@@ -1,0 +1,52 @@
+stages:
+  - build
+  - test
+  - docker-build
+  - deploy
+
+build:
+  stage: build
+  image: node
+  script:
+    - echo "Start building App"
+    - npm install
+    - npm build
+    - echo "Build successfully!"
+  artifacts:
+    expire_in: 1 hour
+    paths:
+      - build
+      - node_modules/
+
+test:
+  stage: test
+  image: node
+  script:
+    - echo "Testing App"
+    - CI=true npm test
+    - echo "Test successfully!"
+
+docker-build:
+  stage: docker-build
+  image: docker:stable
+  services:
+    - name: docker:19.03.8-dind
+  before_script:
+    - source .${CI_COMMIT_REF_NAME}.env
+  script:
+    - docker build -t $DOCKER_REPO .
+    - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD docker.io
+    - docker push $DOCKER_REPO
+
+deploy:
+  stage: deploy
+  image: kroniak/ssh-client
+  before_script:
+    - echo "deploying app"
+    - source .${CI_COMMIT_REF_NAME}.env
+  script:
+    - echo "$PROD_SSH_PRIVATE_KEY" | tr -d '\r' > key.pem
+    - chmod 400 key.pem
+    - ssh -o StrictHostKeyChecking=no -i key.pem localadmin@$SERVER_IP "docker login -u $DOCKER_USER -p $DOCKER_PASSWORD docker.io"
+    - ssh -o StrictHostKeyChecking=no -i key.pem localadmin@$SERVER_IP "docker stop $APP_NAME || true && docker rm $APP_NAME || true"
+    - ssh -o StrictHostKeyChecking=no -i key.pem localadmin@$SERVER_IP "docker container run -d --name $APP_NAME -p 3001:80 $DOCKER_REPO; docker logout"
