@@ -1,10 +1,10 @@
 import React, {Fragment} from 'react';
-import Question from "./Components/Question";
+import QuestionBox from "./Components/QuestionBox";
 
 function App() {
   return (
       <Fragment>
-        <Question />
+        <QuestionBox />
       </Fragment>
   );
 }

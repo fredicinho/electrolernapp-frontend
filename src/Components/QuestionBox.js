@@ -1,7 +1,7 @@
 import React, {Fragment} from 'react';
-import Answer from "./Answer";
+import Answers from "./Answers";
 
-class Question extends React.Component {
+class QuestionBox extends React.Component {
     state={
         error: null,
         isLoaded: false,
@@ -50,7 +50,7 @@ class Question extends React.Component {
                     this.state.dataQuestion.map( data => {
                         return <div key={ data.id} className="answer">
                             <h2> { data.quiz}</h2>
-                            <Answer key={ data.id} rightAnswer={ data.rightAnswer} answers={ data.answers} />
+                            <Answers key={ data.id} rightAnswer={ data.rightAnswer} answers={ data.answers} />
                         </div>
                     })
                 }
@@ -59,4 +59,4 @@ class Question extends React.Component {
     }
 }
 
-export default Question;
+export default QuestionBox;

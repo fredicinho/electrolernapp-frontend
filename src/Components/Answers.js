@@ -1,6 +1,6 @@
 import React, {Fragment} from "react";
 
-class Answer extends React.Component {
+class Answers extends React.Component {
 
     state = {
         isClicked:false,
@@ -25,4 +25,4 @@ class Answer extends React.Component {
         );
     }
 }
-export default Answer;
+export default Answers;

@@ -4,6 +4,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 In the CI/CD Lifecycle this application will be available on  http://wiproh20-owerlen.enterpriselab.ch/
 
 ## Available Scripts
+Start the app (available on Port 3000):
+
+### `npm start`
 
 Build Docker Image:
 
