@@ -5,30 +5,28 @@ class QuestionBox extends React.Component {
     state={
         error: null,
         isLoaded: false,
-        dataQuestion:[
-            {
-                id: 1,
-                quiz: "Beantworte diese scheiss Frage!!!",
-                rightAnswer: "bla",
-                answers: [
-                    "hallo",
-                    "bla",
-                    "blaa",
-                    "blaaa"
-                ],
-
-            },
-        ],
+        questionData:[],
     }
 
     componentDidMount() {
-        fetch("http://wiproh20-owerlen.enterpriselab.ch:8080/api/v1/questions")
+        fetch("http://wiproh20-owerlen.enterpriselab.ch:8080/api/v1/questions", {
+            method: "GET", // *Type of request GET, POST, PUT, DELETE
+            mode: "no-cors", // Type of mode of the request
+            cache: "no-cache", // options like default, no-cache, reload, force-cache
+            credentials: "same-origin", // options like include, *same-origin, omit
+            headers: {
+                "Content-Type": "application/json" // request content type
+            },
+            redirect: "follow", // manual, *follow, error
+            referrerPolicy: "no-referrer", // no-referrer, *client
+            // body: JSON.stringify(data) // Attach body with the request
+        })
             .then(res => res.json())
             .then(
                 (result) => {
                     this.setState({
                         isLoaded: true,
-                        dataQuestion: result.items
+                        questionData: result.items
                     });
                 },
                 // Note: it's important to handle errors here
@@ -47,7 +45,7 @@ class QuestionBox extends React.Component {
         return(
             <Fragment>
                 {
-                    this.state.dataQuestion.map( data => {
+                    this.state.questionData.map( data => {
                         return <div key={ data.id} className="answer">
                             <h2> { data.quiz}</h2>
                             <Answers key={ data.id} rightAnswer={ data.rightAnswer} answers={ data.answers} />
