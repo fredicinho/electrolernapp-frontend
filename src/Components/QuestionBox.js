@@ -44,6 +44,7 @@ class QuestionBox extends React.Component {
     render() {
         return(
             <Fragment>
+                <section className="questionBox">
                 {
                     this.state.questionData.map( data => {
                         return <div key={ data.id} className="answer">
@@ -52,6 +53,7 @@ class QuestionBox extends React.Component {
                         </div>
                     })
                 }
+                </section>
             </Fragment>
         );
     }
