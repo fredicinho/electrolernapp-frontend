@@ -13,13 +13,11 @@ class Answers extends React.Component {
     };
 
     render() {
-
         return (
-
             <Fragment>
                 { !this.state.isClicked ? this.props.answers.map(ans => {
-                    return <button onClick={this.onAnswer}> {ans}</button>;
-                }) : <button > {this.props.rightAnswer}</button>  }
+                    return <button onClick={this.onAnswer}> {ans.answerPhrase} </button>;
+                }) : <button > {this.props.rightAnswer.answerPhrase}</button>  }
             </Fragment>
 
         );

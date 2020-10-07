@@ -2,6 +2,12 @@
   "name": "electrolernapp",
   "version": "0.1.0",
   "private": true,
+  "proxy": {
+    "/api": {
+      "target": "http://wiproh20-owerlen.enterpriselab.ch:8080",
+      "ws": true
+    }
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
@@ -37,6 +43,7 @@
     ]
   },
   "devDependencies": {
+    "axios": "^0.20.0",
     "prop-types": "^15.7.2"
   }
 }

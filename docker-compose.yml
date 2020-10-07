@@ -1,0 +1,36 @@
+version: "3.8"
+services:
+  mariadb:
+    image: 'bitnami/mariadb:latest'
+    container_name: mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: electrolernapp2020
+      MARIADB_DATABASE: db_electrolernapp
+      MARIADB_USER: electrolernapp
+      MARIADB_PASSWORD: electrolernapp2020
+    ports:
+      - 3306:3306
+    volumes:
+      - db_data:/var/lib/mysql
+  adminer:
+    image: adminer:latest
+    container_name: adminer
+    environment:
+      ADMINER_DEFAULT_SERVER: mariadb
+    restart: always
+    ports:
+      - 7777:8080
+
+# Need to synchronize with mariadb
+  springbackend:
+    image: springio/gs-spring-boot-docker
+    container_name: springbackend
+    depends_on:
+      - "mariadb"
+    ports:
+    - 8080:8080
+
+
+volumes:
+  db_data:
