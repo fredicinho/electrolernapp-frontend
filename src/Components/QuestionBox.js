@@ -12,7 +12,7 @@ class QuestionBox extends React.Component {
     }
 
     componentDidMount() {
-        axios.get('http://wiproh20-owerlen.enterpriselab.ch:8080/api/v1/questions')
+        axios.get('/api/v1/questions')
             .then(res => {
                 console.log(res)
                 this.setState({
