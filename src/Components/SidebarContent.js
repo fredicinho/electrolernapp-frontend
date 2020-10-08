@@ -43,11 +43,11 @@ const SidebarContent = props => {
   return (
     <MaterialTitlePanel title="Menu" style={style}>
       <div style={styles.content}>
-        <a href="index.html" style={styles.sidebarLink}>
+        <a href="/" style={styles.sidebarLink}>
           Home
         </a>
-        <a href="responsive_example.html" style={styles.sidebarLink}>
-          Responsive Example
+        <a href="/demo" style={styles.sidebarLink}>
+          Demo
         </a>
         <div style={styles.divider} />
         {links}

@@ -14,8 +14,6 @@ class QuestionBox extends React.Component {
     componentDidMount() {
         axios.get('/api/v1/questions')
             .then(res => {
-                // handle success
-                console.log(res.data);
                 this.setState({
                     isLoaded: true,
                     questionData: res.data
