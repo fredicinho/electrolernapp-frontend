@@ -2,7 +2,6 @@ import React, {Fragment} from 'react';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import Sidebar from "react-sidebar";
-import NavigationBar from './Components/NavigationBar';
 import Home from "./Components/Home";
 import About from "./Components/About";
 import NoMatch from "./Components/NoMatch";
