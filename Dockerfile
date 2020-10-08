@@ -21,4 +21,5 @@ COPY nginx/nginx.conf /etc/nginx/conf.d
 
 # Fire up nginx
 EXPOSE 80
+RUN npm config set proxy http://demo_app_prod:8080
 CMD ["nginx", "-g", "daemon off;"]
