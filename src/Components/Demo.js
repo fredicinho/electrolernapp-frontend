@@ -1,5 +1,5 @@
 import React, {Fragment} from "react";
-import QuestionBox from "./QuestionBox";
+import Exercise from "./Exercise";
 
 class Demo extends React.Component {
 
@@ -10,7 +10,7 @@ class Demo extends React.Component {
     render() {
         return(
             <Fragment>
-                <QuestionBox/>
+                <Exercise/>
             </Fragment>
         );
     }

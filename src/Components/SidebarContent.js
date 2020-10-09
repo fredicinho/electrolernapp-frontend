@@ -3,61 +3,77 @@ import PropTypes from "prop-types";
 import MaterialTitlePanel from "./MaterialTitelPanel";
 
 const styles = {
-  sidebar: {
-    width: 256,
-    height: "100%"
-  },
-  sidebarLink: {
-    display: "block",
-    padding: "16px 0px",
-    color: "#757575",
-    textDecoration: "none"
-  },
-  divider: {
-    margin: "8px 0",
-    height: 1,
-    backgroundColor: "#757575"
-  },
-  content: {
-    padding: "16px",
-    height: "100%",
-    backgroundColor: "white"
-  }
+    sidebar: {
+        width: 256,
+        height: "100%"
+    },
+    sidebarLink: {
+        display: "block",
+        padding: "16px 0px",
+        color: "#757575",
+        textDecoration: "none"
+    },
+    divider: {
+        margin: "8px 0",
+        height: 1,
+        backgroundColor: "#757575"
+    },
+    content: {
+        padding: "16px",
+        height: "100%",
+        backgroundColor: "white"
+    }
 };
 
-const SidebarContent = props => {
-  const style = props.style
-    ? { ...styles.sidebar, ...props.style }
-    : styles.sidebar;
+class SidebarContent extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            style: props.style ? {...styles.sidebar, ...props.style} : styles.sidebar,
+        }
+    }
 
-  const links = [];
+    render() {
+        const items = [];
+        this.props.links.map(links => {
+            items.push(
+                <a href="#" style={styles.sidebarLink}>
+                    {links}
+                </a>
+            );
 
-  for (let ind = 0; ind < 10; ind++) {
-    links.push(
-      <a key={ind} href="#" style={styles.sidebarLink}>
-        Mock menu item {ind}
-      </a>
-    );
-  }
+        });
 
-  return (
-    <MaterialTitlePanel title="Menu" style={style}>
-      <div style={styles.content}>
-        <a href="/" style={styles.sidebarLink}>
-          Home
-        </a>
-        <a href="/demo" style={styles.sidebarLink}>
-          Demo
-        </a>
-        <div style={styles.divider} />
-        {links}
-      </div>
-    </MaterialTitlePanel>
-  );
-};
+        return (
+            <MaterialTitlePanel title="Menu" style={this.state.style}>
+                <div style={styles.content}>
+                  {items}
+                    <div style={styles.divider}/>
+                    <a href="/" style={styles.sidebarLink}>
+                        Home
+                    </a>
+                    <a href="/exercices" style={styles.sidebarLink}>
+                        Übungen
+                    </a>
+                    <a href="/exams" style={styles.sidebarLink}>
+                        Prüfungen
+                    </a>
+                    <a href="/statistics" style={styles.sidebarLink}>
+                        Statistiken
+                    </a>
+                    <a href="/demo" style={styles.sidebarLink}>
+                        Demo
+                    </a>
+                </div>
+            </MaterialTitlePanel>
+        );
+    }
+
+
+}
 
 SidebarContent.propTypes = {
-  style: PropTypes.object
+    style: PropTypes.object
 };
 
 export default SidebarContent;
