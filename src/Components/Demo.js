@@ -3,10 +3,6 @@ import Exercise from "./Exercise";
 
 class Demo extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return(
             <Fragment>

@@ -1,5 +1,7 @@
 import React from "react";
-import Quiz from "react-quiz-component/lib/Quiz";
+import axios from 'axios';
+import Quiz from "react-quiz-component";
+
 
 class Exercise extends React.Component {
 
@@ -7,21 +9,82 @@ class Exercise extends React.Component {
         super(props);
 
         this.state = {
-            questions: [],
+            quizData: {},
             error: null,
+            isLoaded: false,
         }
     }
 
+    createQuizData(exerciseData) {
+        let quizData = {
+            "quizTitle": "React Quiz Component Demo",
+            "quizSynopsis": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim",
+            "questions": [],
+        }
+        exerciseData.forEach(data => {
+            let answers = []
+            data.possibleAnswers.forEach( answer => {
+                answers.push(answer.answerPhrase)
+            });
+            quizData.questions.push(
+                {
+                    "question": data.questionphrase,
+                    "questionType": "text",
+                    "questionPic": "https://dummyimage.com/600x400/000/fff&text=X", // if you need to display Picture in Question
+                    "answerSelectionType": "single",
+                    "answers": answers,
+                    "correctAnswer": (this.giveIndexOfCorrectAnswer(data.possibleAnswers, data.correctAnswer) + 1).toString(),
+                    "messageForCorrectAnswer": "Correct answer. Good job.",
+                    "messageForIncorrectAnswer": "Incorrect answer. Please try again.",
+                    "explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                    "point": "20"
+                },
+            );
+        });
+        console.log(quizData)
+        console.log(quiz1)
+        return quizData;
+    }
+
+    giveIndexOfCorrectAnswer(possibleAnswers, correctAnswer) {
+        return possibleAnswers.findIndex(x => x.answerPhrase === correctAnswer.answerPhrase)
+    }
+
+    componentDidMount() {
+        axios.get('/api/v1/questions')
+            .then(result => {
+                let quiz = this.createQuizData(result.data);
+                this.setState({
+                    isLoaded: true,
+                    quizData: quiz,
+                });
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+            .finally(function () {
+                // always executed
+            });
+    }
+
     render() {
-        return (
-            <React.Fragment>
-                <Quiz quiz={quiz}/>
-            </React.Fragment>
-        );
+        const {error, isLoaded, quizData} = this.state;
+        if (error) {
+            return <div>Error: {error.message}</div>;
+        } else if (!isLoaded) {
+            return <div>Loading...</div>;
+        } else {
+            return (
+                <React.Fragment>
+                    <Quiz quiz={quizData}/>
+                </React.Fragment>
+            );
+        }
     }
 }
 
-export const quiz =  {
+export const quiz1 = {
     "quizTitle": "React Quiz Component Demo",
     "quizSynopsis": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim",
     "questions": [
