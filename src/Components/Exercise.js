@@ -1,6 +1,8 @@
 import React from "react";
 import axios from 'axios';
 import Quiz from "react-quiz-component";
+import Center from 'react-center';
+import Loader from "./Loader";
 
 
 class Exercise extends React.Component {
@@ -73,7 +75,7 @@ class Exercise extends React.Component {
         if (error) {
             return <div>Error: {error.message}</div>;
         } else if (!isLoaded) {
-            return <div>Loading...</div>;
+            return <Loader/>
         } else {
             return (
                 <React.Fragment>

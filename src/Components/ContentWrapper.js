@@ -99,6 +99,8 @@ class ContentWrapper extends React.Component {
             docked: this.state.docked,
             open: this.state.open,
             onSetOpen: this.onSetOpen,
+            shadow: true,
+            transitions: true
         };
 
         return (
