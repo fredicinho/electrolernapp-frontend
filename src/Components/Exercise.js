@@ -1,8 +1,7 @@
 import React from "react";
 import axios from 'axios';
-import Quiz from "react-quiz-component";
-import Center from 'react-center';
 import Loader from "./Loader";
+import Quiz from "./Quiz/Quiz"
 
 
 class Exercise extends React.Component {
@@ -43,8 +42,6 @@ class Exercise extends React.Component {
                 },
             );
         });
-        console.log(quizData)
-        console.log(quiz1)
         return quizData;
     }
 
@@ -62,28 +59,26 @@ class Exercise extends React.Component {
                 });
             })
             .catch(function (error) {
-                // handle error
                 console.log(error);
             })
             .finally(function () {
-                // always executed
             });
     }
 
     render() {
-        const {error, isLoaded, quizData} = this.state;
+        /**const {error, isLoaded, quizData} = this.state;
         if (error) {
             return <div>Error: {error.message}</div>;
         } else if (!isLoaded) {
             return <Loader/>
         } else {
-            return (
+            */return (
                 <React.Fragment>
-                    <Quiz quiz={quizData}/>
+                    <Quiz quiz={quiz1}/>
                 </React.Fragment>
             );
         }
-    }
+   // }
 }
 
 export const quiz1 = {

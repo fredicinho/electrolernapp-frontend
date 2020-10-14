@@ -30,11 +30,12 @@ class SidebarContent extends React.Component {
         super(props);
         this.state = {
             style: props.style ? {...styles.sidebar, ...props.style} : styles.sidebar,
+            navigationItems: [],
         }
     }
 
     render() {
-        const items = [];
+        const items = this.state.navigationItems;
         this.props.links.map(links => {
             items.push(
                 <a href="#" style={styles.sidebarLink}>
