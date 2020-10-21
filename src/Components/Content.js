@@ -9,10 +9,11 @@ import Home from "./Home";
 import Demo from "./Demo";
 import About from "./About";
 import NoMatch from "./NoMatch";
+import {connect} from "react-redux";
 
 const mql = window.matchMedia(`(min-width: 800px)`);
 
-class ContentWrapper extends React.Component {
+class Content extends React.Component {
     constructor(props) {
         super(props);
 
@@ -121,5 +122,11 @@ class ContentWrapper extends React.Component {
         );
     }
 }
+
+const mapStateToProps = state => {
+    return { title: state.title }
+}
+
+const ContentWrapper = connect(mapStateToProps)(Content)
 
 export default ContentWrapper;

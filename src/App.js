@@ -1,10 +1,8 @@
 import React, {Fragment} from 'react';
-import ContentWrapper from "./Components/ContentWrapper";
-import {createStore} from 'redux'
-import rootReducer from './Redux/Reducers'
+import ContentWrapper from "./Components/Content";
+import store from "./Redux/Store/index"
 import { Provider } from 'react-redux'
 
-const store = createStore(rootReducer)
 
 class App extends React.Component {
     render() {

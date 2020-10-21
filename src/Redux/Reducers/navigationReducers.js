@@ -1,12 +1,21 @@
-import { NavigationStates } from "../Actions/navigationActions";
+import { NavigationActions, NavigationStates } from "../Actions/navigationActions";
 
-const navigationState = (state = NavigationStates.HOME, action) => {
+const initialNavigationState = {
+    navigationItems: [],
+    actualPage: NavigationStates.HOME,
+}
+
+
+function navigationReducer(state = initialNavigationState, action) {
     switch (action.type) {
-        case 'CHANGE_NAVIGATIONSTATE':
-            return action.navigationState
+        case NavigationActions.CHANGE_NAVIGATIONPAGE:
+            return Object.assign({}, state, {
+                ...state,
+                actualPage: action.payload.actualPage
+            })
         default:
             return state
     }
 }
 
-export default navigationState
+export default navigationReducer;

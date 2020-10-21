@@ -35,7 +35,7 @@ class SidebarContent extends React.Component {
     }
 
     render() {
-        const items = this.state.navigationItems;
+        let items = []
         this.props.links.map(links => {
             items.push(
                 <a href="#" style={styles.sidebarLink}>
@@ -76,5 +76,6 @@ class SidebarContent extends React.Component {
 SidebarContent.propTypes = {
     style: PropTypes.object
 };
+
 
 export default SidebarContent;
