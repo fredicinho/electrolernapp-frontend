@@ -1,6 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 import MaterialTitlePanel from "./MaterialTitelPanel";
+import { NavigationStates } from "../Redux/Actions/navigationActions";
+import { connect } from "react-redux";
+import { Collapse, Button, CardBody, Card } from 'reactstrap';
+
+
 
 const styles = {
     sidebar: {
@@ -25,24 +30,57 @@ const styles = {
     }
 };
 
+
+const mapStateToProps = state => {
+    return { actualPage: state.navigationReducer.actualPage };
+};
+
+
+
+const navigationItems = {
+    home: ["Zufällige Übung"],
+    exercises: ["Nächste Übung", "Vorherige Übung", "Übungen beenden"],
+    exam: ["Test beenden", "Alle Testaufgaben"]
+}
+
 class SidebarContent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             style: props.style ? {...styles.sidebar, ...props.style} : styles.sidebar,
-            navigationItems: [],
+            exercisesOpen: false
+        }
+        this.toggleExercise = this.toggleExercise.bind(this);
+    }
+
+    getNavigationItems(navigationPage) {
+        switch (navigationPage) {
+            case NavigationStates.HOME:
+                return navigationItems.home
+            case NavigationStates.EXERCISES:
+                return navigationItems.exam
+            case NavigationStates.EXAMS:
+                return navigationItems.exam
+            default:
+                return navigationItems.home
         }
     }
 
+    toggleExercise() {
+        this.setState(prevState => ({
+            exercisesOpen: !prevState.exercisesOpen
+        }));
+    }
+
+
     render() {
         let items = []
-        this.props.links.map(links => {
+        this.getNavigationItems(this.props.actualPage).map(navigationItem => {
             items.push(
                 <a href="#" style={styles.sidebarLink}>
-                    {links}
+                    {navigationItem}
                 </a>
             );
-
         });
 
         return (
@@ -53,9 +91,21 @@ class SidebarContent extends React.Component {
                     <a href="/" style={styles.sidebarLink}>
                         Home
                     </a>
-                    <a href="/exercices" style={styles.sidebarLink}>
+                    <a href="#" style={styles.sidebarLink} onClick={this.toggleExercise}>
                         Übungen
                     </a>
+                    <Collapse isOpen={this.state.exercisesOpen}>
+                        <Card>
+                            <CardBody>
+                                <a href="/" style={styles.sidebarLink}>
+                                    Kategorien
+                                </a>
+                                <a href="/" style={styles.sidebarLink}>
+                                    KategorieSets
+                                </a>
+                            </CardBody>
+                        </Card>
+                    </Collapse>
                     <a href="/exams" style={styles.sidebarLink}>
                         Prüfungen
                     </a>
@@ -73,9 +123,11 @@ class SidebarContent extends React.Component {
 
 }
 
+
+
 SidebarContent.propTypes = {
     style: PropTypes.object
 };
 
+export default connect(mapStateToProps, null)(SidebarContent);
 
-export default SidebarContent;

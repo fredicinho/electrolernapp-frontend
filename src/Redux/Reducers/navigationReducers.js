@@ -1,7 +1,6 @@
 import { NavigationActions, NavigationStates } from "../Actions/navigationActions";
 
 const initialNavigationState = {
-    navigationItems: [],
     actualPage: NavigationStates.HOME,
 }
 
@@ -9,10 +8,11 @@ const initialNavigationState = {
 function navigationReducer(state = initialNavigationState, action) {
     switch (action.type) {
         case NavigationActions.CHANGE_NAVIGATIONPAGE:
-            return Object.assign({}, state, {
+            console.log("New State in Reducer: ", action.payload)
+            return {
                 ...state,
-                actualPage: action.payload.actualPage
-            })
+                actualPage: action.payload
+            }
         default:
             return state
     }

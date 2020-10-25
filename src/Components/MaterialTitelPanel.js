@@ -1,5 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+import navbarStyles from "../CSS/NavigationBar.css";
+
 
 const styles = {
   root: {
@@ -10,10 +12,19 @@ const styles = {
   header: {
     backgroundColor: "#03a9f4",
     color: "white",
-    padding: "16px",
-    fontSize: "1.5em"
+    padding: "20px",
+    fontSize: "1.5em",
+    display: "flex",
+    justifyContent: "space-between"
+},
+  headerTitle: {
+    textAlign: "center"
+  },
+  navigationHeader: {
+    textAlign: "right"
   }
 };
+
 
 const MaterialTitlePanel = props => {
   const rootStyle = props.style
@@ -22,7 +33,10 @@ const MaterialTitlePanel = props => {
 
   return (
     <div style={rootStyle}>
-      <div style={styles.header}>{props.title}</div>
+      <div style={styles.header}>
+        <span style={styles.headerTitle}>{props.title}</span>
+        <span style={styles.navigationHeader}>{props.navigation}</span>
+      </div>
       {props.children}
     </div>
   );

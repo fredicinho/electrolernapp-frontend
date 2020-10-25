@@ -1,15 +1,12 @@
 import React, {Fragment} from 'react';
-import ContentWrapper from "./Components/Content";
-import store from "./Redux/Store/index"
-import { Provider } from 'react-redux'
+import Content from "./Components/Content";
+
 
 
 class App extends React.Component {
     render() {
         return(
-            <Provider store={store}>
-                <ContentWrapper/>
-            </Provider>
+                <Content/>
         );
     }
 }

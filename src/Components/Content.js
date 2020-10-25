@@ -9,22 +9,54 @@ import Home from "./Home";
 import Demo from "./Demo";
 import About from "./About";
 import NoMatch from "./NoMatch";
-import {connect} from "react-redux";
+import { connect } from "react-redux";
+import { changeNavigationPage, NavigationStates } from "../Redux/Actions/navigationActions";
+import IconButton from "@material-ui/core/IconButton";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import {MuiThemeProvider} from "@material-ui/core";
+import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
+
 
 const mql = window.matchMedia(`(min-width: 800px)`);
 
+
+function mapDispatchToProps(dispatch) {
+    return {
+        changeNavigationPage: actualPage => dispatch(changeNavigationPage(actualPage))
+    };
+}
+
+const theme = createMuiTheme({
+    overrides: {
+        MuiOutlinedInput: {
+            root: {
+                "&&&& $input": {
+                    padding: "0px"
+                }
+            }
+        }
+    }
+});
+
 class Content extends React.Component {
+
     constructor(props) {
         super(props);
-
         this.state = {
             docked: mql.matches,
-            open: false
+            open: false,
+            actualPage: NavigationStates.EXERCISES,
+            anchorEl: null,
+            openAnchorEl: false
         };
 
         this.mediaQueryChanged = this.mediaQueryChanged.bind(this);
         this.toggleOpen = this.toggleOpen.bind(this);
         this.onSetOpen = this.onSetOpen.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+        this.handleMenu = this.handleMenu.bind(this);
     }
 
     componentWillMount() {
@@ -34,6 +66,7 @@ class Content extends React.Component {
     componentWillUnmount() {
         mql.removeListener(this.mediaQueryChanged);
     }
+
 
     onSetOpen(open) {
         this.setState({ open });
@@ -54,33 +87,75 @@ class Content extends React.Component {
         }
     }
 
-    getTitleByLocation(location) {
+    handleMenu(event){
+        this.setState({
+            anchorEl: event.currentTarget,
+            openAnchorEl: true
+        })
+    };
+
+    handleClose(){
+        this.setState({
+            anchorEl: null,
+            openAnchorEl: false
+        });
+    };
+
+    getNavigationStateByLocation(location) {
         switch (location) {
             case "/statistics":
-                return "Statistiken";
+                this.props.changeNavigationPage( this.state.actualPage )
+                return NavigationStates.STATISTICS;
                 break
             case "/":
-                return "Home";
+                this.props.changeNavigationPage(NavigationStates.HOME)
+                return NavigationStates.HOME;
                 break
             case "/demo":
-                return "Demo";
+                this.props.changeNavigationPage(NavigationStates.DEMO)
+                return NavigationStates.DEMO;
                 break
             case "/exams":
-                return "Prüfungen";
+                this.props.changeNavigationPage(NavigationStates.EXAMS)
+                return NavigationStates.EXAMS;
                 break
             case "/exercices":
-                return "Übungen";
+                this.props.changeNavigationPage(NavigationStates.EXERCISES)
+                return NavigationStates.EXERCISES;
                 break
             default:
-                return "Whatever";
+                this.props.changeNavigationPage(NavigationStates.HOME)
+                return NavigationStates.NOTFOUND;
         }
     }
 
+    getNavigationName(navigationItem) {
+        switch (navigationItem) {
+            case NavigationStates.STATISTICS:
+                return "Statistiken";
+                break
+            case NavigationStates.HOME:
+                return "Home";
+                break
+            case NavigationStates.DEMO:
+                return "Demo";
+                break
+            case NavigationStates.EXAMS:
+                return "Prüfungen";
+                break
+            case NavigationStates.EXERCISES:
+                return "Übungen";
+                break
+            default:
+                return "Not Found";
+        }
+    }
+
+
+
     render() {
-        const links = ["Nächster Übungsblock", "Vorheriger Übungsblock", "Übungsblock beenden"];
-        const sidebar = <SidebarContent links={links}/>;
-        const history = createBrowserHistory()
-        console.log(history.location.pathname)
+        const navigationState = this.getNavigationStateByLocation(createBrowserHistory().location.pathname);
+        const sidebar = <SidebarContent />;
         const contentHeader = (
             <span>
         {!this.state.docked && (
@@ -91,8 +166,44 @@ class Content extends React.Component {
                 =
             </a>
         )}
-                <span> {this.getTitleByLocation(createBrowserHistory().location.pathname)} </span>
-      </span>
+                <span> {this.getNavigationName(navigationState)} </span>
+            </span>
+        );
+
+        const navigationHeader = (
+            <span>
+                                <MuiThemeProvider theme={theme}>
+            <IconButton
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={this.handleMenu}
+                color="inherit"
+            >
+
+                    <AccountCircle />
+
+            </IconButton>
+                                                    </MuiThemeProvider>
+        <Menu
+            id="menu-appbar"
+            anchorEl={this.state.anchorEl}
+            anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+            }}
+            open={this.state.openAnchorEl}
+            onClose={this.handleClose}
+        >
+            <MenuItem onClick={this.handleClose}>Profile</MenuItem>
+            <MenuItem onClick={this.handleClose}>My account</MenuItem>
+        </Menu>
+                </span>
         );
 
         const sidebarProps = {
@@ -108,7 +219,7 @@ class Content extends React.Component {
             <Fragment>
                 <Router>
                     <Sidebar {...sidebarProps}>
-                        <MaterialTitlePanel title={contentHeader}>
+                        <MaterialTitlePanel title={contentHeader} navigation={navigationHeader}>
                             <Switch>
                                 <Route exact path="/" component={Home}/>
                                 <Route path="/demo" component={Demo}/>
@@ -123,10 +234,8 @@ class Content extends React.Component {
     }
 }
 
-const mapStateToProps = state => {
-    return { title: state.title }
-}
+export default connect(
+    null,
+    mapDispatchToProps
+)(Content);
 
-const ContentWrapper = connect(mapStateToProps)(Content)
-
-export default ContentWrapper;
