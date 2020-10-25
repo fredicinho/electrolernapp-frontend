@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import Content from "./Components/Content";
+import Content from "./Components/MainContent";
 
 
 

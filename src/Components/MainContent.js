@@ -40,7 +40,7 @@ const theme = createMuiTheme({
     }
 });
 
-class Content extends React.Component {
+class MainContent extends React.Component {
 
     constructor(props) {
         super(props);
@@ -237,5 +237,5 @@ class Content extends React.Component {
 export default connect(
     null,
     mapDispatchToProps
-)(Content);
+)(MainContent);
 
