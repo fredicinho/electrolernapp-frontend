@@ -1,7 +1,9 @@
 import React from "react";
 import axios from 'axios';
 import Loader from "./Loader";
-import Quiz from "./Quiz/Quiz"
+import Quiz from "../Quiz/Quiz"
+import ApiRequests, {urlTypes} from "../../Services/AuthService/ApiRequests";
+
 
 
 class Exercise extends React.Component {
@@ -22,19 +24,20 @@ class Exercise extends React.Component {
             "quizSynopsis": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim",
             "questions": [],
         }
-        exerciseData.forEach(data => {
+        let newData = [exerciseData]
+        newData.forEach(data => {
             let answers = []
-            data.possibleAnswers.forEach( answer => {
+            data.possibleAnswers.forEach(answer => {
                 answers.push(answer.answerPhrase)
             });
             quizData.questions.push(
                 {
                     "question": data.questionphrase,
                     "questionType": "text",
-                    "questionPic": "https://dummyimage.com/600x400/000/fff&text=X", // if you need to display Picture in Question
+                    "questionPic": (ApiRequests.getUrl(urlTypes.MEDIAS) + data.questionImage.id), // checkquestion Objekt
                     "answerSelectionType": "single",
                     "answers": answers,
-                    "correctAnswer": (this.giveIndexOfCorrectAnswer(data.possibleAnswers, data.correctAnswer) + 1).toString(),
+                    "correctAnswer": (this.giveIndexOfCorrectAnswer(data.possibleAnswers, data.correctAnswers) + 1),
                     "messageForCorrectAnswer": "Correct answer. Good job.",
                     "messageForIncorrectAnswer": "Incorrect answer. Please try again.",
                     "explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
@@ -45,12 +48,18 @@ class Exercise extends React.Component {
         return quizData;
     }
 
-    giveIndexOfCorrectAnswer(possibleAnswers, correctAnswer) {
-        return possibleAnswers.findIndex(x => x.answerPhrase === correctAnswer.answerPhrase)
+    giveIndexOfCorrectAnswer(possibleAnswers, correctAnswers) {
+        let indexes = []
+        correctAnswers.map((answer) => {
+            if (possibleAnswers.indexOf(answer)) {
+                indexes.push(possibleAnswers.indexOf(answer))
+            }
+        });
+        return indexes
     }
 
     componentDidMount() {
-        axios.get('/api/v1/questions')
+        ApiRequests.getQuestionById(4771)
             .then(result => {
                 let quiz = this.createQuizData(result.data);
                 this.setState({
@@ -65,20 +74,21 @@ class Exercise extends React.Component {
             });
     }
 
+
     render() {
-        /**const {error, isLoaded, quizData} = this.state;
+        const {error, isLoaded, quizData} = this.state;
         if (error) {
             return <div>Error: {error.message}</div>;
         } else if (!isLoaded) {
             return <Loader/>
         } else {
-            */return (
+            return (
                 <React.Fragment>
-                    <Quiz quiz={quiz1}/>
+                    <Quiz quiz={quizData}/>
                 </React.Fragment>
             );
         }
-   // }
+    }
 }
 
 export const quiz1 = {

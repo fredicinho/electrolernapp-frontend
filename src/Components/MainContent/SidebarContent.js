@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import MaterialTitlePanel from "./MaterialTitelPanel";
-import { NavigationStates } from "../Redux/Actions/navigationActions";
+import { NavigationStates } from "../../Redux/Actions/navigationActions";
 import { connect } from "react-redux";
 import { Collapse, Button, CardBody, Card } from 'reactstrap';
 

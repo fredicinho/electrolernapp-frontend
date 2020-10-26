@@ -1,6 +1,6 @@
 import React, {Fragment} from "react";
 import SidebarContent from "./SidebarContent";
-import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import { createBrowserHistory } from "history";
 import Sidebar from "react-sidebar";
@@ -10,13 +10,15 @@ import Demo from "./Demo";
 import About from "./About";
 import NoMatch from "./NoMatch";
 import { connect } from "react-redux";
-import { changeNavigationPage, NavigationStates } from "../Redux/Actions/navigationActions";
+import { changeNavigationPage, NavigationStates } from "../../Redux/Actions/navigationActions";
 import IconButton from "@material-ui/core/IconButton";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import {MuiThemeProvider} from "@material-ui/core";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
+import AuthenticationRequests from "../../Services/AuthService/AuthenticationRequests";
+import Exercise from "./Exercise";
 
 
 const mql = window.matchMedia(`(min-width: 800px)`);
@@ -84,6 +86,14 @@ class MainContent extends React.Component {
 
         if (ev) {
             ev.preventDefault();
+        }
+    }
+
+    toggleLogout(event) {
+        AuthenticationRequests.logout()
+        this.handleClose()
+        if (event) {
+            event.preventDefault();
         }
     }
 
@@ -200,8 +210,9 @@ class MainContent extends React.Component {
             open={this.state.openAnchorEl}
             onClose={this.handleClose}
         >
-            <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-            <MenuItem onClick={this.handleClose}>My account</MenuItem>
+            <MenuItem onClick={this.handleClose}>Mein Profil</MenuItem>
+            <MenuItem onClick={this.handleClose}>Mein Account</MenuItem>
+            <MenuItem onClick={this.toggleLogout}>Ausloggen</MenuItem>
         </Menu>
                 </span>
         );

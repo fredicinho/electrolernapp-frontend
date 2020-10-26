@@ -1,6 +1,6 @@
 import React from 'react';
 import { Nav, Navbar, Form, FormControl } from 'react-bootstrap';
-import "../CSS/NavigationBar.css"
+import "../../CSS/NavigationBar.css"
 
 class NavigationBar extends React.Component {
 
