@@ -264,7 +264,7 @@ const Core = ({questions, appLocale, showDefaultResult, onComplete, customResult
           </div>
           <div>{appLocale.question} {currentQuestionIndex + 1}:</div>
           <h3 dangerouslySetInnerHTML={rawMarkup(question && question.question)}/>
-          {question && question.questionPic && <img src={question.questionPic} alt="image"/>}
+          {question && question.questionPic && <img className="questionImage" src={question.questionPic} alt="image"/>}
           {question && renderTags(answerSelectionTypeState, question.correctAnswer.length, question.segment)}
           {question && renderAnswers(question, buttons)}
           {showNextQuestionButton &&
