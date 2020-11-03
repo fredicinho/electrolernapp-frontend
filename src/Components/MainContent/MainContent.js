@@ -19,16 +19,18 @@ import {MuiThemeProvider} from "@material-ui/core";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import AuthenticationRequests from "../../Services/AuthService/AuthenticationRequests";
 import Exercise from "./Exercise";
+import CategoryView from "./CategorieView";
+import CategorySets from "./CategorySetView";
+import {getNavigationName} from "./NavigationUtils";
 
 
 const mql = window.matchMedia(`(min-width: 800px)`);
 
 
-function mapDispatchToProps(dispatch) {
-    return {
-        changeNavigationPage: actualPage => dispatch(changeNavigationPage(actualPage))
-    };
-}
+const mapStateToProps = state => {
+    return {actualPage: state.navigation.actualPage};
+};
+
 
 const theme = createMuiTheme({
     overrides: {
@@ -53,12 +55,12 @@ class MainContent extends React.Component {
             anchorEl: null,
             openAnchorEl: false
         };
-
         this.mediaQueryChanged = this.mediaQueryChanged.bind(this);
         this.toggleOpen = this.toggleOpen.bind(this);
         this.onSetOpen = this.onSetOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleMenu = this.handleMenu.bind(this);
+        this.toggleLogout = this.toggleLogout.bind(this);
     }
 
     componentWillMount() {
@@ -92,6 +94,7 @@ class MainContent extends React.Component {
     toggleLogout(event) {
         AuthenticationRequests.logout()
         this.handleClose()
+        window.location.reload();
         if (event) {
             event.preventDefault();
         }
@@ -111,60 +114,9 @@ class MainContent extends React.Component {
         });
     };
 
-    getNavigationStateByLocation(location) {
-        switch (location) {
-            case "/statistics":
-                this.props.changeNavigationPage( this.state.actualPage )
-                return NavigationStates.STATISTICS;
-                break
-            case "/":
-                this.props.changeNavigationPage(NavigationStates.HOME)
-                return NavigationStates.HOME;
-                break
-            case "/demo":
-                this.props.changeNavigationPage(NavigationStates.DEMO)
-                return NavigationStates.DEMO;
-                break
-            case "/exams":
-                this.props.changeNavigationPage(NavigationStates.EXAMS)
-                return NavigationStates.EXAMS;
-                break
-            case "/exercices":
-                this.props.changeNavigationPage(NavigationStates.EXERCISES)
-                return NavigationStates.EXERCISES;
-                break
-            default:
-                this.props.changeNavigationPage(NavigationStates.HOME)
-                return NavigationStates.NOTFOUND;
-        }
-    }
-
-    getNavigationName(navigationItem) {
-        switch (navigationItem) {
-            case NavigationStates.STATISTICS:
-                return "Statistiken";
-                break
-            case NavigationStates.HOME:
-                return "Home";
-                break
-            case NavigationStates.DEMO:
-                return "Demo";
-                break
-            case NavigationStates.EXAMS:
-                return "Prüfungen";
-                break
-            case NavigationStates.EXERCISES:
-                return "Übungen";
-                break
-            default:
-                return "Not Found";
-        }
-    }
-
 
 
     render() {
-        const navigationState = this.getNavigationStateByLocation(createBrowserHistory().location.pathname);
         const sidebar = <SidebarContent />;
         const contentHeader = (
             <span>
@@ -176,7 +128,7 @@ class MainContent extends React.Component {
                 =
             </a>
         )}
-                <span> {this.getNavigationName(navigationState)} </span>
+                <span> {getNavigationName(this.props.actualPage)} </span>
             </span>
         );
 
@@ -235,6 +187,9 @@ class MainContent extends React.Component {
                                 <Route exact path="/" component={Home}/>
                                 <Route path="/demo" component={Demo}/>
                                 <Route path="/about" component={About}/>
+                                <Route path="/categories" component={CategoryView}/>
+                                <Route path="/categorySets" component={CategorySets}/>
+                                <Route path="/exercises" component={Exercise}/>
                                 <Route component={NoMatch}/>
                             </Switch>
                         </MaterialTitlePanel>
@@ -246,7 +201,7 @@ class MainContent extends React.Component {
 }
 
 export default connect(
-    null,
-    mapDispatchToProps
+    mapStateToProps,
+    null
 )(MainContent);
 

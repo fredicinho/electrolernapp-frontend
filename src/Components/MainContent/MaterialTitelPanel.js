@@ -1,6 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import navbarStyles from "../../CSS/NavigationBar.css";
+import {changeNavigationPage} from "../../Redux/Actions/navigationActions";
+import {connect} from "react-redux";
+import { withRouter } from 'react-router-dom';
+import {getNavigationStateByLocation} from "./NavigationUtils";
 
 
 const styles = {
@@ -15,7 +18,7 @@ const styles = {
     padding: "20px",
     fontSize: "1.5em",
     display: "flex",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
 },
   headerTitle: {
     textAlign: "center"
@@ -25,11 +28,21 @@ const styles = {
   }
 };
 
+function mapDispatchToProps(dispatch) {
+  return {
+    changeNavigationPage: actualPage => dispatch(changeNavigationPage(actualPage))
+  };
+}
 
 const MaterialTitlePanel = props => {
   const rootStyle = props.style
     ? { ...styles.root, ...props.style }
     : styles.root;
+
+  props.history.listen((location, action) => {
+    props.changeNavigationPage(getNavigationStateByLocation(location.pathname))
+  });
+
 
   return (
     <div style={rootStyle}>
@@ -47,5 +60,5 @@ MaterialTitlePanel.propTypes = {
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   children: PropTypes.object
 };
-
-export default MaterialTitlePanel;
+const MaterialTitlePanelView = connect(null, mapDispatchToProps)(MaterialTitlePanel);
+export default withRouter(MaterialTitlePanelView);

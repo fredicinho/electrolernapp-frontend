@@ -32,7 +32,7 @@ export default function NavigationBar() {
                     <IconButton href="/" edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
                         <SchoolIcon />
                     </IconButton>
-                    <Typography variant="h7" className={classes.title}>
+                    <Typography variant="h6" className={classes.title}>
                         gefördert von der Hochschule Luzern - Gebäudetechnik
                     </Typography>
                     <Typography variant="h2" className={classes.title} align="justify">

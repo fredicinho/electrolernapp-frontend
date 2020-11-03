@@ -101,7 +101,6 @@ class SignUp extends React.Component {
           this.state.password
       ).then(
           response => {
-              console.log(response)
             this.setState({
               message: response.data.message,
               successful: true

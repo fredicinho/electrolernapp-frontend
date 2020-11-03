@@ -1,10 +1,21 @@
 import React from "react";
 import PropTypes from "prop-types";
 import MaterialTitlePanel from "./MaterialTitelPanel";
-import { NavigationStates } from "../../Redux/Actions/navigationActions";
-import { connect } from "react-redux";
-import { Collapse, Button, CardBody, Card } from 'reactstrap';
-
+import {NavigationStates} from "../../Redux/Actions/navigationActions";
+import {connect} from "react-redux";
+import {Collapse, Button, CardBody, Card} from 'reactstrap';
+import ListSubheader from "@material-ui/core/ListSubheader";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import InboxIcon from '@material-ui/icons/MoveToInbox';
+import DraftsIcon from '@material-ui/icons/Drafts';
+import SendIcon from '@material-ui/icons/Send';
+import List from "@material-ui/core/List";
+import {ExpandLess, ExpandMore, StarBorder} from "@material-ui/icons";
+import withStyles from "@material-ui/core/styles/withStyles";
+import {Link} from 'react-router-dom';
+import {useLocation} from "react-router";
 
 
 const styles = {
@@ -32,16 +43,26 @@ const styles = {
 
 
 const mapStateToProps = state => {
-    return { actualPage: state.navigationReducer.actualPage };
+    return {actualPage: state.navigation.actualPage};
 };
 
 
-
 const navigationItems = {
-    home: ["Zufällige Übung"],
+    home: [],
     exercises: ["Nächste Übung", "Vorherige Übung", "Übungen beenden"],
     exam: ["Test beenden", "Alle Testaufgaben"]
 }
+
+const myStyles = theme => ({
+    root: {
+        width: '100%',
+        maxWidth: 360,
+        backgroundColor: theme.palette.background.paper,
+    },
+    nested: {
+        paddingLeft: theme.spacing(4),
+    },
+});
 
 class SidebarContent extends React.Component {
     constructor(props) {
@@ -74,48 +95,53 @@ class SidebarContent extends React.Component {
 
 
     render() {
+        const {classes} = this.props;
         let items = []
         this.getNavigationItems(this.props.actualPage).map(navigationItem => {
             items.push(
-                <a href="#" style={styles.sidebarLink}>
-                    {navigationItem}
-                </a>
+                <ListItem button>
+                    <ListItemText primary={navigationItem}/>
+                </ListItem>
             );
         });
-
         return (
             <MaterialTitlePanel title="Menu" style={this.state.style}>
-                <div style={styles.content}>
-                  {items}
-                    <div style={styles.divider}/>
-                    <a href="/" style={styles.sidebarLink}>
-                        Home
-                    </a>
-                    <a href="#" style={styles.sidebarLink} onClick={this.toggleExercise}>
-                        Übungen
-                    </a>
-                    <Collapse isOpen={this.state.exercisesOpen}>
-                        <Card>
-                            <CardBody>
-                                <a href="/" style={styles.sidebarLink}>
-                                    Kategorien
-                                </a>
-                                <a href="/" style={styles.sidebarLink}>
-                                    KategorieSets
-                                </a>
-                            </CardBody>
-                        </Card>
+                {!items && <List
+                    component="nav"
+                    className={classes.root}
+                >
+                    {items}
+                </List>
+                }
+                { !items && <div style={styles.divider}/> }
+                <List
+                    component="nav"
+                    className={classes.root}
+                >
+                    <ListItem button component={Link} to="/">
+                        <ListItemText primary="Home"/>
+                    </ListItem>
+                    <ListItem button onClick={this.toggleExercise}>
+                        <ListItemText primary="Übungen"/>
+                        {this.state.exercisesOpen ? <ExpandLess/> : <ExpandMore/>}
+                    </ListItem>
+                    <Collapse isOpen={this.state.exercisesOpen} timeout="auto" unmountOnExit={true}>
+                        <List component="div" disablePadding>
+                            <ListItem button className={classes.nested} component={Link} to="/categories">
+                                <ListItemText primary="Kategorien"/>
+                            </ListItem>
+                            <ListItem button className={classes.nested} component={Link} to="/categorySets">
+                                <ListItemText primary="Übungssets"/>
+                            </ListItem>
+                        </List>
                     </Collapse>
-                    <a href="/exams" style={styles.sidebarLink}>
-                        Prüfungen
-                    </a>
-                    <a href="/statistics" style={styles.sidebarLink}>
-                        Statistiken
-                    </a>
-                    <a href="/demo" style={styles.sidebarLink}>
-                        Demo
-                    </a>
-                </div>
+                    <ListItem button component={Link} to="/exams">
+                        <ListItemText primary="Prüfungen"/>
+                    </ListItem>
+                    <ListItem button component={Link} to="/statistics">
+                        <ListItemText primary="Statistiken"/>
+                    </ListItem>
+                </List>
             </MaterialTitlePanel>
         );
     }
@@ -124,10 +150,10 @@ class SidebarContent extends React.Component {
 }
 
 
-
 SidebarContent.propTypes = {
     style: PropTypes.object
 };
 
-export default connect(mapStateToProps, null)(SidebarContent);
+const Sidebar = connect(mapStateToProps, null)(SidebarContent)
 
+export default withStyles(myStyles)(Sidebar);

@@ -6,9 +6,9 @@ const initialNavigationState = {
 
 
 function navigationReducer(state = initialNavigationState, action) {
+    console.log("New State: " + state.actualPage)
     switch (action.type) {
         case NavigationActions.CHANGE_NAVIGATIONPAGE:
-            console.log("New State in Reducer: ", action.payload)
             return {
                 ...state,
                 actualPage: action.payload

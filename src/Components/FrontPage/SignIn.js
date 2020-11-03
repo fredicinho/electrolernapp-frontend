@@ -91,7 +91,7 @@ class SignIn extends React.Component {
 
       AuthenticationService.login(this.state.username, this.state.password).then(
           () => {
-            this.props.history.push("/profile");
+            this.props.history.push("/");
             window.location.reload();
           },
           error => {

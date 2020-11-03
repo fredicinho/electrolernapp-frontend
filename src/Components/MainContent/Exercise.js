@@ -3,8 +3,15 @@ import axios from 'axios';
 import Loader from "./Loader";
 import Quiz from "../Quiz/Quiz"
 import ApiRequests, {urlTypes} from "../../Services/AuthService/ApiRequests";
+import {connect} from "react-redux";
 
 
+const mapStateToProps = state => {
+    return {
+        urlOfQuestions: state.quiz.urlOfQuestions,
+        selectedCategorySet: state.quiz.selectedCategorySet,
+    };
+};
 
 class Exercise extends React.Component {
 
@@ -19,22 +26,30 @@ class Exercise extends React.Component {
     }
 
     createQuizData(exerciseData) {
+        console.log(exerciseData)
         let quizData = {
             "quizTitle": "React Quiz Component Demo",
             "quizSynopsis": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim",
             "questions": [],
         }
-        let newData = [exerciseData]
-        newData.forEach(data => {
+        exerciseData.forEach(data => {
             let answers = []
-            data.possibleAnswers.forEach(answer => {
-                answers.push(answer.answerPhrase)
-            });
+            if (data.possibleAnswers) {
+                data.possibleAnswers.forEach(answer => {
+                    answers.push(answer.answerPhrase)
+                });
+            }
+            let questionImageUrl = "";
+            data.links.forEach((link) => {
+                if (link.rel === "questionImage") {
+                    questionImageUrl = link.href;
+                }
+            })
             quizData.questions.push(
                 {
                     "question": data.questionphrase,
                     "questionType": "text",
-                    "questionPic": (ApiRequests.getUrl(urlTypes.MEDIAS) + data.questionImage.id), // checkquestion Objekt
+                    "questionPic": questionImageUrl, // checkquestion Objekt
                     "answerSelectionType": "single",
                     "answers": answers,
                     "correctAnswer": (this.giveIndexOfCorrectAnswer(data.possibleAnswers, data.correctAnswers) + 1),
@@ -59,13 +74,21 @@ class Exercise extends React.Component {
     }
 
     componentDidMount() {
-        ApiRequests.getQuestionById(4771)
+        console.log(this.props.urlOfQuestions)
+        ApiRequests.apiGetRequest(this.props.urlOfQuestions)
             .then(result => {
-                let quiz = this.createQuizData(result.data);
-                this.setState({
-                    isLoaded: true,
-                    quizData: quiz,
-                });
+                if (result.data !== undefined && result.data != 0) {
+                    let quiz = this.createQuizData(result.data);
+                    this.setState({
+                        isLoaded: true,
+                        quizData: quiz,
+                    });
+                } else {
+                    this.setState({
+                        error: "No data found for this CategorySet..."
+                    })
+                }
+
             })
             .catch(function (error) {
                 console.log(error);
@@ -78,7 +101,7 @@ class Exercise extends React.Component {
     render() {
         const {error, isLoaded, quizData} = this.state;
         if (error) {
-            return <div>Error: {error.message}</div>;
+            return <div>Error: {error}</div>;
         } else if (!isLoaded) {
             return <Loader/>
         } else {
@@ -190,4 +213,6 @@ export const quiz1 = {
     ]
 }
 
-export default Exercise;
+const Exercises = connect(mapStateToProps, null)(Exercise)
+
+export default Exercises;
