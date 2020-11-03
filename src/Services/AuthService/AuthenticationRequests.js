@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const AUTHENTICATION_API = "http://localhost:8080/api/v1/auth/";
+const AUTHENTICATION_API = "/api/v1/auth/";
 
 class AuthenticationRequests {
   login(username, password) {

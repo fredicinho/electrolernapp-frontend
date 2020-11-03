@@ -98,7 +98,7 @@ class SignUp extends React.Component {
       AuthenticationService.register(
           this.state.username,
           this.state.email,
-          this.state.password
+          this.state.password,
       ).then(
           response => {
             this.setState({
