@@ -4,8 +4,7 @@ const AUTHENTICATION_API = "/api/v1/auth/";
 
 class AuthenticationRequests {
   login(username, password) {
-    return axios
-      .post(AUTHENTICATION_API + "signin", {
+    return axios.post(AUTHENTICATION_API + "signin", {
         username,
         password
       })

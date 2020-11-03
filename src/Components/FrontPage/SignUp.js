@@ -105,6 +105,8 @@ class SignUp extends React.Component {
               message: response.data.message,
               successful: true
             });
+              this.props.history.push("/login");
+              window.location.reload();
           },
           error => {
               console.log(error)
