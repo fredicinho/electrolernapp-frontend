@@ -18,6 +18,7 @@ class Exercise extends React.Component {
     constructor(props) {
         super(props);
 
+
         this.state = {
             quizData: {},
             error: null,
@@ -26,13 +27,14 @@ class Exercise extends React.Component {
     }
 
     createQuizData(exerciseData) {
-        console.log(exerciseData)
         let quizData = {
             "quizTitle": "React Quiz Component Demo",
             "quizSynopsis": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim",
             "questions": [],
         }
         exerciseData.forEach(data => {
+            console.log("Question")
+            console.log(data)
             let answers = []
             if (data.possibleAnswers) {
                 data.possibleAnswers.forEach(answer => {
@@ -45,14 +47,16 @@ class Exercise extends React.Component {
                     questionImageUrl = link.href;
                 }
             })
+            const type = this.getTypeOfQuestion(data.correctAnswers)
+            let correctAnswers = this.giveIndexesOfCorrectAnswers(data.possibleAnswers, data.correctAnswers)
             quizData.questions.push(
                 {
                     "question": data.questionphrase,
                     "questionType": "text",
                     "questionPic": questionImageUrl, // checkquestion Objekt
-                    "answerSelectionType": "single",
+                    "answerSelectionType": type,
                     "answers": answers,
-                    "correctAnswer": (this.giveIndexOfCorrectAnswer(data.possibleAnswers, data.correctAnswers) + 1),
+                    "correctAnswer": (this.checkTypeOfAnswers(correctAnswers, type)),
                     "messageForCorrectAnswer": "Correct answer. Good job.",
                     "messageForIncorrectAnswer": "Incorrect answer. Please try again.",
                     "explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
@@ -63,18 +67,43 @@ class Exercise extends React.Component {
         return quizData;
     }
 
-    giveIndexOfCorrectAnswer(possibleAnswers, correctAnswers) {
+    checkTypeOfAnswers(correctAnswers, type) {
+        if (type === "single") {
+            return correctAnswers[0].toString();
+        } else {
+            return correctAnswers;
+        }
+    }
+
+    getIndexOfArray(arraytosearch, key, valuetosearch) {
+        for (var i = 0; i < arraytosearch.length; i++) {
+            if (arraytosearch[i][key] == valuetosearch) {
+                return i;
+            }
+        }
+        return null;
+    }
+
+    getTypeOfQuestion(correctAnswers) {
+        if (correctAnswers.length <= 1 ) {
+            return "single"
+        } else {
+            return "multiple"
+        }
+    }
+
+    giveIndexesOfCorrectAnswers(possibleAnswers, correctAnswers) {
         let indexes = []
-        correctAnswers.map((answer) => {
-            if (possibleAnswers.indexOf(answer)) {
-                indexes.push(possibleAnswers.indexOf(answer))
+        correctAnswers.map((correctAnswer) => {
+            if (possibleAnswers.some( answer => answer.id === correctAnswer.id )) {
+                indexes.push(this.getIndexOfArray(possibleAnswers, 'id', correctAnswer.id) + 1)
             }
         });
+        console.log(indexes)
         return indexes
     }
 
     componentDidMount() {
-        console.log(this.props.urlOfQuestions)
         ApiRequests.apiGetRequest(this.props.urlOfQuestions)
             .then(result => {
                 if (result.data !== undefined && result.data != 0) {
@@ -88,7 +117,6 @@ class Exercise extends React.Component {
                         error: "No data found for this CategorySet..."
                     })
                 }
-
             })
             .catch(function (error) {
                 console.log(error);
@@ -107,7 +135,7 @@ class Exercise extends React.Component {
         } else {
             return (
                 <React.Fragment>
-                    <Quiz quiz={quizData}/>
+                    <Quiz quiz={quizData} continueTillCorrect={true} />
                 </React.Fragment>
             );
         }

@@ -5,7 +5,7 @@ import {checkAnswer, rawMarkup} from "./core-components/helpers";
 import InstantFeedback from "./core-components/InstantFeedback";
 import Explanation from "./core-components/Explanation";
 
-const Core = ({questions, appLocale, showDefaultResult, onComplete, customResultPage, showInstantFeedback, continueTillCorrect}) => {
+const Card = ({questions, appLocale, showDefaultResult, onComplete, customResultPage, showInstantFeedback, continueTillCorrect}) => {
   const [incorrectAnswer, setIncorrectAnswer] = useState(false);
   const [correctAnswer, setCorrectAnswer] = useState(false);
   const [showNextQuestionButton, setShowNextQuestionButton] = useState(false);
@@ -76,6 +76,12 @@ const Core = ({questions, appLocale, showDefaultResult, onComplete, customResult
   useEffect(() => {
     if (endQuiz && onComplete !== undefined && questionSummary !== undefined) {
       onComplete(questionSummary)
+    }
+  }, [endQuiz, questionSummary]);
+
+  useEffect(() => {
+    if (endQuiz && !showDefaultResultState && customResultPage !== undefined && questionSummary !== undefined) {
+      customResultPage(questionSummary)
     }
   }, [endQuiz, questionSummary]);
 
@@ -264,7 +270,7 @@ const Core = ({questions, appLocale, showDefaultResult, onComplete, customResult
           </div>
           <div>{appLocale.question} {currentQuestionIndex + 1}:</div>
           <h3 dangerouslySetInnerHTML={rawMarkup(question && question.question)}/>
-          {question && question.questionPic && <img className="questionImage" src={question.questionPic} alt="image"/>}
+          {question && question.questionPic && <img src={question.questionPic} alt="image"/>}
           {question && renderTags(answerSelectionTypeState, question.correctAnswer.length, question.segment)}
           {question && renderAnswers(question, buttons)}
           {showNextQuestionButton &&
@@ -277,16 +283,13 @@ const Core = ({questions, appLocale, showDefaultResult, onComplete, customResult
         </div>
         }
         {endQuiz && showDefaultResultState && customResultPage === undefined &&
-          renderResult()
-        }
-        {endQuiz && !showDefaultResultState && customResultPage !== undefined &&
-          customResultPage(questionSummary)
+        renderResult()
         }
       </div>
   );
 };
 
-Core.propTypes = {
+Card.propTypes = {
   questions: PropTypes.array,
   showDefaultResult: PropTypes.bool,
   onComplete: PropTypes.func,
@@ -296,4 +299,4 @@ Core.propTypes = {
   appLocale: PropTypes.object
 };
 
-export default Core;
+export default Card;

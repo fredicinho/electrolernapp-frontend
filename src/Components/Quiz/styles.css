@@ -1,7 +1,6 @@
 .react-quiz-container {
   margin: 20px;
-  width: 80%;
-  height: 100%;
+  width: 500px;
 }
 
 .react-quiz-container .startQuizWrapper {
@@ -59,7 +58,7 @@
   color: white;
 }
 
-.react-quiz-container .questionWrapper {
+.react-quiz-container .questionWrapper img {
   width: 100%;
 }
 
@@ -159,9 +158,4 @@
 .react-quiz-container .selection-tag.segment {
   background: #3db4b9;
   margin-left: 5px;
-}
-
-.questionImage {
-    max-height: 50%;
-    width: auto;
 }

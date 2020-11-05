@@ -125,7 +125,7 @@ class SidebarContent extends React.Component {
                         <ListItemText primary="Übungen"/>
                         {this.state.exercisesOpen ? <ExpandLess/> : <ExpandMore/>}
                     </ListItem>
-                    <Collapse isOpen={this.state.exercisesOpen} timeout="auto" unmountOnExit={true}>
+                    <Collapse isOpen={this.state.exercisesOpen} unmountOnExit={true}>
                         <List component="div" disablePadding>
                             <ListItem button className={classes.nested} component={Link} to="/categories">
                                 <ListItemText primary="Kategorien"/>
