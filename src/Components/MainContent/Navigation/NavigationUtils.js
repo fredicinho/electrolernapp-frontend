@@ -1,4 +1,4 @@
-import {NavigationStates} from "../../Redux/Actions/navigationActions";
+import {NavigationStates} from "../../../Redux/Actions/navigationActions";
 
 export function getNavigationStateByLocation(location) {
     switch (location) {

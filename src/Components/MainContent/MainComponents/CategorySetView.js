@@ -1,13 +1,19 @@
 import React from "react";
-import withStyles from "@material-ui/core/styles/withStyles";
 import Grid from "@material-ui/core/Grid";
-import CategoryCard from "./CategoryCard";
-import ApiRequests, {urlTypes} from "../../Services/AuthService/ApiRequests";
-import Loader from "./Loader";
-import {changeNavigationPage} from "../../Redux/Actions/navigationActions";
-import {getNavigationStateByLocation} from "./MainContent";
+import CategoryCard from "../Utils/CategoryCard";
+import ApiRequests from "../../../Services/AuthService/ApiRequests";
+import { urlTypes } from "../../../Services/AuthService/ApiRequests";
+import Loader from "../Utils/Loader";
 import {connect} from "react-redux";
-import mapStateToProps from "react-redux/lib/connect/mapStateToProps";
+import CategorySetCard from "../Utils/CategorySetCard";
+import withStyles from "@material-ui/core/styles/withStyles";
+
+const mapStateToProps = state => {
+    return {
+        selectedCategorySetUrl: state.categorySet.selectedCategorySetUrl,
+        selectedCategory: state.categorySet.selectedCategory,
+    };
+};
 
 const myStyles = theme => ({
     root: {
@@ -21,40 +27,35 @@ const myStyles = theme => ({
 
 });
 
-function mapDispatchToProps(dispatch) {
-    return {
-        changeNavigationPage: actualPage => dispatch(changeNavigationPage(actualPage))
-    };
-}
 
-class CategorieView extends React.Component {
+class CategorySetView extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            categories: [],
+            categorieSets: [],
             isLoaded: false,
         }
     }
 
     componentDidMount() {
-        ApiRequests.apiGetRequest(ApiRequests.getUrl(urlTypes.CATEGORIES))
+        ApiRequests.apiGetRequest(this.props.selectedCategorySetUrl)
             .then(result => {
                 this.setState({
                     isLoaded: true,
-                    categories: result.data,
+                    categorySets: result.data,
                 });
             })
             .catch(function (error) {
                 console.log(error);
-                // TODO: Make an Error Screen Component!!!
+                // TODO: Make "Show Error" Component
             })
             .finally(function () {
             });
     }
 
     render() {
-        const {error, isLoaded, categories} = this.state;
+        const {error, isLoaded, categorySets} = this.state;
         const { classes } = this.props
         if (error) {
             return <div>Error: {error.message}</div>;
@@ -62,10 +63,10 @@ class CategorieView extends React.Component {
             return <Loader/>
         } else {
             let categoryItems = [];
-            categories.map((category) => {
+            categorySets.map((categorySet) => {
                 categoryItems.push(
                     <Grid item xs={12} sm={6} md={4} lg={3} justify="space-around">
-                        <CategoryCard category={category}/>
+                        <CategorySetCard categorySet={categorySet}/>
                     </Grid>)
             });
             return (
@@ -78,6 +79,6 @@ class CategorieView extends React.Component {
         }
     }
 }
-const CategoryViewDefault = connect(null, mapDispatchToProps)(CategorieView)
+const CategorySets = connect(mapStateToProps, null)(CategorySetView)
 
-export default withStyles(myStyles)(CategoryViewDefault);
+export default withStyles(myStyles)(CategorySets);

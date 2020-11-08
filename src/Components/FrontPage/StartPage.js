@@ -4,7 +4,7 @@ import StartPageContent from "./StartPageContent";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
-import Demo from "../MainContent/Demo";
+import Demo from "./Demo";
 
 
 class StartPage extends React.Component {

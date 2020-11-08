@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import MaterialTitlePanel from "./MaterialTitelPanel";
-import {NavigationStates} from "../../Redux/Actions/navigationActions";
+import {NavigationStates} from "../../../Redux/Actions/navigationActions";
 import {connect} from "react-redux";
 import {Collapse, Button, CardBody, Card} from 'reactstrap';
 import ListSubheader from "@material-ui/core/ListSubheader";
@@ -69,9 +69,11 @@ class SidebarContent extends React.Component {
         super(props);
         this.state = {
             style: props.style ? {...styles.sidebar, ...props.style} : styles.sidebar,
-            exercisesOpen: false
+            exercisesOpen: false,
+            adminPanelOpen: false
         }
         this.toggleExercise = this.toggleExercise.bind(this);
+        this.toggleAdmin = this.toggleAdmin.bind(this);
     }
 
     getNavigationItems(navigationPage) {
@@ -90,6 +92,12 @@ class SidebarContent extends React.Component {
     toggleExercise() {
         this.setState(prevState => ({
             exercisesOpen: !prevState.exercisesOpen
+        }));
+    }
+
+    toggleAdmin() {
+        this.setState( prevState => ({
+            adminPanelOpen: !prevState.adminPanelOpen
         }));
     }
 
@@ -141,6 +149,24 @@ class SidebarContent extends React.Component {
                     <ListItem button component={Link} to="/statistics">
                         <ListItemText primary="Statistiken"/>
                     </ListItem>
+                    <ListItem button onClick={this.toggleAdmin}>
+                        <ListItemText primary="Lehrer"/>
+                        {this.state.adminPanelOpen ? <ExpandLess/> : <ExpandMore/>}
+                    </ListItem>
+                    <Collapse isOpen={this.state.adminPanelOpen} unmountOnExit={true}>
+                        <List component="div" disablePadding>
+                            <ListItem button className={classes.nested} component={Link} to="/createexam">
+                                <ListItemText primary="Neue Prüfung"/>
+                            </ListItem>
+                            <ListItem button className={classes.nested} component={Link} to="/createquestion">
+                                <ListItemText primary="Neue Frage"/>
+                            </ListItem>
+                            <ListItem button className={classes.nested} component={Link} to="/createschoolclass">
+                                <ListItemText primary="Neue Klasse"/>
+                            </ListItem>
+                        </List>
+                    </Collapse>
+
                 </List>
             </MaterialTitlePanel>
         );

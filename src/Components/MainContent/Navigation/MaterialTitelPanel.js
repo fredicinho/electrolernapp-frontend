@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {changeNavigationPage} from "../../Redux/Actions/navigationActions";
+import {changeNavigationPage} from "../../../Redux/Actions/navigationActions";
 import {connect} from "react-redux";
 import { withRouter } from 'react-router-dom';
 import {getNavigationStateByLocation} from "./NavigationUtils";

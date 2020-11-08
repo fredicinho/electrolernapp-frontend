@@ -1,19 +1,13 @@
 import React from "react";
-import Grid from "@material-ui/core/Grid";
-import CategoryCard from "./CategoryCard";
-import ApiRequests from "../../Services/AuthService/ApiRequests";
-import { urlTypes } from "../../Services/AuthService/ApiRequests";
-import Loader from "./Loader";
-import {connect} from "react-redux";
-import CategorySetCard from "./CategorySetCard";
 import withStyles from "@material-ui/core/styles/withStyles";
-
-const mapStateToProps = state => {
-    return {
-        selectedCategorySetUrl: state.categorySet.selectedCategorySetUrl,
-        selectedCategory: state.categorySet.selectedCategory,
-    };
-};
+import Grid from "@material-ui/core/Grid";
+import CategoryCard from "../Utils/CategoryCard";
+import ApiRequests, {urlTypes} from "../../../Services/AuthService/ApiRequests";
+import Loader from "../Utils/Loader";
+import {changeNavigationPage} from "../../../Redux/Actions/navigationActions";
+import {getNavigationStateByLocation} from "../MainContent";
+import {connect} from "react-redux";
+import mapStateToProps from "react-redux/lib/connect/mapStateToProps";
 
 const myStyles = theme => ({
     root: {
@@ -27,35 +21,43 @@ const myStyles = theme => ({
 
 });
 
+function mapDispatchToProps(dispatch) {
+    return {
+        changeNavigationPage: actualPage => dispatch(changeNavigationPage(actualPage))
+    };
+}
 
-class CategorySetView extends React.Component {
+class CategorieView extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            categorieSets: [],
+            categories: [],
             isLoaded: false,
         }
     }
 
     componentDidMount() {
-        ApiRequests.apiGetRequest(this.props.selectedCategorySetUrl)
+        console.log(ApiRequests.getUrl(urlTypes.CATEGORIES))
+        ApiRequests.apiGetRequest(ApiRequests.getUrl(urlTypes.CATEGORIES))
             .then(result => {
+                console.log(result.data)
                 this.setState({
                     isLoaded: true,
-                    categorySets: result.data,
+                    categories: result.data,
                 });
             })
             .catch(function (error) {
                 console.log(error);
-                // TODO: Make "Show Error" Component
+                // TODO: Make an Error Screen Component!!!
             })
             .finally(function () {
+                console.log("Made Category Request")
             });
     }
 
     render() {
-        const {error, isLoaded, categorySets} = this.state;
+        const {error, isLoaded, categories} = this.state;
         const { classes } = this.props
         if (error) {
             return <div>Error: {error.message}</div>;
@@ -63,10 +65,10 @@ class CategorySetView extends React.Component {
             return <Loader/>
         } else {
             let categoryItems = [];
-            categorySets.map((categorySet) => {
+            categories.map((category) => {
                 categoryItems.push(
                     <Grid item xs={12} sm={6} md={4} lg={3} justify="space-around">
-                        <CategorySetCard categorySet={categorySet}/>
+                        <CategoryCard category={category}/>
                     </Grid>)
             });
             return (
@@ -79,6 +81,6 @@ class CategorySetView extends React.Component {
         }
     }
 }
-const CategorySets = connect(mapStateToProps, null)(CategorySetView)
+const CategoryViewDefault = connect(null, mapDispatchToProps)(CategorieView)
 
-export default withStyles(myStyles)(CategorySets);
+export default withStyles(myStyles)(CategoryViewDefault);

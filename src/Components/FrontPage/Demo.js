@@ -1,7 +1,6 @@
 import React, {Fragment} from "react";
-import Exercise from "./Exercise";
 import Quiz from "../Quiz/Quiz";
-import { quiz1 } from "../MainContent/Exercise";
+import { quiz1 } from "../MainContent/MainComponents/Exercise";
 import Container from "@material-ui/core/Container";
 
 class Demo extends React.Component {

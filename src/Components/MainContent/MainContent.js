@@ -1,14 +1,11 @@
 import React, {Fragment} from "react";
-import SidebarContent from "./SidebarContent";
+import SidebarContent from "./Navigation/SidebarContent";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
-import { createBrowserHistory } from "history";
 import Sidebar from "react-sidebar";
-import MaterialTitlePanel from "./MaterialTitelPanel";
-import Home from "./Home";
-import Demo from "./Demo";
-import About from "./About";
-import NoMatch from "./NoMatch";
+import MaterialTitlePanel from "./Navigation/MaterialTitelPanel";
+import Demo from "../FrontPage/Demo";
+import NoMatch from "./Utils/NoMatch";
 import { connect } from "react-redux";
 import { changeNavigationPage, NavigationStates } from "../../Redux/Actions/navigationActions";
 import IconButton from "@material-ui/core/IconButton";
@@ -18,10 +15,14 @@ import MenuItem from "@material-ui/core/MenuItem";
 import {MuiThemeProvider} from "@material-ui/core";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import AuthenticationRequests from "../../Services/AuthService/AuthenticationRequests";
-import Exercise from "./Exercise";
-import CategoryView from "./CategorieView";
-import CategorySets from "./CategorySetView";
-import {getNavigationName} from "./NavigationUtils";
+import Exercise from "./MainComponents/Exercise";
+import CategoryView from "./MainComponents/CategorieView";
+import CategorySets from "./MainComponents/CategorySetView";
+import {getNavigationName} from "./Navigation/NavigationUtils";
+import QuestionForm from "./Admin/QuestionForm";
+import Home from "./MainComponents/Home";
+import About from "./MainComponents/About";
+import ExamForm from "./Admin/ExamForm";
 
 
 const mql = window.matchMedia(`(min-width: 800px)`);
@@ -190,6 +191,8 @@ class MainContent extends React.Component {
                                 <Route path="/categories" component={CategoryView}/>
                                 <Route path="/categorySets" component={CategorySets}/>
                                 <Route path="/exercises" component={Exercise}/>
+                                <Route path="/createquestion" component={QuestionForm}/>
+                                <Route path="/createexam" component={ExamForm}/>
                                 <Route component={NoMatch}/>
                             </Switch>
                         </MaterialTitlePanel>

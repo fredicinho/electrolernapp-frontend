@@ -7,10 +7,10 @@ import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import withStyles from "@material-ui/core/styles/withStyles";
-import {selectCategorySet} from "../../Redux/Actions/categorySetActions";
+import {selectCategorySet} from "../../../Redux/Actions/categorySetActions";
 import {connect} from "react-redux";
-import {selectQuiz} from "../../Redux/Actions/quizActions";
-import {Redirect} from "react-router";
+import { Redirect } from 'react-router';
+
 
 const myStyles = theme => ({
     root: {
@@ -24,35 +24,35 @@ const myStyles = theme => ({
 
 function mapDispatchToProps(dispatch) {
     return {
-        selectQuiz: questions => dispatch(selectQuiz(questions))
+        selectCategorySet: categorySet => dispatch(selectCategorySet(categorySet))
     };
 }
 
-class CategorySetCard extends React.Component {
+class CategoryCard extends React.Component {
+
     constructor(props) {
         super(props);
         this.state = {
-            redirect: false
+            redirect: false,
         }
-        this.handleCategorySetStart = this.handleCategorySetStart.bind(this);
+        this.handleToggleForSets = this.handleToggleForSets.bind(this);
     }
 
-    handleCategorySetStart(event) {
-        const selectedQuiz = {
-            selectedCategorySet: this.props.categorySet.title,
-            urlOfQuestions: this.props.categorySet.links[1].href,
-        }
-        this.props.selectQuiz(selectedQuiz)
-        this.setState({redirect: true});
+    handleToggleForSets(event) {
         event.preventDefault();
-
+        const selectedCategory = {
+            selectedCategory: this.props.category.name,
+            selectedCategorySetUrl: this.props.category.links[0].href,
+        }
+        this.props.selectCategorySet(selectedCategory)
+        this.setState({redirect: true});
     }
+
 
     render() {
-        const { classes } = this.props;
-
+        const { classes, title } = this.props;
         if (this.state.redirect) {
-            return <Redirect push to="/exercises" />;
+            return <Redirect push to="/categorySets" />;
         } else {
             return (
                 <Card className={classes.root}>
@@ -60,21 +60,22 @@ class CategorySetCard extends React.Component {
                         <CardMedia
                             className={classes.media}
                             //image="/static/images/cards/contemplative-reptile.jpg"
-                            title="Contemplative Reptile"
+                            title={title}
                         />
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="h2">
-                                {this.props.categorySet.title}
+                                {this.props.category.name}
                             </Typography>
                             <Typography variant="body2" color="textSecondary" component="p">
+                                TODO: this.props.description showing here
                                 Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
                                 across all continents except Antarctica
                             </Typography>
                         </CardContent>
                     </CardActionArea>
                     <CardActions>
-                        <Button size="small" color="primary" onClick={this.handleCategorySetStart}>
-                            Übungsset starten
+                        <Button size="small" color="primary" onClick={this.handleToggleForSets}>
+                            Übungssets
                         </Button>
                         <Button size="small" color="primary">
                             Learn More
@@ -84,8 +85,10 @@ class CategorySetCard extends React.Component {
             );
         }
     }
+
+
 }
 
-const CategorySetCardDefault = connect(null, mapDispatchToProps)(CategorySetCard)
+const CategoryCardView = connect(null, mapDispatchToProps)(CategoryCard)
 
-export default withStyles(myStyles)(CategorySetCardDefault);
+export default withStyles(myStyles)(CategoryCardView);

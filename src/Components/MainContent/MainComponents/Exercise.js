@@ -1,8 +1,8 @@
 import React from "react";
 import axios from 'axios';
-import Loader from "./Loader";
-import Quiz from "../Quiz/Quiz"
-import ApiRequests, {urlTypes} from "../../Services/AuthService/ApiRequests";
+import Loader from "../Utils/Loader";
+import Quiz from "../../Quiz/Quiz"
+import ApiRequests, {urlTypes} from "../../../Services/AuthService/ApiRequests";
 import {connect} from "react-redux";
 
 
