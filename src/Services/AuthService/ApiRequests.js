@@ -6,6 +6,7 @@ const QUESTIONS_API = '/api/v1/questions/';
 const MEDIA_API = '/api/v1/medias/';
 const CATEGORY_API = '/api/v1/categories/';
 const CATEGORYSET_API = '/api/v1/categorysets/';
+const EXAMSET_API = '/api/v1/examSets/'
 
 
 export const urlTypes = {
@@ -13,6 +14,7 @@ export const urlTypes = {
   MEDIAS: MEDIA_API,
   CATEGORIES: CATEGORY_API,
   CATEGORYSET: CATEGORYSET_API,
+  EXAMSET: EXAMSET_API
 }
 
 
@@ -28,6 +30,8 @@ class ApiRequests {
         return CATEGORY_API;
       case urlTypes.CATEGORYSET:
         return CATEGORYSET_API;
+      case urlTypes.EXAMSET:
+        return EXAMSET_API
       default:
         console.log("Type of URL not found!");
         return "Type not found";

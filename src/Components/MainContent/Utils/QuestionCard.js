@@ -31,7 +31,9 @@ class QuestionCard extends React.Component {
 
 
     render() {
-        const {classes, question} = this.props;
+        const {classes, question, addQuestion} = this.props;
+        console.log("QuestionCard:: ")
+        console.log(question)
         let possibleAnswers = [];
         question.possibleAnswers.map(possibleAnswer => {
             possibleAnswers.push(possibleAnswer.answerPhrase)
@@ -41,19 +43,18 @@ class QuestionCard extends React.Component {
                 <CardActionArea>
                     <CardMedia
                         className={classes.media}
-                        //image="/static/images/cards/contemplative-reptile.jpg"
+                        // image={} TODO: With HATEOAS get imageLink
                     />
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="h2">
-                            {question.questionPhrase}
+                            {question.questionphrase}
                         </Typography>
                         <Typography variant="body2" color="textSecondary" component="p">
-                            {possibleAnswers}
                         </Typography>
                     </CardContent>
                 </CardActionArea>
                 <CardActions>
-                    <Button size="small" color="primary">
+                    <Button size="small" color="primary" onClick={addQuestion}>
                         Hinzufügen
                     </Button>
                 </CardActions>

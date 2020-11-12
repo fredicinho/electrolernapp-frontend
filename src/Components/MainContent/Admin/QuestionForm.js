@@ -63,6 +63,26 @@ export const questionType = [
     },
 ];
 
+const initialState = {
+    questionPhrase: "",
+    possibleAnswers: [],
+    correctAnswers: [],
+    loading: false,
+    categorySetId: "",
+    questionType: "MC",
+    userId: "",
+    questionImageId: "",
+    answerImageId: "",
+    pointsToAchieve: "",
+    availableAnswerTextFields: 3,
+    possiblePoints: 1,
+    allCategorySets: null,
+    error: null,
+    answerError: false,
+    answerErrorMessage: "",
+    questionCreated: false,
+    questionCreatedMessage: "",
+}
 
 class QuestionForm extends React.Component {
     constructor(props) {
@@ -78,25 +98,7 @@ class QuestionForm extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
 
         this.state = {
-            questionPhrase: "",
-            possibleAnswers: [],
-            correctAnswers: [],
-            loading: false,
-            categorySetId: "",
-            questionType: "MC",
-            userId: AuthenticationService.getCurrentUser().id,
-            questionImageId: "",
-            answerImageId: "",
-            pointsToAchieve: "",
-            availableAnswerTextFields: 3,
-            possiblePoints: 1,
-            allCategorySets: null,
-            error: null,
-            answerError: false,
-            answerErrorMessage: "",
-            questionCreated: false,
-            questionCreatedMessage: "",
-            questionCreatedState: "info"
+            ...initialState
         };
     }
 
@@ -148,7 +150,7 @@ class QuestionForm extends React.Component {
             possibleAnswers: possibleAnswers,
             correctAnswers: correctAnswers,
             questionType: this.state.questionType,
-            userId: this.state.userId,
+            userId: AuthenticationService.getCurrentUser().id,
             statisticIds: [],
             categorySetIds: [this.state.categorySetId],
             questionImageId: null,
@@ -161,6 +163,7 @@ class QuestionForm extends React.Component {
                 console.log(result)
                 if (result.status === 200) {
                     this.setState({
+                        ...initialState,
                         questionCreated: true,
                         questionCreatedMessage: "Die Frage :: " + result.data.questionPhrase + " :: wurde erfolgreich erstellt!",
                     });
@@ -171,10 +174,11 @@ class QuestionForm extends React.Component {
                 }
             })
             .catch(function (error) {
+                console.log(error.response.data)
                 this.setState({
-                    questionCreated: false,
-                    questionCreatedMessage: "Es gab ein Problem beim erstellen der Frage..."
-                })
+                    questionCreated: true,
+                    questionCreatedMessage: "Die Frage :: " + error.response.data.questionPhrase + " :: existiert bereits!"
+                });
             })
             .finally(function () {
             });
@@ -264,7 +268,7 @@ class QuestionForm extends React.Component {
 
     render() {
         const {classes} = this.props;
-        const {answerError, answerErrorMessage, questionCreated, questionCreatedMessage, questionCreatedState} = this.state;
+        const {answerError, answerErrorMessage, questionCreated, questionCreatedMessage} = this.state;
         let correctAnswerCheckbox = [];
         for (let i = 1; i <= this.state.availableAnswerTextFields; i++) {
             let answerLabel = "Antwort Nr. " + i;
@@ -276,9 +280,9 @@ class QuestionForm extends React.Component {
                 <CssBaseline/>
                 <div className={classes.paper}>
                     {questionCreated &&
-                    <Alert variant="warn">
-                        {questionCreatedMessage}
-                    </Alert>
+                        <Alert variant="info">
+                            {questionCreatedMessage}
+                        </Alert>
                     }
                     <Typography component="h1" variant="h5">
                         Erstelle hier eine neue Frage
