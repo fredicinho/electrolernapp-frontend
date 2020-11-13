@@ -147,7 +147,7 @@ class QuestionForm extends React.Component {
         }
 
         let newQuestion = {
-            questionphrase: this.state.questionPhrase,
+            questionPhrase: this.state.questionPhrase,
             possibleAnswers: possibleAnswers,
             correctAnswers: correctAnswers,
             questionType: this.state.questionType,
