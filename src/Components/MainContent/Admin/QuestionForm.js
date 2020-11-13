@@ -158,8 +158,7 @@ class QuestionForm extends React.Component {
             answerImageId: null,
             pointsToAchieve: parseInt(this.state.possiblePoints)
         }
-        console.log("New Ouestion to send ::")
-        console.log(JSON.stringify(newQuestion))
+
         ApiRequests.apiPostRequest(urlTypes.QUESTIONS, newQuestion)
             .then(result => {
                 console.log(result)

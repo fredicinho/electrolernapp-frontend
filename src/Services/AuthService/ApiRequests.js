@@ -5,8 +5,11 @@ import authenticationHeader from './AuthenticationHeader';
 const QUESTIONS_API = '/api/v1/questions/';
 const MEDIA_API = '/api/v1/medias/';
 const CATEGORY_API = '/api/v1/categories/';
-const CATEGORYSET_API = '/api/v1/categorysets/';
+const CATEGORYSET_API = '/api/v1/categorySets/';
 const EXAMSET_API = '/api/v1/examSets/'
+const INSTITUTION_API = '/api/v1/institutions/';
+const SCHOOLCLASS_API = '/api/v1/schoolClasses/';
+const USERS_API = '/api/v1/users/';
 
 
 export const urlTypes = {
@@ -14,30 +17,14 @@ export const urlTypes = {
   MEDIAS: MEDIA_API,
   CATEGORIES: CATEGORY_API,
   CATEGORYSET: CATEGORYSET_API,
-  EXAMSET: EXAMSET_API
+  EXAMSET: EXAMSET_API,
+  INSTITUTION: INSTITUTION_API,
+  SCHOOLCLASS: SCHOOLCLASS_API,
+  USERS: USERS_API,
 }
 
 
 class ApiRequests {
-
-  getUrl(type) {
-    switch (type) {
-      case urlTypes.QUESTIONS:
-        return QUESTIONS_API;
-      case urlTypes.MEDIAS:
-        return MEDIA_API;
-      case urlTypes.CATEGORIES:
-        return CATEGORY_API;
-      case urlTypes.CATEGORYSET:
-        return CATEGORYSET_API;
-      case urlTypes.EXAMSET:
-        return EXAMSET_API
-      default:
-        console.log("Type of URL not found!");
-        return "Type not found";
-    }
-
-  }
 
   apiGetRequest(url) {
     return axios.get(url, { headers: authenticationHeader()})

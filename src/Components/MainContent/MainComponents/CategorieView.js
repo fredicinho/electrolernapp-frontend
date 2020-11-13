@@ -38,8 +38,7 @@ class CategorieView extends React.Component {
     }
 
     componentDidMount() {
-        console.log(ApiRequests.getUrl(urlTypes.CATEGORIES))
-        ApiRequests.apiGetRequest(ApiRequests.getUrl(urlTypes.CATEGORIES))
+        ApiRequests.apiGetRequest(urlTypes.CATEGORIES)
             .then(result => {
                 console.log(result.data)
                 this.setState({
