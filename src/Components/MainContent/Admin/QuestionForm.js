@@ -173,12 +173,15 @@ class QuestionForm extends React.Component {
                     })
                 }
             })
-            .catch(function (error) {
-                console.log(error.response.data)
-                this.setState({
-                    questionCreated: true,
-                    questionCreatedMessage: "Die Frage :: " + error.response.data.questionPhrase + " :: existiert bereits!"
-                });
+            .catch( error => {
+                if (error.response.status === 409) {
+                    this.setState({
+                        questionCreated: true,
+                        questionCreatedMessage: "Die Frage :: " + error.response.data.questionPhrase + " :: existiert bereits!"
+                    });
+                }
+                console.log(error.response)
+
             })
             .finally(function () {
             });

@@ -15,6 +15,7 @@ import Container from '@material-ui/core/Container';
 import withStyles from "@material-ui/core/styles/withStyles";
 import AuthenticationService from "../../Services/AuthService/AuthenticationRequests";
 import Input from "react-validation/build/input";
+import {TextValidator, ValidatorForm} from "react-material-ui-form-validator";
 
 
 
@@ -113,6 +114,7 @@ class SignIn extends React.Component {
 
   render() {
     const { classes } = this.props;
+    const { username, password } = this.state;
 
     return (
         <Container component="main" maxWidth="xs">
@@ -124,33 +126,35 @@ class SignIn extends React.Component {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <form className={classes.form} noValidate>
-              <TextField
-                  variant="outlined"
-                  value={this.state.username}
-                  onChange={this.onChangeUsername}
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  autoFocus
-              />
-              <TextField
-                  variant="outlined"
-                  value={this.state.password}
-                  onChange={this.onChangePassword}
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-              />
+            <ValidatorForm
+                className={classes.form}
+                ref="form"
+                onSubmit={this.handleLogin}
+                onError={errors => console.log(errors)}
+            >
+              <Grid item xs={12}>
+                <TextValidator
+                    fullWidth
+                    label="Benutzername"
+                    onChange={this.onChangeUsername}
+                    name="username"
+                    validators={['required']}
+                    errorMessages={['this field is required']}
+                    value={username}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextValidator
+                    fullWidth
+                    label="Passwort"
+                    onChange={this.onChangePassword}
+                    name="password"
+                    type="password"
+                    validators={['required']}
+                    errorMessages={['this field is required']}
+                    value={password}
+                />
+              </Grid>
               <FormControlLabel
                   control={<Checkbox value="remember" color="primary" />}
                   label="Remember me"
@@ -166,6 +170,7 @@ class SignIn extends React.Component {
               >
                 Sign In
               </Button>
+            </ValidatorForm>
               <Grid container>
                 <Grid item xs>
                   <Link href="#" variant="body2">
@@ -173,12 +178,11 @@ class SignIn extends React.Component {
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="#" variant="body2">
+                  <Link href="/register" variant="body2">
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>
               </Grid>
-            </form>
           </div>
           <Box mt={8}>
             <Copyright />

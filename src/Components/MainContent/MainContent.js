@@ -23,6 +23,8 @@ import QuestionForm from "./Admin/QuestionForm";
 import Home from "./MainComponents/Home";
 import About from "./MainComponents/About";
 import ExamForm from "./Admin/ExamForm";
+import {RadioOutlined} from "@material-ui/icons";
+import Exam from "./MainComponents/Exam";
 
 
 const mql = window.matchMedia(`(min-width: 800px)`);
@@ -191,6 +193,7 @@ class MainContent extends React.Component {
                                 <Route path="/categories" component={CategoryView}/>
                                 <Route path="/categorySets" component={CategorySets}/>
                                 <Route path="/exercises" component={Exercise}/>
+                                <Route path="/exam" component={Exam}/>
                                 <Route path="/createquestion" component={QuestionForm}/>
                                 <Route path="/createexam" component={ExamForm}/>
                                 <Route component={NoMatch}/>

@@ -163,7 +163,7 @@ class ExamForm extends React.Component {
                     console.log(result)
                 }
             })
-            .catch(function (error) {
+            .catch( error => {
                 this.setState({
                     examCreatedPopup: true,
                     questionCreatedMessage: "Es gab ein Problem beim erstellen der Prüfung..."
