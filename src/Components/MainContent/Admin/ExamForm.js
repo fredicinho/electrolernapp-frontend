@@ -68,10 +68,14 @@ class ExamForm extends React.Component {
         this.handleAddQuestion = this.handleAddQuestion.bind(this);
         this.handleValidFrom = this.handleValidFrom.bind(this);
         this.handleValidUntil = this.handleValidUntil.bind(this);
-
+        this.getCategories = this.getCategories.bind(this);
     }
 
     componentDidMount() {
+        this.getCategories()
+    }
+
+    getCategories() {
         ApiRequests.apiGetRequest(urlTypes.CATEGORIES).then(
             response => {
                 if (response.data !== undefined && response.data != 0) {
@@ -95,8 +99,6 @@ class ExamForm extends React.Component {
         ).catch(function (error) {
             console.log(error);
         })
-
-
     }
 
     handleValidFrom(e) {
@@ -238,7 +240,7 @@ class ExamForm extends React.Component {
         questionsInExamSet.map(question => {
             chosedExersices.push(
                 <ListGroup.Item>
-                    {question.questionphrase}
+                    {question.questionPhrase}
                     <Button className="pull-right" onClick={() => this.handleDeleteQuestion(question.id)}>Entfernen</Button>
                 </ListGroup.Item>
             )
@@ -249,7 +251,7 @@ class ExamForm extends React.Component {
             if (!questionsInExamSet.includes(question)) {
                 fetchedExersices.push(
                     <ListGroup.Item>
-                        {question.questionphrase}
+                        {question.questionPhrase}
                         <Button className="pull-right" onClick={() => this.handleAddQuestion(question)}>Hinzufügen</Button>
                     </ListGroup.Item>
                 )

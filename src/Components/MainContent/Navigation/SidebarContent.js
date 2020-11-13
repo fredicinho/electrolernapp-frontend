@@ -164,6 +164,9 @@ class SidebarContent extends React.Component {
                             <ListItem button className={classes.nested} component={Link} to="/createschoolclass">
                                 <ListItemText primary="Neue Klasse"/>
                             </ListItem>
+                            <ListItem button className={classes.nested} component={Link} to="/createinstitution">
+                                <ListItemText primary="Neue Bildungsinstitution"/>
+                            </ListItem>
                         </List>
                     </Collapse>
 

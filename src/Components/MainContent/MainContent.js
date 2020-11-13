@@ -26,6 +26,7 @@ import ExamForm from "./Admin/ExamForm";
 import {RadioOutlined} from "@material-ui/icons";
 import Exam from "./MainComponents/Exam";
 import SchoolClassForm from "./Admin/SchoolClassForm";
+import InstitutionForm from "./Admin/InstitutionForm";
 
 
 const mql = window.matchMedia(`(min-width: 800px)`);
@@ -198,6 +199,7 @@ class MainContent extends React.Component {
                                 <Route path="/createquestion" component={QuestionForm}/>
                                 <Route path="/createexam" component={ExamForm}/>
                                 <Route path="/createschoolclass" component={SchoolClassForm}/>
+                                <Route path="/createinstitution" component={InstitutionForm}/>
                                 <Route component={NoMatch}/>
                             </Switch>
                         </MaterialTitlePanel>

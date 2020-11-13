@@ -135,11 +135,12 @@ class SchoolClassForm extends React.Component {
 
         ApiRequests.apiPostRequest(urlTypes.SCHOOLCLASS, newSchoolClass)
             .then(result => {
-                if (result.status === 200) {
+                console.log(result)
+                if (result.status === 201) {
                     this.setState({
                         ...initialState,
-                        questionCreated: true,
-                        questionCreatedMessage: "Die Klasse :: " + result.data.name + " :: wurde erfolgreich erstellt!",
+                        schooClassCreated: true,
+                        schooClassCreatedMessage: "Die Klasse :: " + result.data.name + " :: wurde erfolgreich erstellt!",
                     });
                 } else {
                     this.setState({

@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import SchoolIcon from '@material-ui/icons/School';
 
+
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -14,12 +15,22 @@ const useStyles = makeStyles((theme) => ({
     menuButton: {
         marginRight: theme.spacing(2),
     },
+    mainTitle: {
+        flexGrow: 3,
+    },
     title: {
         flexGrow: 1,
     },
     navigationBarStyle: {
         backgroundColor: "#03a9f4",
-    }
+    },
+    link: {
+        textDecoration: 'none',
+        color: 'white',
+        '&:hover': {
+            textDecoration: 'none',
+        }
+    },
 }));
 
 export default function NavigationBar() {
@@ -32,11 +43,13 @@ export default function NavigationBar() {
                     <IconButton href="/" edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
                         <SchoolIcon />
                     </IconButton>
-                    <Typography variant="h6" className={classes.title}>
-                        gefördert von der Hochschule Luzern - Gebäudetechnik
+                    <Typography variant="h6" className={classes.title} >
+                        <a className={classes.link} href="https://www.hslu.ch/de-ch/technik-architektur/studium/bachelor/gebaeudetechnik-energie/" target="_blank">
+                            gefördert von der Hochschule Luzern - Gebäudetechnik
+                        </a>
                     </Typography>
-                    <Typography variant="h2" className={classes.title} align="justify">
-                        Electrolern-App
+                    <Typography variant="h2" className={classes.mainTitle}>
+                        Brain Power
                     </Typography>
                     <Button color="inherit" href="/login">Einloggen</Button>
                     <Button color="inherit" href="/register">Registrieren</Button>
