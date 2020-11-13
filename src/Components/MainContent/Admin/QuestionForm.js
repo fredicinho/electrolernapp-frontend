@@ -131,6 +131,7 @@ class QuestionForm extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
+        console.log("State on submit::")
         console.log(this.state)
         let possibleAnswers = [];
         let correctAnswers = [];
@@ -146,7 +147,7 @@ class QuestionForm extends React.Component {
         }
 
         let newQuestion = {
-            questionPhrase: this.state.questionPhrase,
+            questionphrase: this.state.questionPhrase,
             possibleAnswers: possibleAnswers,
             correctAnswers: correctAnswers,
             questionType: this.state.questionType,
@@ -155,9 +156,10 @@ class QuestionForm extends React.Component {
             categorySetIds: [this.state.categorySetId],
             questionImageId: null,
             answerImageId: null,
-            pointsToAchieve: this.state.possiblePoints
+            pointsToAchieve: parseInt(this.state.possiblePoints)
         }
-        console.log(newQuestion)
+        console.log("New Ouestion to send ::")
+        console.log(JSON.stringify(newQuestion))
         ApiRequests.apiPostRequest(urlTypes.QUESTIONS, newQuestion)
             .then(result => {
                 console.log(result)
