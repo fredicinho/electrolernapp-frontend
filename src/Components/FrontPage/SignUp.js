@@ -12,6 +12,7 @@ import Container from '@material-ui/core/Container';
 import withStyles from "@material-ui/core/styles/withStyles";
 import AuthenticationService from "../../Services/AuthService/AuthenticationRequests";
 import {ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
+import Fade from "react-reveal/Fade";
 
 
 function Copyright() {
@@ -33,6 +34,7 @@ const styles = theme => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        height: '100vh',
     },
     avatar: {
         margin: theme.spacing(1),
@@ -147,91 +149,94 @@ class SignUp extends React.Component {
         const {email, username, password, repeatPassword} = this.state;
 
         return (
-            <Container component="main" maxWidth="xs">
-                <CssBaseline/>
-                <div className={classes.paper}>
-                    <Avatar className={classes.avatar}>
-                        <LockOutlinedIcon/>
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Sign up
-                    </Typography>
-                    <ValidatorForm
-                        className={classes.form}
-                        ref="form"
-                        onSubmit={this.handleRegister}
-                        onError={errors => console.log(errors)}
-                    >
-                        <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                            <TextValidator
-                                fullWidth
-                                label="Email"
-                                onChange={this.onChangeEmail}
-                                name="email"
-                                value={email}
-                                validators={['required', 'isEmail']}
-                                errorMessages={['this field is required', 'email is not valid']}
-                            />
+                <Container component="main" maxWidth="xs">
+                    <Fade right>
+                    <CssBaseline/>
+                    <div className={classes.paper}>
+                        <Avatar className={classes.avatar}>
+                            <LockOutlinedIcon/>
+                        </Avatar>
+                        <Typography component="h1" variant="h5">
+                            Sign up
+                        </Typography>
+                        <ValidatorForm
+                            className={classes.form}
+                            ref="form"
+                            onSubmit={this.handleRegister}
+                            onError={errors => console.log(errors)}
+                        >
+                            <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                    <TextValidator
+                                        fullWidth
+                                        label="Email"
+                                        onChange={this.onChangeEmail}
+                                        name="email"
+                                        value={email}
+                                        validators={['required', 'isEmail']}
+                                        errorMessages={['this field is required', 'email is not valid']}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextValidator
+                                        fullWidth
+                                        label="Benutzername"
+                                        onChange={this.onChangeUsername}
+                                        name="username"
+                                        validators={['required']}
+                                        errorMessages={['this field is required']}
+                                        value={username}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextValidator
+                                        fullWidth
+                                        label="Passwort"
+                                        onChange={this.onChangePassword}
+                                        name="password"
+                                        type="password"
+                                        validators={['required']}
+                                        errorMessages={['this field is required']}
+                                        value={password}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextValidator
+                                        fullWidth
+                                        label="Passwort wiederholen"
+                                        onChange={this.onChangeRepeatPassword}
+                                        name="repeatPassword"
+                                        type="password"
+                                        validators={['isPasswordMatch', 'required']}
+                                        errorMessages={['password mismatch', 'this field is required']}
+                                        value={repeatPassword}
+                                    />
+                                </Grid>
+                                <Button
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained"
+                                    color="primary"
+                                    className={classes.submit}
+                                >
+                                    Sign Up
+                                </Button>
                             </Grid>
-                            <Grid item xs={12}>
-                            <TextValidator
-                                fullWidth
-                                label="Benutzername"
-                                onChange={this.onChangeUsername}
-                                name="username"
-                                validators={['required']}
-                                errorMessages={['this field is required']}
-                                value={username}
-                            />
+                        </ValidatorForm>
+                        <Grid container justify="center">
+                            <Grid item>
+                                <Link href="/login" variant="body2">
+                                    Already have an account? Sign in
+                                </Link>
                             </Grid>
-                            <Grid item xs={12}>
-                            <TextValidator
-                                fullWidth
-                                label="Passwort"
-                                onChange={this.onChangePassword}
-                                name="password"
-                                type="password"
-                                validators={['required']}
-                                errorMessages={['this field is required']}
-                                value={password}
-                            />
-                            </Grid>
-                            <Grid item xs={12}>
-                            <TextValidator
-                                fullWidth
-                                label="Passwort wiederholen"
-                                onChange={this.onChangeRepeatPassword}
-                                name="repeatPassword"
-                                type="password"
-                                validators={['isPasswordMatch', 'required']}
-                                errorMessages={['password mismatch', 'this field is required']}
-                                value={repeatPassword}
-                            />
-                            </Grid>
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                color="primary"
-                                className={classes.submit}
-                            >
-                                Sign Up
-                            </Button>
                         </Grid>
-                    </ValidatorForm>
-                    <Grid container justify="center">
-                        <Grid item>
-                            <Link href="/login" variant="body2">
-                                Already have an account? Sign in
-                            </Link>
-                        </Grid>
-                    </Grid>
-                </div>
-                <Box mt={5}>
-                    <Copyright/>
-                </Box>
-            </Container>
+                    </div>
+                    <Box mt={5}>
+                        <Copyright/>
+                    </Box>
+            </Fade>
+                </Container>
+
         );
     }
 }

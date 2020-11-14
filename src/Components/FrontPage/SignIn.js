@@ -16,6 +16,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import AuthenticationService from "../../Services/AuthService/AuthenticationRequests";
 import Input from "react-validation/build/input";
 import {TextValidator, ValidatorForm} from "react-material-ui-form-validator";
+import Fade from 'react-reveal/Fade';
 
 
 
@@ -38,6 +39,7 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    height: '100vh',
   },
   avatar: {
     margin: theme.spacing(1),
@@ -117,7 +119,9 @@ class SignIn extends React.Component {
     const { username, password } = this.state;
 
     return (
+
         <Container component="main" maxWidth="xs">
+          <Fade right>
           <CssBaseline />
           <div className={classes.paper}>
             <Avatar className={classes.avatar}>
@@ -187,7 +191,9 @@ class SignIn extends React.Component {
           <Box mt={8}>
             <Copyright />
           </Box>
+          </Fade>
         </Container>
+
     );
   }
 }

@@ -6,6 +6,8 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import SchoolIcon from '@material-ui/icons/School';
+import Zoom from 'react-reveal/Roll';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -13,16 +15,15 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
     },
     menuButton: {
-        marginRight: theme.spacing(2),
+        color: 'white',
+        fontWeight: 700,
     },
     mainTitle: {
-        flexGrow: 3,
+        flexGrow: 2,
+        alignItems: 'center',
     },
     title: {
         flexGrow: 1,
-    },
-    navigationBarStyle: {
-        backgroundColor: "#03a9f4",
     },
     link: {
         textDecoration: 'none',
@@ -38,7 +39,7 @@ export default function NavigationBar() {
 
     return (
         <div className={classes.root}>
-            <AppBar position="static" color="primary" className={classes.navigationBarStyle}>
+            <AppBar position="static" color="transparent">
                 <Toolbar>
                     <IconButton href="/" edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
                         <SchoolIcon />
@@ -48,11 +49,8 @@ export default function NavigationBar() {
                             gefördert von der Hochschule Luzern - Gebäudetechnik
                         </a>
                     </Typography>
-                    <Typography variant="h2" className={classes.mainTitle}>
-                        Brain Power
-                    </Typography>
-                    <Button color="inherit" href="/login">Einloggen</Button>
-                    <Button color="inherit" href="/register">Registrieren</Button>
+                    <Button className={classes.menuButton} href="/login">Einloggen</Button>
+                    <Button className={classes.menuButton} href="/register">Registrieren</Button>
                 </Toolbar>
             </AppBar>
         </div>

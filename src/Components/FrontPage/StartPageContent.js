@@ -1,36 +1,43 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
-import background from "../../images/backgroundImage.jpg"
+import background from "../../images/backgroundBlue.jpg"
 import withStyles from "@material-ui/core/styles/withStyles";
 import Box from '@material-ui/core/Box';
+import Zoom from 'react-reveal/Zoom';
+import Roll from 'react-reveal/Roll';
+import Toolbar from "@material-ui/core/Toolbar";
+import '../../CSS/NavigationBar.css';
+import logo from "../../images/logoWhite.png"
 
 
 const styles = theme => ({
     root: {
-        backgroundImage:  `url(${background})`,
+        backgroundImage: `url(${background})`,
         backgroundRepeat: 'no-repeat',
-        backgroundSize: '100% auto',
-    }
+        backgroundSize: 'auto auto',
+        backgroundPosition: 'center',
+        flexDirection: 'column',
+    },
 });
 
 class StartPageContent extends React.Component {
 
     render() {
-        const { classes } = this.props;
-        return(
-            <Box className={classes.root}
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                minHeight="100vh"
-            >
-                    <Box width="auto" height="auto">
-                        <Button variant="contained" color="primary"> Getting Started </Button>
-                        <Button variant="contained" color="primary" href="/demo"> Demo </Button>
-                    </Box>
-            </Box>
+        const {classes} = this.props;
+        return (
+                <Box className={classes.root}
+                     display="flex"
+                     justifyContent="center"
+                     alignItems="center"
+                     minHeight="100vh"
+                >
+                    <Zoom>
+                        <img src={logo} alt="Logo Brain Power"/>
+                        <span className='transparent_btn transparent_btn.blue'>Probier eine Demo aus!</span>
+                    </Zoom>
 
+                </Box>
         );
     }
 }
