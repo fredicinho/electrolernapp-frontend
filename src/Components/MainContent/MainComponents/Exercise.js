@@ -1,5 +1,4 @@
 import React from "react";
-import axios from 'axios';
 import Loader from "../Utils/Loader";
 import Quiz from "../../Quiz/Quiz"
 import ApiRequests, {urlTypes} from "../../../Services/AuthService/ApiRequests";
@@ -51,7 +50,7 @@ class Exercise extends React.Component {
             let correctAnswers = this.giveIndexesOfCorrectAnswers(data.possibleAnswers, data.correctAnswers)
             quizData.questions.push(
                 {
-                    "question": data.questionphrase,
+                    "question": data.questionPhrase,
                     "questionType": "text",
                     "questionPic": questionImageUrl, // checkquestion Objekt
                     "answerSelectionType": type,
@@ -99,7 +98,6 @@ class Exercise extends React.Component {
                 indexes.push(this.getIndexOfArray(possibleAnswers, 'id', correctAnswer.id) + 1)
             }
         });
-        console.log(indexes)
         return indexes
     }
 
@@ -133,6 +131,8 @@ class Exercise extends React.Component {
         } else if (!isLoaded) {
             return <Loader/>
         } else {
+            console.log("Loading quiz now")
+            console.log(this.state.quizData)
             return (
                 <React.Fragment>
                     <Quiz quiz={quizData} continueTillCorrect={true} />

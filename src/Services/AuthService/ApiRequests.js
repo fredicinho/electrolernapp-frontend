@@ -10,6 +10,7 @@ const EXAMSET_API = '/api/v1/examSets/'
 const INSTITUTION_API = '/api/v1/institutions/';
 const SCHOOLCLASS_API = '/api/v1/schoolClasses/';
 const USERS_API = '/api/v1/users/';
+const EXAMCHECK_API = '/api/v1/examSets/check';
 
 
 export const urlTypes = {
@@ -21,6 +22,7 @@ export const urlTypes = {
   INSTITUTION: INSTITUTION_API,
   SCHOOLCLASS: SCHOOLCLASS_API,
   USERS: USERS_API,
+  EXAMCHECK: EXAMCHECK_API
 }
 
 

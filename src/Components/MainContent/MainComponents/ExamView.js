@@ -1,11 +1,12 @@
-import React from "react";
-import withStyles from "@material-ui/core/styles/withStyles";
-import Grid from "@material-ui/core/Grid";
-import CategoryCard from "../Utils/CategoryCard";
+import React from 'react';
+import {changeNavigationPage} from "../../../Redux/Actions/navigationActions";
 import ApiRequests, {urlTypes} from "../../../Services/AuthService/ApiRequests";
 import Loader from "../Utils/Loader";
-import {changeNavigationPage} from "../../../Redux/Actions/navigationActions";
+import Grid from "@material-ui/core/Grid";
+import CategoryCard from "../Utils/CategoryCard";
 import {connect} from "react-redux";
+import withStyles from "@material-ui/core/styles/withStyles";
+import ExamCard from "../Utils/ExamCard";
 
 const myStyles = theme => ({
     root: {
@@ -25,23 +26,23 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-class CategorieView extends React.Component {
+class ExamView extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            categories: [],
+            exams: [],
             isLoaded: false,
         }
     }
 
     componentDidMount() {
-        ApiRequests.apiGetRequest(urlTypes.CATEGORIES)
+        ApiRequests.apiGetRequest(urlTypes.EXAMSET)
             .then(result => {
                 console.log(result.data)
                 this.setState({
                     isLoaded: true,
-                    categories: result.data,
+                    exams: result.data,
                 });
             })
             .catch(function (error) {
@@ -49,35 +50,34 @@ class CategorieView extends React.Component {
                 // TODO: Make an Error Screen Component!!!
             })
             .finally(function () {
-                console.log("Made Category Request")
             });
     }
 
     render() {
-        const {error, isLoaded, categories} = this.state;
+        const {error, isLoaded, exams} = this.state;
         const { classes } = this.props
         if (error) {
             return <div>Error: {error.message}</div>;
         } else if (!isLoaded) {
             return <Loader/>
         } else {
-            let categoryItems = [];
-            categories.map((category) => {
-                categoryItems.push(
+            let examItems = [];
+            exams.map((exam) => {
+                examItems.push(
                     <Grid item xs={12} sm={6} md={4} lg={3} justify="space-around">
-                        <CategoryCard category={category}/>
+                        <ExamCard exam={exam}/>
                     </Grid>)
             });
             return (
                 <div className={classes.root} justify="center">
                     <Grid container spacing={3}>
-                        {categoryItems}
+                        {examItems}
                     </Grid>
                 </div>
             );
         }
     }
 }
-const CategoryViewDefault = connect(null, mapDispatchToProps)(CategorieView)
+const ExamViewDefault = connect(null, mapDispatchToProps)(ExamView)
 
-export default withStyles(myStyles)(CategoryViewDefault);
+export default withStyles(myStyles)(ExamViewDefault);
