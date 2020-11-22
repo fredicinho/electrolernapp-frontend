@@ -41,6 +41,7 @@ const initialState = {
     city: "",
     institutionCreated: false,
     institutionCreatedMessage: "",
+    error: "",
 }
 
 
@@ -54,21 +55,31 @@ class SchoolClassForm extends React.Component {
 
         this.handleInstitutionName = this.handleInstitutionName.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleDescription = this.handleDescription.bind(this);
+        this.handleSchoolClassDescription = this.handleSchoolClassDescription.bind(this);
+        this.handleInstitution = this.handleInstitution.bind(this);
+        this.handleCity = this.handleCity.bind(this);
+        this.handlePlz = this.handlePlz.bind(this);
 
+    }
+
+    handleCity(e) {
+        e.preventDefault();
+        this.setState({
+            city: e.target.value,
+        })
+    }
+
+    handlePlz(e) {
+        e.preventDefault();
+        this.setState({
+            plz: e.target.value,
+        })
     }
 
     handleInstitutionName(e) {
         e.preventDefault();
         this.setState({
             name: e.target.value,
-        })
-    }
-
-    handleDescription(e) {
-        e.preventDefault();
-        this.setState({
-            description: e.target.value,
         })
     }
 
@@ -154,7 +165,7 @@ class SchoolClassForm extends React.Component {
                     </Alert>
                     }
                     <Typography component="h1" variant="h5">
-                        Erstelle hier eine neue Klasse
+                        Erstelle hier eine neue Bildungsinstitution
                     </Typography>
                     <Form onSubmit={this.handleSubmit}>
                         <Form.Group controlId="institutionName">
@@ -165,7 +176,7 @@ class SchoolClassForm extends React.Component {
                         <Form.Group controlId="institutionDescription">
                             <Form.Label>Beschreibung</Form.Label>
                             <Form.Control as="input" placeholder="Gib hier eine Beschreibung der Bildungsinstitution ein" value={description}
-                                          onChange={this.handleDescription}/>
+                                          onChange={this.handleSchoolClassDescription}/>
                         </Form.Group>
                         <Form.Group controlId="city">
                             <Form.Label>Ort</Form.Label>
@@ -173,7 +184,7 @@ class SchoolClassForm extends React.Component {
                                           onChange={this.handleCity}/>
                         </Form.Group>
                         <Form.Group controlId="plz">
-                            <Form.Label>Ort</Form.Label>
+                            <Form.Label>PLZ</Form.Label>
                             <Form.Control as="input" placeholder="Gib hier die Postleitzahl der Bildungsinstitution ein" value={plz}
                                           onChange={this.handlePlz}/>
                         </Form.Group>

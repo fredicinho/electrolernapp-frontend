@@ -13,6 +13,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import AuthenticationService from "../../Services/AuthService/AuthenticationRequests";
 import {ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 import Fade from "react-reveal/Fade";
+import {Alert} from "react-bootstrap";
 
 
 function Copyright() {
@@ -66,6 +67,7 @@ class SignUp extends React.Component {
             successful: false,
             message: "",
             repeatPassword: "",
+            error: false,
         };
     }
 
@@ -127,18 +129,21 @@ class SignUp extends React.Component {
                 window.location.reload();
             },
             error => {
-                console.log(error)
+                console.log(error.response)
                 const resMessage =
                     (error.response &&
                         error.response.data &&
                         error.response.data.message) ||
                     error.message ||
                     error.toString();
-
-                this.setState({
-                    successful: false,
-                    message: resMessage
-                });
+                if (error.response.status === 409) {
+                    this.setState({
+                        successful: false,
+                        message: resMessage,
+                        error: true,
+                        errorMessage: "Es existiert bereits ein Benutzer mit dieser E-Mail Adresse oder diesem Benutzernamen!"
+                    });
+                }
             }
         );
     }
@@ -146,7 +151,7 @@ class SignUp extends React.Component {
 
     render() {
         const {classes} = this.props;
-        const {email, username, password, repeatPassword} = this.state;
+        const {email, username, password, repeatPassword, error, errorMessage} = this.state;
 
         return (
                 <Container component="main" maxWidth="xs">
@@ -159,6 +164,11 @@ class SignUp extends React.Component {
                         <Typography component="h1" variant="h5">
                             Sign up
                         </Typography>
+                        {error &&
+                        <Alert variant="danger">
+                            {errorMessage}
+                        </Alert>
+                        }
                         <ValidatorForm
                             className={classes.form}
                             ref="form"

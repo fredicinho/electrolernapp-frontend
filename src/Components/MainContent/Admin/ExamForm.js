@@ -153,6 +153,7 @@ class ExamForm extends React.Component {
                         examCreatedPopup: true,
                         examCreatedMessage: "Die Prüfung :: " + result.data.title + " :: wurde erfolgreich erstellt!",
                     });
+                    this.getCategories();
                 } else {
                     this.setState({
                         ...initialState,
@@ -232,7 +233,6 @@ class ExamForm extends React.Component {
     render() {
         const {classes} = this.props;
         const { questionsInExamSet, questionsOfSelectedCategorySet, examCreatedPopup, examCreatedMessage } = this.state;
-
         let chosedExersices = [];
         questionsInExamSet.map(question => {
             chosedExersices.push(

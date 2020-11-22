@@ -5,6 +5,9 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Checkbox from "@material-ui/core/Checkbox";
 import ListItemText from "@material-ui/core/ListItemText";
+import Container from "@material-ui/core/Container";
+import Image from 'material-ui-image'
+
 
 
 const myStyles = theme => ({
@@ -26,8 +29,6 @@ class QuizCore extends React.Component {
     }
 
     handleToggle(value) {
-        console.log("New Value of question")
-        console.log(value)
         const { checked } = this.state;
         const currentIndex = checked.indexOf(value);
         const newChecked = [...checked];
@@ -44,25 +45,36 @@ class QuizCore extends React.Component {
 
     render() {
         const {classes, question} = this.props;
+        let imageAvailable = false;
+        console.log("Question is ::")
+        console.log(question)
+        if (question.links.length > 1) {
+            imageAvailable = true;
+        }
         return(
-            <List className={classes.root}>
-                {question.possibleAnswers.map((answer) => {
-                    return (
-                        <ListItem key={answer} role={undefined} dense button onClick={() => this.handleToggle(answer)}>
-                            <ListItemIcon>
-                                <Checkbox
-                                    edge="start"
-                                    checked={this.state.checked.indexOf(answer) !== -1}
-                                    tabIndex={-1}
-                                    disableRipple
-                                    inputProps={{ 'aria-labelledby': answer.id }}
-                                />
-                            </ListItemIcon>
-                            <ListItemText id={answer.id} primary={answer.answerPhrase} />
-                        </ListItem>
-                    );
-                })}
-            </List>
+            <Container maxWidth={"lg"}>
+                { imageAvailable &&
+                    <Image src={question.links[1].href}/>
+                }
+                <List className={classes.root}>
+                    {question.possibleAnswers.map((answer) => {
+                        return (
+                            <ListItem key={answer} role={undefined} dense button onClick={() => this.handleToggle(answer)}>
+                                <ListItemIcon>
+                                    <Checkbox
+                                        edge="start"
+                                        checked={this.state.checked.indexOf(answer) !== -1}
+                                        tabIndex={-1}
+                                        disableRipple
+                                        inputProps={{ 'aria-labelledby': answer.id }}
+                                    />
+                                </ListItemIcon>
+                                <ListItemText id={answer.id} primary={answer.answerPhrase} />
+                            </ListItem>
+                        );
+                    })}
+                </List>
+            </Container>
         );
     }
 }

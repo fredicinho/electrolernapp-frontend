@@ -43,7 +43,7 @@ class Quiz extends React.Component {
     }
 
     componentDidMount() {
-        ApiRequests.apiGetRequest('/api/v1/examSets/1')
+        ApiRequests.apiGetRequest('/api/v1/examSets/4')
             .then(result => {
                 if (result.data !== undefined && result.data != 0) {
                     this.setState({
@@ -112,6 +112,7 @@ class Quiz extends React.Component {
                 possibleAnswers: question.possibleAnswers, // contains "answerPhrase", "id", and "links" which are empty
                 questionType: question.questionType,
                 pointsToAchieve: question.pointsToAchieve,
+                links: question.links,
                 result: {
                     userId: AuthenticationRequests.getCurrentUser().id,
                     questionId: question.id,
@@ -152,7 +153,7 @@ class Quiz extends React.Component {
 
         if (isLoaded) {
             return (
-                <Container className={classes.rootContainer}>
+                <Container maxWidth={"lg"} className={classes.rootContainer}>
                     {quizStarted && quizDataLoaded &&
                     <VerticalTab questions={questions} onChangeAnswer={this.changeSelectedAnswers} sendActualAnswers={this.sendActualAnswers}/>
                     }

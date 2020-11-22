@@ -135,7 +135,7 @@ class Exercise extends React.Component {
             console.log(this.state.quizData)
             return (
                 <React.Fragment>
-                    <Quiz quiz={quizData} continueTillCorrect={true} />
+                    <Quiz quiz={quizData} continueTillCorrect={false} />
                 </React.Fragment>
             );
         }

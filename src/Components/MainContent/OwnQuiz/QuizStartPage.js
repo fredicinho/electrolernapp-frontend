@@ -14,11 +14,12 @@ import logo from "../../../images/logoBlue.png"
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import withStyles from "@material-ui/core/styles/withStyles";
+import moment from "moment";
 
 const myStyles = theme => ({
     root: {
-        maxWidth: '40%',
-        maxHeigth: '50%',
+        maxWidth: 'auto',
+        maxHeigth: 'auto',
     },
     media: {
         height: '50%',
@@ -57,12 +58,17 @@ class QuizStartPage extends React.Component {
     render() {
 
         const { classes } = this.props;
+        console.log(this.props.examData)
+        const examTime = moment(this.props.examData.startDate).format('LLLL') + " - " + moment(this.props.examData.endDate).format('LT')
+        let examIsActive = false;
+        if (moment() >= moment(this.props.examData.startDate) && moment() <= moment(this.props.examData.endDate)) {
+            examIsActive = true;
+        }
         return (
             <Card className={classes.root}>
-                <CssBaseline/>
                 <CardHeader
                     title={this.props.examData.title}
-                    subheader="examTime comes here"
+                    subheader={examTime}
                 />
                 <CardMedia
                     className={classes.media}
@@ -75,7 +81,7 @@ class QuizStartPage extends React.Component {
                     </Typography>
                 </CardContent>
                 <CardActions disableSpacing>
-                    <Button variant="contained" color="primary" onClick={this.props.startQuiz}>
+                    <Button variant="contained" color="primary" disabled={!examIsActive} onClick={this.props.startQuiz}>
                         Prüfung starten
                     </Button>
                     <IconButton

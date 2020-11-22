@@ -17,6 +17,7 @@ import AuthenticationService from "../../Services/AuthService/AuthenticationRequ
 import Input from "react-validation/build/input";
 import {TextValidator, ValidatorForm} from "react-material-ui-form-validator";
 import Fade from 'react-reveal/Fade';
+import {Alert} from "react-bootstrap";
 
 
 
@@ -98,17 +99,21 @@ class SignIn extends React.Component {
             window.location.reload();
           },
           error => {
+            console.log(error)
             const resMessage =
                 (error.response &&
                     error.response.data &&
                     error.response.data.message) ||
                 error.message ||
                 error.toString();
-
-            this.setState({
-              loading: false,
-              message: resMessage
-            });
+            if (error.response.status === 500) {
+              this.setState({
+                loading: false,
+                message: resMessage,
+                error: true,
+                errorMessage: "Der Benutzername oder das Passwort ist falsch!"
+              });
+            }
           }
       );
     }
@@ -116,7 +121,7 @@ class SignIn extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { username, password } = this.state;
+    const { username, password, error, errorMessage } = this.state;
 
     return (
 
@@ -130,6 +135,11 @@ class SignIn extends React.Component {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
+            {error &&
+              <Alert variant="danger">
+              {errorMessage}
+              </Alert>
+            }
             <ValidatorForm
                 className={classes.form}
                 ref="form"
