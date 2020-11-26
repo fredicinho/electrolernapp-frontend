@@ -36,14 +36,15 @@ class ExamCard extends React.Component {
         this.state = {
             redirect: false,
         }
-        this.handleToggleForSets = this.handleToggleForSets.bind(this);
+        this.handleToggleForExam = this.handleToggleForExam.bind(this);
     }
 
-    handleToggleForSets(event) {
+    handleToggleForExam(event) {
         event.preventDefault();
         const selectedExam = {
-            selectedExam: this.props.exam.title,
-            selectedExamUrl: urlTypes.EXAMSET + this.props.exam.id,
+            selectedExamTitle: this.props.exam.title,
+            selectedExamId: this.props.exam.examSetId,
+            selectedExamUrl: urlTypes.EXAMSET + this.props.exam.examSetId,
         }
         this.props.selectExam(selectedExam)
         this.setState({redirect: true});
@@ -51,7 +52,7 @@ class ExamCard extends React.Component {
 
 
     render() {
-        const { classes, title } = this.props;
+        const { classes, exam } = this.props;
         if (this.state.redirect) {
             return <Redirect push to="/exam" />;
         } else {
@@ -61,22 +62,20 @@ class ExamCard extends React.Component {
                         <CardMedia
                             className={classes.media}
                             //image="/static/images/cards/contemplative-reptile.jpg"
-                            title={title}
+                            title={exam.title}
                         />
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="h2">
-                                {this.props.category.name}
+                                {exam.title}
                             </Typography>
                             <Typography variant="body2" color="textSecondary" component="p">
-                                TODO: this.props.description showing here
-                                Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                                across all continents except Antarctica
+                                {exam.startDate} - {exam.endDate}
                             </Typography>
                         </CardContent>
                     </CardActionArea>
                     <CardActions>
-                        <Button size="small" color="primary" onClick={this.handleToggleForSets}>
-                            Übungssets
+                        <Button size="small" color="primary" onClick={this.handleToggleForExam}>
+                            Zur Prüfung
                         </Button>
                         <Button size="small" color="primary">
                             Learn More

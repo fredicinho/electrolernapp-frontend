@@ -12,8 +12,9 @@ import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 import "moment/locale/de";
 import AuthenticationService from "../../../Services/AuthService/AuthenticationRequests";
+import makeAnimated from "react-select/animated/dist/react-select.esm";
 
-
+const animatedComponents = makeAnimated();
 
 const styles = theme => ({
     paper: {
@@ -49,6 +50,7 @@ const initialState = {
     userId: "",
     examCreatedPopup: false,
     examCreatedMessage: "",
+    allSchoolClasses: null,
 }
 
 
@@ -66,10 +68,39 @@ class ExamForm extends React.Component {
         this.handleValidFrom = this.handleValidFrom.bind(this);
         this.handleValidUntil = this.handleValidUntil.bind(this);
         this.getCategories = this.getCategories.bind(this);
+        this.getSchoolClasses = this.getSchoolClasses.bind(this);
+        this.handleSchoolClass = this.handleSchoolClass.bind(this);
     }
 
     componentDidMount() {
-        this.getCategories()
+        this.getCategories();
+        this.getSchoolClasses();
+    }
+
+    getSchoolClasses() {
+        ApiRequests.apiGetRequest(urlTypes.SCHOOLCLASS)
+            .then(response => {
+                if (response.data !== undefined && response.data != 0) {
+                    let allSchoolClasses = [];
+                    response.data.map((user) => {
+                        allSchoolClasses.push({
+                            value: user.id,
+                            label: user.name,
+                        })
+                    });
+                    this.setState({
+                        allSchoolClasses: allSchoolClasses,
+                    })
+                } else {
+                    console.log("No Schoolclasses found...")
+                    this.setState({
+                        error: "No Schoolclasses found..."
+                    })
+                }
+            })
+            .catch(error => {
+                console.log(error.data)
+            })
     }
 
     getCategories() {
@@ -96,6 +127,14 @@ class ExamForm extends React.Component {
         ).catch(function (error) {
             console.log(error);
         })
+    }
+
+    handleSchoolClass(e) {
+        if (e != null) {
+            this.setState({
+                schoolClassesInExamSet: e
+            })
+        }
     }
 
     handleValidFrom(e) {
@@ -134,12 +173,19 @@ class ExamForm extends React.Component {
         questionsInExamSet.map(question => {
             idsOfChosenQuestions.push(question.id);
         })
+        console.log("All Schooclasses ")
+        console.log(schoolClassesInExamSet)
+        let schoolClassesInNewExamSet = [];
+        schoolClassesInExamSet.map(schoolClass => {
+            schoolClassesInNewExamSet.push(schoolClass.value);
+        });
+
         let newExam = {
             title: title,
             startDate: startDate,
             endDate: endDate,
             questionsInExamSet: idsOfChosenQuestions,
-            schoolClassesInExamSet: [],
+            schoolClassesInExamSet: schoolClassesInNewExamSet,
             userId: AuthenticationService.getCurrentUser().id,
         }
 
@@ -280,6 +326,17 @@ class ExamForm extends React.Component {
                         <Form.Group controlId="valitUntil">
                             <Form.Label>Prüfungsende</Form.Label>
                             <Datetime locale="de" value={this.state.endDate} onChange={this.handleValidUntil}/>
+                        </Form.Group>
+                        <Form.Group controlId="schooclasses">
+                            <Form.Label>Schulklassen für die Prüfung</Form.Label>
+                            <Select
+                                defaultValue={"Auswählen..."}
+                                closeMenuOnSelect={false}
+                                components={animatedComponents}
+                                onChange={this.handleSchoolClass}
+                                options={this.state.allSchoolClasses}
+                                isMulti
+                            />
                         </Form.Group>
                         <Form.Group controlId="category">
                             <Form.Label>Kategorie</Form.Label>

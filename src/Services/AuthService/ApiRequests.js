@@ -10,7 +10,7 @@ const EXAMSET_API = '/api/v1/examSets/'
 const INSTITUTION_API = '/api/v1/institutions/';
 const SCHOOLCLASS_API = '/api/v1/schoolClasses/';
 const USERS_API = '/api/v1/users/';
-const EXAMCHECK_API = '/api/v1/examSets/check';
+const EXAMCHECK_API = '/api/v1/examResults/check';
 
 
 export const urlTypes = {
@@ -34,6 +34,10 @@ class ApiRequests {
 
   apiPostRequest(url, data) {
     return axios.post(url, data, { headers: authenticationHeader()});
+  }
+
+  apiPutRequest(url, data) {
+    return axios.put(url, data, { headers: authenticationHeader()})
   }
 
   getAllQuestions() {

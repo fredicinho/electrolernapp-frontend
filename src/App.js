@@ -22,7 +22,7 @@ class App extends React.Component {
     componentDidMount() {
         const user = AuthenticationRequests.getCurrentUser();
         if (user) {
-            ApiRequests.apiGetRequest(urlTypes.QUESTIONS + "user")
+            ApiRequests.apiGetRequest(urlTypes.CATEGORIES)
                 .then(response => {
                     if (response.status === 200) {
                         console.log(response)

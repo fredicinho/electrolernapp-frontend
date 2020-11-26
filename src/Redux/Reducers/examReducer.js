@@ -13,8 +13,8 @@ function examReducer(state = initialExam, action) {
             console.log(action)
             return {
                 ...state,
-                selectedCategorySetUrl: action.payload.selectedCategorySetUrl,
-                selectedCategory: action.payload.selectedCategory,
+                selectedExam: action.payload.selectedExamTitle,
+                selectedExamUrl: action.payload.selectedExamUrl,
             }
         default:
             return state

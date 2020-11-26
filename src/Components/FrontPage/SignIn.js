@@ -68,7 +68,7 @@ class SignIn extends React.Component {
       username: "",
       password: "",
       loading: false,
-      message: ""
+      message: "",
     };
   }
 
@@ -93,6 +93,16 @@ class SignIn extends React.Component {
     });
 
 
+    if (this.props.examSignIn) {
+      console.log("Signing in for Exam")
+      console.log(this.props.examSetId)
+      AuthenticationService.startExam(this.state.username, this.state.password, this.props.examSetId).then(
+          () => {
+            console.log("Received Response")
+            this.props.onExamSignIn();
+          }
+      );
+    } else {
       AuthenticationService.login(this.state.username, this.state.password).then(
           () => {
             this.props.history.push("/");
@@ -117,6 +127,7 @@ class SignIn extends React.Component {
           }
       );
     }
+  }
 
 
   render() {
@@ -185,18 +196,32 @@ class SignIn extends React.Component {
                 Sign In
               </Button>
             </ValidatorForm>
-              <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
+            { !this.props.examSignIn &&
+                <Grid container>
+                  <Grid item xs>
+                    <Link href="#" variant="body2">
+                      Forgot password?
+                    </Link>
+                  </Grid>
+                  <Grid item>
+                    <Link href="/register" variant="body2">
+                      {"Don't have an account? Sign Up"}
+                    </Link>
+                  </Grid>
                 </Grid>
-                <Grid item>
-                  <Link href="/register" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
-              </Grid>
+            }
+            { this.props.onExamSignIn &&
+              <Button
+                  fullWidth
+                  variant="contained"
+                  color="secondary"
+                  className={classes.submit}
+                  onClick={this.props.onGoBack}
+              >
+                Zurück
+              </Button>
+
+            }
           </div>
           <Box mt={8}>
             <Copyright />
@@ -206,6 +231,10 @@ class SignIn extends React.Component {
 
     );
   }
+}
+
+SignIn.defaultProps = {
+  examSignIn: false,
 }
 
 export default withStyles(styles)(SignIn);

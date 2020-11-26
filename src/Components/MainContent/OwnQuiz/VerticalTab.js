@@ -7,6 +7,9 @@ import Box from '@material-ui/core/Box';
 import withStyles from "@material-ui/core/styles/withStyles";
 import QuizCore from "./QuizCore";
 import ApiRequests, {urlTypes} from "../../../Services/AuthService/ApiRequests";
+import moment from "moment";
+import AuthenticationRequests from "../../../Services/AuthService/AuthenticationRequests";
+
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -59,6 +62,8 @@ class VerticalTabs extends React.Component {
         this.state = {
             value: this.props.questions[0].id,
             questions: this.props.questions,
+            timeLeft: true,
+            difference: null,
         }
         this.handleChange = this.handleChange.bind(this);
         this.changeSelectedAnswers = this.changeSelectedAnswers.bind(this);
@@ -86,7 +91,7 @@ class VerticalTabs extends React.Component {
                 return answer.answerPhrase
             })
         }
-        ApiRequests.apiPostRequest(urlTypes.EXAMCHECK, affectedResultObject)
+        ApiRequests.apiPutRequest(urlTypes.EXAMCHECK, affectedResultObject)
             .then(result => {
                 if (result.status === 201) {
                     console.log("Sending result was successful")
@@ -114,8 +119,27 @@ class VerticalTabs extends React.Component {
         })
     }
 
+    componentDidMount() {
+        this.interval = setInterval(() => {
+            const { examData } = this.props;
+            const difference = moment(examData.endDate) - moment();
+            this.setState({
+                timeLeft: {
+                    hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+                    minutes: Math.floor((difference / 1000 / 60) % 60),
+                    seconds: Math.floor((difference / 1000) % 60),
+                    difference: difference,
+                }
+            });
+        }, 1000);
+    }
+
+
     render() {
-        const { questions } = this.state;
+        const { questions, timeLeft } = this.state;
+        if (timeLeft.difference <= 0 ) {
+            this.props.signOutOfExam();
+        }
         let tabLabels = [];
         let tabPanels = [];
         questions.map((question) => {
@@ -128,9 +152,13 @@ class VerticalTabs extends React.Component {
                 </TabPanel>
             );
         });
+
         const { classes } = this.props;
+        console.log("Timer")
+        console.log(moment(this.props.examData.endDate) - moment())
         return (
             <div className={classes.root}>
+                {timeLeft.hours + ":" + timeLeft.minutes + ":" + timeLeft.seconds}
                 <Tabs
                     orientation="vertical"
                     variant="scrollable"

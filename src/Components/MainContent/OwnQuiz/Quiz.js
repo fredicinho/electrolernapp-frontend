@@ -6,6 +6,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import QuizStartPage from "./QuizStartPage";
 import AuthenticationRequests from "../../../Services/AuthService/AuthenticationRequests";
 import VerticalTab from "./VerticalTab";
+import {connect} from "react-redux";
 
 const initialState = {
     exam: null,
@@ -16,6 +17,7 @@ const initialState = {
     quizStarted: false,
     quizUrl: "",
     quizDataLoaded: false,
+    examFinished: false,
 }
 
 const myStyles = theme => ({
@@ -26,6 +28,13 @@ const myStyles = theme => ({
     },
 
 });
+
+const mapStateToProps = state => {
+    return {
+        urlOfExam: state.exam.selectedExamUrl,
+        examSetId: state.exam.selectedExamId,
+    };
+};
 
 class Quiz extends React.Component {
 
@@ -40,12 +49,15 @@ class Quiz extends React.Component {
         this.loadQuizData = this.loadQuizData.bind(this);
         this.getActualQuestion = this.getActualQuestion.bind(this);
         this.changeSelectedAnswers = this.changeSelectedAnswers.bind(this);
+        this.signOutOfExam = this.signOutOfExam.bind(this);
     }
 
     componentDidMount() {
-        ApiRequests.apiGetRequest('/api/v1/examSets/4')
+        ApiRequests.apiGetRequest(this.props.urlOfExam)
             .then(result => {
                 if (result.data !== undefined && result.data != 0) {
+                    console.log("Exam received of Reducer url :: ")
+                    console.log(result.data)
                     this.setState({
                         isLoaded: true,
                         examData: result.data,
@@ -62,6 +74,17 @@ class Quiz extends React.Component {
             })
             .finally(function () {
             });
+    }
+
+    signOutOfExam() {
+        AuthenticationRequests.endExam(this.props.examSetId).then((response) => {
+            if (response.status === 200) {
+                this.setState({
+                    examFinished: true,
+                })
+            }
+        });
+        // TODO: Make Exam Finished Page Component
     }
 
     changeSelectedAnswers(selectedAnswers) {
@@ -155,7 +178,12 @@ class Quiz extends React.Component {
             return (
                 <Container maxWidth={"lg"} className={classes.rootContainer}>
                     {quizStarted && quizDataLoaded &&
-                    <VerticalTab questions={questions} onChangeAnswer={this.changeSelectedAnswers} sendActualAnswers={this.sendActualAnswers}/>
+                    <VerticalTab
+                        questions={questions}
+                        onChangeAnswer={this.changeSelectedAnswers}
+                        sendActualAnswers={this.sendActualAnswers}
+                        examData={this.state.examData}
+                        signOutOfExam={this.signOutOfExam}/>
                     }
                     {quizStarted && !quizDataLoaded &&
                         <Container className={classes.rootContainer}>
@@ -179,4 +207,7 @@ class Quiz extends React.Component {
     }
 }
 
-export default withStyles(myStyles)(Quiz);
+const Exam = connect(mapStateToProps, null)(Quiz)
+
+
+export default withStyles(myStyles)(Exam);

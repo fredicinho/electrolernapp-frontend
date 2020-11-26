@@ -3,7 +3,6 @@ import {changeNavigationPage} from "../../../Redux/Actions/navigationActions";
 import ApiRequests, {urlTypes} from "../../../Services/AuthService/ApiRequests";
 import Loader from "../Utils/Loader";
 import Grid from "@material-ui/core/Grid";
-import CategoryCard from "../Utils/CategoryCard";
 import {connect} from "react-redux";
 import withStyles from "@material-ui/core/styles/withStyles";
 import ExamCard from "../Utils/ExamCard";
@@ -63,6 +62,8 @@ class ExamView extends React.Component {
         } else {
             let examItems = [];
             exams.map((exam) => {
+                console.log("Exam looks like that ::")
+                console.log(exam)
                 examItems.push(
                     <Grid item xs={12} sm={6} md={4} lg={3} justify="space-around">
                         <ExamCard exam={exam}/>

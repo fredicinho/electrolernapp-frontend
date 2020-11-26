@@ -56,7 +56,6 @@ class SchoolClassForm extends React.Component {
         this.handleInstitutionName = this.handleInstitutionName.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleSchoolClassDescription = this.handleSchoolClassDescription.bind(this);
-        this.handleInstitution = this.handleInstitution.bind(this);
         this.handleCity = this.handleCity.bind(this);
         this.handlePlz = this.handlePlz.bind(this);
 
@@ -129,11 +128,6 @@ class SchoolClassForm extends React.Component {
         })
     }
 
-    handleInstitution(e) {
-        this.setState({
-            institution: e.value,
-        })
-    }
 
     handleUsers(e) {
         if (e != null) {
@@ -171,7 +165,7 @@ class SchoolClassForm extends React.Component {
                         <Form.Group controlId="institutionName">
                             <Form.Label>Bildungsinstitution</Form.Label>
                             <Form.Control as="input" placeholder="Gib hier den Namen der Bildungsinstitution ein" value={name}
-                                          onChange={this.handleInstitution}/>
+                                          onChange={this.handleInstitutionName}/>
                         </Form.Group>
                         <Form.Group controlId="institutionDescription">
                             <Form.Label>Beschreibung</Form.Label>
