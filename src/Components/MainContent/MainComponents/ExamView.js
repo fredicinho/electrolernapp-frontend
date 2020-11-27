@@ -6,6 +6,8 @@ import Grid from "@material-ui/core/Grid";
 import {connect} from "react-redux";
 import withStyles from "@material-ui/core/styles/withStyles";
 import ExamCard from "../Utils/ExamCard";
+import Zoom from 'react-reveal/Zoom';
+
 
 const myStyles = theme => ({
     root: {
@@ -62,11 +64,11 @@ class ExamView extends React.Component {
         } else {
             let examItems = [];
             exams.map((exam) => {
-                console.log("Exam looks like that ::")
-                console.log(exam)
                 examItems.push(
                     <Grid item xs={12} sm={6} md={4} lg={3} justify="space-around">
-                        <ExamCard exam={exam}/>
+                        <Zoom>
+                            <ExamCard exam={exam}/>
+                        </Zoom>
                     </Grid>)
             });
             return (

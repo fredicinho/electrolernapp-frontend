@@ -4,24 +4,28 @@ export function getNavigationStateByLocation(location) {
     switch (location) {
         case "/statistics":
             return NavigationStates.STATISTICS;
-            break
         case "/":
             return NavigationStates.HOME;
-            break
         case "/demo":
             return NavigationStates.DEMO;
-            break
         case "/exams":
             return NavigationStates.EXAMS;
-            break
         case "/exercices":
             return NavigationStates.EXERCISES;
-            break
         case "/categories":
-            return NavigationStates.CATEGORIES
-            break
+            return NavigationStates.CATEGORIES;
         case "/categorySets":
-            return NavigationStates.CATEGORYSETS
+            return NavigationStates.CATEGORYSETS;
+        case "/createexam":
+            return NavigationStates.CREATE_EXAM;
+        case "/createinstitution":
+            return NavigationStates.CREATE_INSTITUTION;
+        case "/createschoolclass":
+            return NavigationStates.CREATE_SCHOOLCLASS;
+        case "/createquestion":
+            return NavigationStates.CREATE_QUESTION;
+        case "/reviseexam":
+            return NavigationStates.REVISE_EXAM;
         default:
             return NavigationStates.NOTFOUND;
     }
@@ -50,6 +54,20 @@ export function getNavigationName(navigationItem) {
         case NavigationStates.CATEGORYSETS:
             return "Übungssets";
             break
+        case NavigationStates.CREATE_SCHOOLCLASS:
+            return "Schulklasse erstellen";
+            break
+        case NavigationStates.CREATE_INSTITUTION:
+            return "Bildungsinstitution erstellen";
+            break
+        case NavigationStates.CREATE_QUESTION:
+            return "Frage erstellen";
+            break
+        case NavigationStates.CREATE_EXAM:
+            return "Prüfung erstellen";
+            break
+        case NavigationStates.REVISE_EXAM:
+            return "Prüfung auswerten";
         default:
             return "Not Found";
     }

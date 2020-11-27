@@ -26,7 +26,7 @@ class AuthenticationRequests {
       username,
       email,
       password,
-      role: ['ROLE_USER'],
+      role: ['user'],
     });
   }
 
@@ -58,6 +58,21 @@ class AuthenticationRequests {
 
   getCurrentUser() {
     return JSON.parse(localStorage.getItem('user'));;
+  }
+
+  isAdmin() {
+      const user = JSON.parse(localStorage.getItem('user'));
+      return user.roles.includes("ROLE_ADMIN")
+  }
+
+  isTeacher() {
+      const user = JSON.parse(localStorage.getItem('user'));
+      return user.roles.includes("ROLE_TEACHER");
+  }
+
+  isUser() {
+      const user = JSON.parse(localStorage.getItem('user'));
+      return user.roles.includes("ROLE_USER");
   }
 }
 

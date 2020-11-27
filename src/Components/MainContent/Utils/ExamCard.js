@@ -10,7 +10,8 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import {connect} from "react-redux";
 import { Redirect } from 'react-router';
 import {urlTypes} from "../../../Services/AuthService/ApiRequests";
-import {selectExam} from "../../../Redux/Actions/examActions";
+import {selectExam, selectExamReview} from "../../../Redux/Actions/examActions";
+import AuthenticationRequests from "../../../Services/AuthService/AuthenticationRequests";
 
 
 const myStyles = theme => ({
@@ -25,7 +26,8 @@ const myStyles = theme => ({
 
 function mapDispatchToProps(dispatch) {
     return {
-        selectExam: exam => dispatch(selectExam(exam))
+        selectExam: exam => dispatch(selectExam(exam)),
+        selectExamReview: exam => dispatch(selectExamReview(exam)),
     };
 }
 
@@ -34,9 +36,11 @@ class ExamCard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            redirect: false,
+            redirectToExam: false,
+            redirectToExamReview: false,
         }
         this.handleToggleForExam = this.handleToggleForExam.bind(this);
+        this.handleToggleForExamReview = this.handleToggleForExamReview.bind(this);
     }
 
     handleToggleForExam(event) {
@@ -47,14 +51,27 @@ class ExamCard extends React.Component {
             selectedExamUrl: urlTypes.EXAMSET + this.props.exam.examSetId,
         }
         this.props.selectExam(selectedExam)
-        this.setState({redirect: true});
+        this.setState({redirectToExam: true});
+    }
+
+    handleToggleForExamReview(event) {
+        event.preventDefault();
+        const selectedExamToReview = {
+            selectedExamTitle: this.props.exam.title,
+            selectedExamId: this.props.exam.examSetId,
+            urlOfClassesInExam: this.props.exam.links[1].href,
+        }
+        this.props.selectExamReview(selectedExamToReview);
+        this.setState({redirectToExamReview: true})
     }
 
 
     render() {
         const { classes, exam } = this.props;
-        if (this.state.redirect) {
+        if (this.state.redirectToExam) {
             return <Redirect push to="/exam" />;
+        } else if (this.state.redirectToExamReview) {
+            return <Redirect push to="/reviseexam"/>
         } else {
             return (
                 <Card className={classes.root}>
@@ -77,9 +94,11 @@ class ExamCard extends React.Component {
                         <Button size="small" color="primary" onClick={this.handleToggleForExam}>
                             Zur Prüfung
                         </Button>
-                        <Button size="small" color="primary">
-                            Learn More
-                        </Button>
+                        { (AuthenticationRequests.isAdmin() || AuthenticationRequests.isTeacher()) &&
+                            <Button size="small" color="primary" onClick={this.handleToggleForExamReview}>
+                                Prüfung auswerten
+                            </Button>
+                        }
                     </CardActions>
                 </Card>
             );

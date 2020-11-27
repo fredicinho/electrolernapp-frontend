@@ -53,6 +53,7 @@ class Quiz extends React.Component {
     }
 
     componentDidMount() {
+        console.log(this.props.urlOfExam)
         ApiRequests.apiGetRequest(this.props.urlOfExam)
             .then(result => {
                 if (result.data !== undefined && result.data != 0) {

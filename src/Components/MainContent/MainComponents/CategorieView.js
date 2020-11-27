@@ -6,6 +6,7 @@ import ApiRequests, {urlTypes} from "../../../Services/AuthService/ApiRequests";
 import Loader from "../Utils/Loader";
 import {changeNavigationPage} from "../../../Redux/Actions/navigationActions";
 import {connect} from "react-redux";
+import Zoom from 'react-reveal/Zoom';
 
 const myStyles = theme => ({
     root: {
@@ -64,9 +65,13 @@ class CategorieView extends React.Component {
             let categoryItems = [];
             categories.map((category) => {
                 categoryItems.push(
-                    <Grid item xs={12} sm={6} md={4} lg={3} justify="space-around">
-                        <CategoryCard category={category}/>
-                    </Grid>)
+
+                        <Grid item xs={12} sm={6} md={4} lg={3} justify="space-around">
+                            <Zoom>
+                                <CategoryCard category={category}/>
+                            </Zoom>
+                        </Grid>
+                )
             });
             return (
                 <div className={classes.root} justify="center">

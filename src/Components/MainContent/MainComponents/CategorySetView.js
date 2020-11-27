@@ -7,6 +7,8 @@ import Loader from "../Utils/Loader";
 import {connect} from "react-redux";
 import CategorySetCard from "../Utils/CategorySetCard";
 import withStyles from "@material-ui/core/styles/withStyles";
+import Zoom from 'react-reveal/Zoom';
+
 
 const mapStateToProps = state => {
     return {
@@ -66,7 +68,9 @@ class CategorySetView extends React.Component {
             categorySets.map((categorySet) => {
                 categoryItems.push(
                     <Grid item xs={12} sm={6} md={4} lg={3} justify="space-around">
-                        <CategorySetCard categorySet={categorySet}/>
+                        <Zoom>
+                            <CategorySetCard categorySet={categorySet}/>
+                        </Zoom>
                     </Grid>)
             });
             return (

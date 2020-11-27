@@ -25,7 +25,6 @@ class App extends React.Component {
             ApiRequests.apiGetRequest(urlTypes.CATEGORIES)
                 .then(response => {
                     if (response.status === 200) {
-                        console.log(response)
                         this.setState({
                             isAuthenticated: true,
                             currentUser: user,
@@ -37,6 +36,7 @@ class App extends React.Component {
                 })
                 .catch(error => {
                     console.log(error)
+                    console.log(error.message)
                     this.setState({
                         isAuthenticated: false,
                         redirectToLogin: true,

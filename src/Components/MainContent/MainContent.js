@@ -27,6 +27,7 @@ import ExamView from "./MainComponents/ExamView";
 import SchoolClassForm from "./Admin/SchoolClassForm";
 import InstitutionForm from "./Admin/InstitutionForm";
 import Quiz from "./OwnQuiz/Quiz";
+import ReviseExam from "./Admin/ReviseExam";
 
 
 const mql = window.matchMedia(`(min-width: 800px)`);
@@ -201,6 +202,7 @@ class MainContent extends React.Component {
                                 <Route path="/createexam" component={ExamForm}/>
                                 <Route path="/createschoolclass" component={SchoolClassForm}/>
                                 <Route path="/createinstitution" component={InstitutionForm}/>
+                                <Route path="/reviseexam" component={ReviseExam}/>
                                 <Route component={NoMatch}/>
                             </Switch>
                         </MaterialTitlePanel>

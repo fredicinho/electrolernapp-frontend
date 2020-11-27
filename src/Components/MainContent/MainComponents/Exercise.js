@@ -16,13 +16,19 @@ class Exercise extends React.Component {
 
     constructor(props) {
         super(props);
-
-
         this.state = {
             quizData: {},
             error: null,
             isLoaded: false,
+            fetchedQuestions: null,
         }
+
+        this.onCompleteAction = this.onCompleteAction.bind(this);
+        this.checkIfArrayContainsAllValues = this.checkIfArrayContainsAllValues.bind(this);
+        this.createQuizData = this.createQuizData.bind(this);
+        this.getTypeOfQuestion = this.getTypeOfQuestion.bind(this);
+        this.giveIndexesOfCorrectAnswers = this.giveIndexesOfCorrectAnswers.bind(this);
+
     }
 
     createQuizData(exerciseData) {
@@ -66,6 +72,57 @@ class Exercise extends React.Component {
         return quizData;
     }
 
+    onCompleteAction(result) {
+        let statistics = [];
+        result.userInput.map((userinput, index) => {
+            const involvedQuestion = this.state.fetchedQuestions[index];
+            const correctAnswers = this.giveIndexesOfCorrectAnswers(involvedQuestion.possibleAnswers, involvedQuestion.correctAnswers)
+            let statistic = {
+                pointsAchieved: null,
+                isMarked: false,
+                questionId: involvedQuestion.id,
+            }
+            if (Array.isArray(userinput)) {
+                if (this.checkIfArrayContainsAllValues(correctAnswers, userinput)) {
+                    statistic.pointsAchieved = involvedQuestion.pointsToAchieve;
+                    statistics.push(statistic);
+                } else {
+                    statistic.pointsAchieved = 0;
+                    statistics.push(statistic);
+                }
+            } else {
+                if (correctAnswers.includes(userinput)) {
+                    statistic.pointsAchieved = involvedQuestion.pointsToAchieve;
+                    statistics.push(statistic);
+                } else {
+                    statistic.pointsAchieved = 0;
+                    statistics.push(statistic);
+                }
+            }
+        });
+
+        console.log("Sending new Statistics")
+        console.log(statistics)
+        console.log(JSON.stringify(statistics))
+
+        ApiRequests.apiPostRequest(urlTypes.STATISTICS, statistics)
+            .then(result => {
+                console.log(result)
+                if (result.status === 200) {
+
+                }
+            })
+            .catch( error => {
+                console.log(error.response)
+            })
+            .finally(function () {
+            });
+    }
+
+    checkIfArrayContainsAllValues(correctArray, target) {
+        return target.every(v => correctArray.includes(v));
+    }
+
     checkTypeOfAnswers(correctAnswers, type) {
         if (type === "single") {
             return correctAnswers[0].toString();
@@ -84,7 +141,7 @@ class Exercise extends React.Component {
     }
 
     getTypeOfQuestion(correctAnswers) {
-        if (correctAnswers.length <= 1 ) {
+        if (correctAnswers.length <= 1) {
             return "single"
         } else {
             return "multiple"
@@ -94,7 +151,7 @@ class Exercise extends React.Component {
     giveIndexesOfCorrectAnswers(possibleAnswers, correctAnswers) {
         let indexes = []
         correctAnswers.map((correctAnswer) => {
-            if (possibleAnswers.some( answer => answer.id === correctAnswer.id )) {
+            if (possibleAnswers.some(answer => answer.id === correctAnswer.id)) {
                 indexes.push(this.getIndexOfArray(possibleAnswers, 'id', correctAnswer.id) + 1)
             }
         });
@@ -109,6 +166,7 @@ class Exercise extends React.Component {
                     this.setState({
                         isLoaded: true,
                         quizData: quiz,
+                        fetchedQuestions: result.data,
                     });
                 } else {
                     this.setState({
@@ -135,7 +193,7 @@ class Exercise extends React.Component {
             console.log(this.state.quizData)
             return (
                 <React.Fragment>
-                    <Quiz quiz={quizData} continueTillCorrect={false} />
+                    <Quiz quiz={quizData} continueTillCorrect={false} onComplete={this.onCompleteAction}/>
                 </React.Fragment>
             );
         }

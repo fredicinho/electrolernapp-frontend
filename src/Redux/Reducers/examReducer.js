@@ -2,8 +2,9 @@ import {Exam, ExamActions} from "../Actions/examActions";
 import {urlTypes} from "../../Services/AuthService/ApiRequests";
 
 const initialExam = {
-    selectedExam: Exam.ALL,
+    selectedExamTitle: Exam.ALL,
     selectedExamUrl: urlTypes.EXAMSET,
+    urlOfClassesInExam: "",
 }
 
 
@@ -13,8 +14,17 @@ function examReducer(state = initialExam, action) {
             console.log(action)
             return {
                 ...state,
-                selectedExam: action.payload.selectedExamTitle,
+                selectedExamTitle: action.payload.selectedExamTitle,
+                selectedExamId: action.payload.selectedExamId,
                 selectedExamUrl: action.payload.selectedExamUrl,
+            }
+        case ExamActions.SELECT_EXAMREVIEW:
+            console.log(action)
+            return {
+                ...state,
+                selectedExamTitle: action.payload.selectedExamTitle,
+                selectedExamId: action.payload.selectedExamId,
+                urlOfClassesInExam: action.payload.urlOfClassesInExam,
             }
         default:
             return state
