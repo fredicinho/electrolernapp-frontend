@@ -1,10 +1,11 @@
 import axios from "axios";
+import authenticationHeader from "./AuthenticationHeader";
+import {urlTypes} from "./ApiRequests";
 
-const AUTHENTICATION_API = "/api/v1/auth/";
 
 class AuthenticationRequests {
   login(username, password) {
-    return axios.post(AUTHENTICATION_API + "signin", {
+    return axios.post(urlTypes.AUTH + "signin", {
         username,
         password
       })
@@ -22,16 +23,43 @@ class AuthenticationRequests {
   }
 
   register(username, email, password) {
-    return axios.post(AUTHENTICATION_API + "signup", {
+    return axios.post(urlTypes.AUTH + "signup", {
       username,
       email,
       password,
-      role: ['user'],
+      role: ['admin'],
     });
   }
 
+  resetPassword(email) {
+      const bodyFormData = new FormData();
+      bodyFormData.append('email', email)
+      return axios(
+          {
+              method: 'post',
+              url: urlTypes.PASSWORDRESET,
+              data: bodyFormData,
+              headers: {'Content-Type': 'multipart/form-data' }
+          }
+      );
+  }
+
+  createNewPassword(password, resetToken) {
+      const bodyFormData = new FormData();
+      bodyFormData.append('password', password);
+      bodyFormData.append('token', resetToken);
+      return axios(
+          {
+              method: 'post',
+              url: urlTypes.NEWPASSWORD,
+              data: bodyFormData,
+              headers: {'Content-Type': 'multipart/form-data' }
+          }
+      );
+  }
+
   startExam(username, password, examSetId) {
-    return axios.post(AUTHENTICATION_API + "startExam?examSetId=" + examSetId, {
+    return axios.post(urlTypes.AUTH + "startExam?examSetId=" + examSetId, {
       username,
       password
     })
@@ -39,18 +67,20 @@ class AuthenticationRequests {
             console.log("Response of starting Exam sign in ::")
             console.log(response.data)
           if (response.data.accessToken) {
-            localStorage.setItem("user", JSON.stringify(response.data));
+              localStorage.removeItem("user");
+              localStorage.setItem("user", JSON.stringify(response.data));
           }
 
           return response.data;
-        });
+        })
   }
 
   endExam(examSetId) {
-    return axios.post(AUTHENTICATION_API + "endExam?examSetId=" + examSetId, {})
+    return axios.post(urlTypes.AUTH + "endExam?examSetId=" + examSetId, {}, { headers: authenticationHeader()})
         .then(response => {
           if (response.data.accessToken) {
-            localStorage.setItem("user", JSON.stringify(response.data));
+              localStorage.removeItem("user");
+              localStorage.setItem("user", JSON.stringify(response.data));
           }
           return response.data;
         });

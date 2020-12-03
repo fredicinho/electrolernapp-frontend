@@ -42,6 +42,18 @@ class App extends React.Component {
                         redirectToLogin: true,
                     })
                 })
+            ApiRequests.apiGetRequest(urlTypes.CHECKAUTH)
+                .then((response) => {
+                    this.setState({
+                        isAdminOrTeacher: response.status === 200,
+                    })
+                })
+                .catch((error) => {
+                    console.log(error);
+                    this.setState({
+                        isAdminOrTeacher: false,
+                    })
+                });
         }
     }
 
@@ -50,9 +62,9 @@ class App extends React.Component {
             <div>
          {
                 this.state.isAuthenticated ? (
-                    <MainContent/>
+                    <MainContent isAdminOrTeacher={this.state.isAdminOrTeacher}/>
                 ) : (
-                    <StartPage redirect={this.state.redirectToLogin}/>
+                    <StartPage redirect={this.state.redirectToLogin} isAdminOrTeacher={this.state.isAdminOrTeacher}/>
                 )
             }
 

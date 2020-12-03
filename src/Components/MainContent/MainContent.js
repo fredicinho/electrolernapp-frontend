@@ -21,13 +21,14 @@ import CategorySets from "./MainComponents/CategorySetView";
 import {getNavigationName} from "./Navigation/NavigationUtils";
 import QuestionForm from "./Admin/QuestionForm";
 import Home from "./MainComponents/Home";
-import About from "./MainComponents/About";
 import ExamForm from "./Admin/ExamForm";
 import ExamView from "./MainComponents/ExamView";
 import SchoolClassForm from "./Admin/SchoolClassForm";
 import InstitutionForm from "./Admin/InstitutionForm";
-import Quiz from "./OwnQuiz/Quiz";
+import Quiz from "./Exam/Quiz";
 import ReviseExam from "./Admin/ReviseExam";
+import Typography from "@material-ui/core/Typography";
+import Toolbar from "@material-ui/core/Toolbar";
 
 
 const mql = window.matchMedia(`(min-width: 800px)`);
@@ -47,7 +48,18 @@ const theme = createMuiTheme({
                 }
             }
         }
-    }
+    },
+    title: {
+        flexGrow: 1,
+    },
+    link: {
+        textDecoration: 'none',
+        color: 'white',
+        '&:hover': {
+            textDecoration: 'none',
+        }
+    },
+
 });
 
 class MainContent extends React.Component {
@@ -59,7 +71,7 @@ class MainContent extends React.Component {
             open: false,
             actualPage: NavigationStates.EXERCISES,
             anchorEl: null,
-            openAnchorEl: false
+            openAnchorEl: false,
         };
         this.mediaQueryChanged = this.mediaQueryChanged.bind(this);
         this.toggleOpen = this.toggleOpen.bind(this);
@@ -123,7 +135,7 @@ class MainContent extends React.Component {
 
 
     render() {
-        const sidebar = <SidebarContent />;
+        const sidebar = <SidebarContent isAdminOrTeacher={this.props.isAdminOrTeacher}/>;
         const contentHeader = (
             <span>
         {!this.state.docked && (
@@ -140,6 +152,7 @@ class MainContent extends React.Component {
 
         const navigationHeader = (
             <span>
+
                                 <MuiThemeProvider theme={theme}>
             <IconButton
                 aria-label="account of current user"
@@ -169,7 +182,6 @@ class MainContent extends React.Component {
             onClose={this.handleClose}
         >
             <MenuItem onClick={this.handleClose}>Mein Profil</MenuItem>
-            <MenuItem onClick={this.handleClose}>Mein Account</MenuItem>
             <MenuItem onClick={this.toggleLogout}>Ausloggen</MenuItem>
         </Menu>
                 </span>
@@ -181,28 +193,31 @@ class MainContent extends React.Component {
             open: this.state.open,
             onSetOpen: this.onSetOpen,
             shadow: true,
-            transitions: true
+            transitions: true,
         };
 
         return (
             <Fragment>
                 <Router>
-                    <Sidebar {...sidebarProps}>
+                    <Sidebar {...sidebarProps} isAdminOrTeacher={this.props.isAdminOrTeacher}>
                         <MaterialTitlePanel title={contentHeader} navigation={navigationHeader}>
                             <Switch>
                                 <Route exact path="/" component={Home}/>
                                 <Route path="/demo" component={Demo}/>
-                                <Route path="/about" component={About}/>
                                 <Route path="/categories" component={CategoryView}/>
                                 <Route path="/categorySets" component={CategorySets}/>
                                 <Route path="/exercises" component={Exercise}/>
                                 <Route path="/exams" component={ExamView}/>
                                 <Route path="/exam" component={Quiz}/>
-                                <Route path="/createquestion" component={QuestionForm}/>
-                                <Route path="/createexam" component={ExamForm}/>
-                                <Route path="/createschoolclass" component={SchoolClassForm}/>
-                                <Route path="/createinstitution" component={InstitutionForm}/>
-                                <Route path="/reviseexam" component={ReviseExam}/>
+                                {this.props.isAdminOrTeacher &&
+                                    <React.Fragment>
+                                        <Route path="/createquestion" component={QuestionForm}/>
+                                        <Route path="/createexam" component={ExamForm}/>
+                                        <Route path="/createschoolclass" component={SchoolClassForm}/>
+                                        <Route path="/createinstitution" component={InstitutionForm}/>
+                                        <Route path="/reviseexam" component={ReviseExam}/>
+                                    </React.Fragment>
+                                }
                                 <Route component={NoMatch}/>
                             </Switch>
                         </MaterialTitlePanel>

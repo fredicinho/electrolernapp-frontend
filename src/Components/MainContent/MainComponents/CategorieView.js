@@ -7,6 +7,7 @@ import Loader from "../Utils/Loader";
 import {changeNavigationPage} from "../../../Redux/Actions/navigationActions";
 import {connect} from "react-redux";
 import Zoom from 'react-reveal/Zoom';
+import TransitionGroup from 'react-transition-group/TransitionGroup';
 
 const myStyles = theme => ({
     root: {
@@ -67,7 +68,7 @@ class CategorieView extends React.Component {
                 categoryItems.push(
 
                         <Grid item xs={12} sm={6} md={4} lg={3} justify="space-around">
-                            <Zoom>
+                            <Zoom key={category.id}>
                                 <CategoryCard category={category}/>
                             </Zoom>
                         </Grid>
@@ -76,7 +77,7 @@ class CategorieView extends React.Component {
             return (
                 <div className={classes.root} justify="center">
                     <Grid container spacing={3}>
-                        {categoryItems}
+                            {categoryItems}
                     </Grid>
                 </div>
             );

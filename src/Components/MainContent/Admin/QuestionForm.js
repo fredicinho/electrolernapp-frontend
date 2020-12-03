@@ -218,8 +218,6 @@ class QuestionForm extends React.Component {
             case "Multiple Choice":
                 newQuestionType = "MC";
                 break;
-            case "Fachbegriff":
-                newQuestionType = "FB";
         }
         this.setState({
             questionType: newQuestionType,
@@ -231,7 +229,6 @@ class QuestionForm extends React.Component {
         this.setState({
             questionPhrase: e.target.value,
         })
-        console.log(this.state.questionPhrase)
     }
 
     handleCategorySet(e) {
@@ -310,7 +307,6 @@ class QuestionForm extends React.Component {
                             <Form.Label>Fragetyp</Form.Label>
                             <Form.Control as="select" defaultValue="Multiple Choice" onChange={this.handleQuestionType}>
                                 <option>Multiple Choice</option>
-                                <option>Fachbegriff</option>
                             </Form.Control>
                         </Form.Group>
                         <Form.Group controlId={'answer1'}>

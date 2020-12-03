@@ -101,7 +101,18 @@ class SignIn extends React.Component {
             console.log("Received Response")
             this.props.onExamSignIn();
           }
-      );
+      )
+          .catch(function (error) {
+            console.log(error);
+            if (error.response.status === 500) {
+              this.setState({
+                loading: false,
+                error: true,
+                errorMessage: "Der Benutzername oder das Passwort ist falsch!"
+              });
+
+            // TODO: Make an Error Screen Component!!!
+          }});
     } else {
       AuthenticationService.login(this.state.username, this.state.password).then(
           () => {
@@ -199,7 +210,7 @@ class SignIn extends React.Component {
             { !this.props.examSignIn &&
                 <Grid container>
                   <Grid item xs>
-                    <Link href="#" variant="body2">
+                    <Link href="/resetpassword" variant="body2">
                       Forgot password?
                     </Link>
                   </Grid>

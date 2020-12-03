@@ -1,17 +1,23 @@
 import axios from 'axios';
 import authenticationHeader from './AuthenticationHeader';
 
+const API_VERSION = '/api/v1/';
 
-const QUESTIONS_API = '/api/v1/questions/';
-const MEDIA_API = '/api/v1/medias/';
-const CATEGORY_API = '/api/v1/categories/';
-const CATEGORYSET_API = '/api/v1/categorySets/';
-const EXAMSET_API = '/api/v1/examSets/'
-const INSTITUTION_API = '/api/v1/institutions/';
-const SCHOOLCLASS_API = '/api/v1/schoolClasses/';
-const USERS_API = '/api/v1/users/';
-const EXAMCHECK_API = '/api/v1/examResults/check';
-const STATISTIC_API = '/api/v1/statistics/statistics'
+const QUESTIONS_API = API_VERSION + 'questions/';
+const MEDIA_API = API_VERSION + '/medias/';
+const CATEGORY_API = API_VERSION + 'categories/';
+const CATEGORYSET_API = API_VERSION + 'categorySets/';
+const EXAMSET_API = API_VERSION + 'examSets/'
+const INSTITUTION_API = API_VERSION + 'institutions/';
+const SCHOOLCLASS_API = API_VERSION + 'schoolClasses/';
+const USERS_API = API_VERSION + 'users/';
+const EXAMCHECK_API = API_VERSION + 'examResults/check';
+const STATISTIC_API = API_VERSION + 'statistics/statistics';
+const EXAMRESULT_API = API_VERSION + 'examResults/';
+const AUTHENTICATION_API = API_VERSION + "auth/";
+const CHECKAUTH_API = AUTHENTICATION_API + 'isTeacherOrAdmin';
+const PASSWORDRESET_API = API_VERSION + 'forgotPassword/';
+const NEWPASSWORD_API = PASSWORDRESET_API + "resetPassword";
 
 
 export const urlTypes = {
@@ -25,6 +31,11 @@ export const urlTypes = {
   USERS: USERS_API,
   EXAMCHECK: EXAMCHECK_API,
   STATISTICS: STATISTIC_API,
+  EXAMRESULT: EXAMRESULT_API,
+  CHECKAUTH: CHECKAUTH_API,
+  AUTH: AUTHENTICATION_API,
+  PASSWORDRESET: PASSWORDRESET_API,
+  NEWPASSWORD: NEWPASSWORD_API,
 }
 
 

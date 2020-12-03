@@ -16,6 +16,10 @@ import {ExpandLess, ExpandMore, StarBorder} from "@material-ui/icons";
 import withStyles from "@material-ui/core/styles/withStyles";
 import {Link} from 'react-router-dom';
 import {useLocation} from "react-router";
+import AuthenticationRequests from "../../../Services/AuthService/AuthenticationRequests";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import Avatar from "@material-ui/core/Avatar";
+import hsluLogo from "../../../images/hsluLogo.png";
 
 
 const styles = {
@@ -62,6 +66,11 @@ const myStyles = theme => ({
     nested: {
         paddingLeft: theme.spacing(4),
     },
+    hsluLogo: {
+        width: '100%',
+        height: 'auto',
+        padding: '10px',
+    },
 });
 
 class SidebarContent extends React.Component {
@@ -70,7 +79,7 @@ class SidebarContent extends React.Component {
         this.state = {
             style: props.style ? {...styles.sidebar, ...props.style} : styles.sidebar,
             exercisesOpen: false,
-            adminPanelOpen: false
+            adminPanelOpen: false,
         }
         this.toggleExercise = this.toggleExercise.bind(this);
         this.toggleAdmin = this.toggleAdmin.bind(this);
@@ -149,33 +158,37 @@ class SidebarContent extends React.Component {
                     <ListItem button component={Link} to="/statistics">
                         <ListItemText primary="Statistiken"/>
                     </ListItem>
-                    <ListItem button onClick={this.toggleAdmin}>
-                        <ListItemText primary="Lehrer"/>
-                        {this.state.adminPanelOpen ? <ExpandLess/> : <ExpandMore/>}
-                    </ListItem>
-                    <Collapse isOpen={this.state.adminPanelOpen} unmountOnExit={true}>
-                        <List component="div" disablePadding>
-                            <ListItem button className={classes.nested} component={Link} to="/createexam">
-                                <ListItemText primary="Neue Prüfung"/>
+                    { this.props.isAdminOrTeacher &&
+                        <React.Fragment>
+                            <ListItem button onClick={this.toggleAdmin}>
+                                <ListItemText primary="Lehrer"/>
+                                {this.state.adminPanelOpen ? <ExpandLess/> : <ExpandMore/>}
                             </ListItem>
-                            <ListItem button className={classes.nested} component={Link} to="/createquestion">
-                                <ListItemText primary="Neue Frage"/>
-                            </ListItem>
-                            <ListItem button className={classes.nested} component={Link} to="/createschoolclass">
-                                <ListItemText primary="Neue Klasse"/>
-                            </ListItem>
-                            <ListItem button className={classes.nested} component={Link} to="/createinstitution">
-                                <ListItemText primary="Neue Bildungsinstitution"/>
-                            </ListItem>
-                        </List>
-                    </Collapse>
-
+                            <Collapse isOpen={this.state.adminPanelOpen} unmountOnExit={true}>
+                                <List component="div" disablePadding>
+                                    <ListItem button className={classes.nested} component={Link} to="/createexam">
+                                        <ListItemText primary="Neue Prüfung"/>
+                                    </ListItem>
+                                    <ListItem button className={classes.nested} component={Link} to="/createquestion">
+                                        <ListItemText primary="Neue Frage"/>
+                                    </ListItem>
+                                    <ListItem button className={classes.nested} component={Link} to="/createschoolclass">
+                                        <ListItemText primary="Neue Klasse"/>
+                                    </ListItem>
+                                    <ListItem button className={classes.nested} component={Link} to="/createinstitution">
+                                        <ListItemText primary="Neue Bildungsinstitution"/>
+                                    </ListItem>
+                                </List>
+                            </Collapse>
+                        </React.Fragment>
+                    }
                 </List>
+                <a href="https://www.hslu.ch/de-ch/technik-architektur/studium/bachelor/gebaeudetechnik-energie/">
+                <img src={hsluLogo} className={classes.hsluLogo}/>
+                </a>
             </MaterialTitlePanel>
         );
     }
-
-
 }
 
 

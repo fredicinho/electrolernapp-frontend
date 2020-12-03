@@ -1,21 +1,14 @@
 import React from 'react';
-import {changeNavigationPage} from "../../../Redux/Actions/navigationActions";
 import ApiRequests, {urlTypes} from "../../../Services/AuthService/ApiRequests";
 import Loader from "../Utils/Loader";
-import Grid from "@material-ui/core/Grid";
 import {connect} from "react-redux";
 import withStyles from "@material-ui/core/styles/withStyles";
-import ExamCard from "../Utils/ExamCard";
 import Select from "react-select";
-import Form from "react-bootstrap/Form";
 import makeAnimated from "react-select/animated/dist/react-select.esm";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import {Alert, ListGroup} from "react-bootstrap";
-import Typography from "@material-ui/core/Typography";
-import Datetime from "react-datetime";
-import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import UserItemList from "../Utils/UserListItem";
+
 
 const animatedComponents = makeAnimated();
 
@@ -34,6 +27,8 @@ const myStyles = theme => ({
 const mapStateToProps = state => {
     return {
         urlOfClassesInExam: state.exam.urlOfClassesInExam,
+        urlOfQuestionsInExam: state.exam.urlOfQuestionsInExam,
+        selectedExamId: state.exam.selectedExamId,
     };
 };
 
@@ -44,19 +39,51 @@ class ReviseExam extends React.Component {
         this.state = {
             isLoaded: false,
             schoolClasses: null,
-            students: null,
+            students: [],
+            questionsLoaded: false,
+            questions: [],
+            examResults: [],
+            examResultsFetched: false,
+            studentsFetched: false,
         }
 
         this.handleSchoolClass = this.handleSchoolClass.bind(this);
+        this.getClassesOfExam = this.getClassesOfExam.bind(this);
+        this.getQuestionsOfExam = this.getQuestionsOfExam.bind(this);
+        this.getAllExamResults = this.getAllExamResults.bind(this);
+        this.getStudentsOfClass = this.getStudentsOfClass.bind(this);
+        this.createExamResultObjects = this.createExamResultObjects.bind(this);
+
     }
 
     componentDidMount() {
-        ApiRequests.apiGetRequest(this.props.urlOfClassesInExam)
+        this.getClassesOfExam();
+        this.getQuestionsOfExam();
+    }
+
+    getQuestionsOfExam() {
+        ApiRequests.apiGetRequest(this.props.urlOfQuestionsInExam)
+            .then(result => {
+                this.setState({
+                    questionsLoaded: true,
+                    questions: result.data,
+                });
+            })
+            .catch(function (error) {
+                console.log(error);
+                // TODO: Make an Error Screen Component!!!
+            })
+            .finally(function () {
+            });
+    }
+
+    getClassesOfExam() {
+      ApiRequests.apiGetRequest(this.props.urlOfClassesInExam)
             .then(result => {
                 let allSchoolClasses = [];
                 result.data.map((schoolClass) => {
                     allSchoolClasses.push({
-                        value: schoolClass.links[0].href,
+                        value: schoolClass.id,
                         label: schoolClass.name,
                     })
                 });
@@ -73,14 +100,13 @@ class ReviseExam extends React.Component {
             });
     }
 
-    handleSchoolClass(e) {
-        ApiRequests.apiGetRequest(e.value).then(
+    getStudentsOfClass(schoolClassId) {
+        ApiRequests.apiGetRequest(urlTypes.USERS + "schoolClasses?schoolClassId=" + schoolClassId).then(
             response => {
                 if (response.data !== undefined && response.data != 0) {
-                    console.log("Fetched Students");
-                    console.log(response.data);
                     this.setState({
                         students: response.data,
+                        studentsFetched: true,
                     })
                 } else {
                     this.setState({
@@ -93,8 +119,61 @@ class ReviseExam extends React.Component {
         })
     }
 
+    getAllExamResults(schoolClassId, examSetId) {
+        console.log(urlTypes.EXAMRESULT + "examSetsAndSchoolClass?examSetId=" + examSetId + "&schoolClassId=" + schoolClassId)
+        ApiRequests.apiGetRequest(urlTypes.EXAMRESULT + "examSetsAndSchoolClass?examSetId=" + examSetId + "&schoolClassId=" + schoolClassId).then(
+            response => {
+                if (response.data !== undefined && response.data != 0) {
+                    console.log("Received ExamResults")
+                    console.log(response.data)
+
+                    this.setState({
+                        examResults: response.data,
+                        examResultsFetched: true,
+                    })
+                } else {
+                    this.setState({
+                        error: "No ExamResultsFound found..."
+                    })
+                }
+            }
+        ).catch(function (error) {
+            console.log(error);
+        })
+    }
+
+    handleSchoolClass(e) {
+        this.getStudentsOfClass(e.value);
+        this.getAllExamResults(e.value, this.props.selectedExamId);
+    }
+
+    createExamResultObjects() {
+        const { examResults, questions, students } = this.state;
+        let newExamResults = [];
+        students.map((student) => {
+            let filteredExamResults = examResults.filter((examResult) => examResult.username === student.username)
+            questions.map((question) => {
+                let newExamResult = {
+                    studentId: student.id,
+                    questionId: question.id,
+                    pointsAchieved: null,
+                }
+                filteredExamResults.map((examResult) => {
+                    if (examResult.questionId === question.id) {
+                        newExamResult.pointsAchieved = examResult.pointsAchieved
+                    }
+                })
+                if (newExamResult.pointsAchieved === null) {
+                    newExamResult.pointsAchieved = 0;
+                }
+                newExamResults.push(newExamResult);
+            })
+        });
+        return newExamResults;
+    }
+
     render() {
-        const {error, isLoaded, schoolClasses, students} = this.state;
+        const {error, isLoaded, schoolClasses, students, questions, examResultsFetched, studentsFetched} = this.state;
         const {classes} = this.props
         if (error) {
             return <div>Error: {error.message}</div>;
@@ -102,9 +181,13 @@ class ReviseExam extends React.Component {
             return <Loader/>
         } else {
             let studentList = [];
-            if (students != null) {
+            if (examResultsFetched && studentsFetched) {
+                let newExamResults = this.createExamResultObjects();
                 students.map((student) => {
-                    studentList.push(<UserItemList user={student}/>);
+                    let filteredExamResults = newExamResults.filter((examResult) => student.id === examResult.studentId)
+                    studentList.push(
+                        <UserItemList key={student.id} user={student} questions={questions} examResults={filteredExamResults} examSetId={this.props.selectedExamId}/>
+                    );
                 })
             }
             return (
@@ -119,7 +202,7 @@ class ReviseExam extends React.Component {
                             options={schoolClasses}
                         />
                     </div>
-                    {studentList}
+                        {studentList}
                 </Container>
             );
         }

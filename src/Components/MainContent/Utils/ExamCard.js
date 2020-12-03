@@ -60,6 +60,7 @@ class ExamCard extends React.Component {
             selectedExamTitle: this.props.exam.title,
             selectedExamId: this.props.exam.examSetId,
             urlOfClassesInExam: this.props.exam.links[1].href,
+            urlOfQuestionsInExam: this.props.exam.links[0].href,
         }
         this.props.selectExamReview(selectedExamToReview);
         this.setState({redirectToExamReview: true})

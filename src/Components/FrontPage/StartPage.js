@@ -8,6 +8,8 @@ import Demo from "./Demo";
 import {Redirect} from "react-router-dom";
 import background from "../../images/backgroundBlue.jpg";
 import withStyles from "@material-ui/core/styles/withStyles";
+import ResetPassword from "./ResetPassword";
+import CreatePassword from "./CreatePassword";
 
 const styles = theme => ({
     root: {
@@ -31,6 +33,8 @@ class StartPage extends React.Component {
                     <Route path="/login" component={SignIn}/>
                     <Route path="/register" component={SignUp}/>
                     <Route path="/demo" component={Demo}/>
+                    <Route path="/resetpassword" component={ResetPassword}/>
+                    <Route path="/createpassword/:token" component={CreatePassword}/>
                     <Route path="/"> {this.props.redirect ? <Redirect to="/login" /> : <StartPageContent />} </Route>
                 </Switch>
                 </div>
