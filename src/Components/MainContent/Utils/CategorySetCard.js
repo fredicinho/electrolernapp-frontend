@@ -10,6 +10,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import {connect} from "react-redux";
 import {selectQuiz} from "../../../Redux/Actions/quizActions";
 import {Redirect} from "react-router";
+import mathImage from "../../../images/mathematics.png";
 
 const myStyles = theme => ({
     root: {
@@ -31,7 +32,8 @@ class CategorySetCard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            redirect: false
+            redirect: false,
+            image: null,
         }
         this.handleCategorySetStart = this.handleCategorySetStart.bind(this);
     }
@@ -58,7 +60,7 @@ class CategorySetCard extends React.Component {
                     <CardActionArea>
                         <CardMedia
                             className={classes.media}
-                            //image="/static/images/cards/contemplative-reptile.jpg"
+                            src="../../../images/mathematics.png"
                             title="Contemplative Reptile"
                         />
                         <CardContent>
@@ -74,9 +76,6 @@ class CategorySetCard extends React.Component {
                     <CardActions>
                         <Button size="small" color="primary" onClick={this.handleCategorySetStart}>
                             Übungsset starten
-                        </Button>
-                        <Button size="small" color="primary">
-                            Learn More
                         </Button>
                     </CardActions>
                 </Card>

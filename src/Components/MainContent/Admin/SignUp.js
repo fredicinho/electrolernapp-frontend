@@ -2,32 +2,16 @@ import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import withStyles from "@material-ui/core/styles/withStyles";
-import AuthenticationService from "../../Services/AuthService/AuthenticationRequests";
+import AuthenticationService from "../../../Services/AuthService/AuthenticationRequests";
 import {ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 import Fade from "react-reveal/Fade";
 import {Alert} from "react-bootstrap";
 
-
-function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
 
 const styles = theme => ({
     paper: {
@@ -51,6 +35,16 @@ const styles = theme => ({
     },
 });
 
+const initialState = {
+    username: "",
+    email: "",
+    password: "",
+    successful: false,
+    message: "",
+    repeatPassword: "",
+    error: false,
+}
+
 class SignUp extends React.Component {
     constructor(props) {
         super(props);
@@ -61,13 +55,7 @@ class SignUp extends React.Component {
         this.onChangeRepeatPassword = this.onChangeRepeatPassword.bind(this);
 
         this.state = {
-            username: "",
-            email: "",
-            password: "",
-            successful: false,
-            message: "",
-            repeatPassword: "",
-            error: false,
+            ...initialState,
         };
     }
 
@@ -113,20 +101,27 @@ class SignUp extends React.Component {
             successful: false
         });
 
-        console.log("Registering now")
-        console.log(this.state.username, this.state.email, this.state.password)
         AuthenticationService.register(
             this.state.username,
             this.state.email,
             this.state.password,
         ).then(
             response => {
-                this.setState({
-                    message: response.data.message,
-                    successful: true
-                });
-                this.props.history.push("/login");
-                window.location.reload();
+                console.log(response)
+                if (response.status === 201) {
+                    this.setState({
+                        ...initialState,
+                        message: 'Der Benutzer "' + this.state.username + '" wurde erfolgreich erstellt!',
+                        successful: true
+                    });
+                } else {
+                    this.setState({
+                        successful: false,
+                        message: "Es gab ein Problem beim Erstellen des Benutzers!",
+                        error: true,
+                        errorMessage: "Es gab ein Problem beim Erstellen des Benutzers!"
+                    })
+                }
             },
             error => {
                 console.log(error.response)
@@ -139,10 +134,17 @@ class SignUp extends React.Component {
                 if (error.response.status === 409) {
                     this.setState({
                         successful: false,
+                        message: "Es existiert bereits ein Benutzer mit dieser E-Mail Adresse oder diesem Benutzernamen!",
+                        error: true,
+                        errorMessage: resMessage,
+                    });
+                } else {
+                    this.setState({
+                        successful: false,
                         message: resMessage,
                         error: true,
-                        errorMessage: "Es existiert bereits ein Benutzer mit dieser E-Mail Adresse oder diesem Benutzernamen!"
-                    });
+                        errorMessage: "Es gab ein Problem beim Erstellen des Benutzers!"
+                    })
                 }
             }
         );
@@ -151,7 +153,7 @@ class SignUp extends React.Component {
 
     render() {
         const {classes} = this.props;
-        const {email, username, password, repeatPassword, error, errorMessage} = this.state;
+        const {email, username, password, repeatPassword, error, errorMessage, successful, message} = this.state;
 
         return (
                 <Container component="main" maxWidth="xs">
@@ -161,12 +163,14 @@ class SignUp extends React.Component {
                         <Avatar className={classes.avatar}>
                             <LockOutlinedIcon/>
                         </Avatar>
-                        <Typography component="h1" variant="h5">
-                            Sign up
-                        </Typography>
                         {error &&
                         <Alert variant="danger">
-                            {errorMessage}
+                            {message}
+                        </Alert>
+                        }
+                        {successful &&
+                        <Alert variant="info">
+                            {message}
                         </Alert>
                         }
                         <ValidatorForm
@@ -233,17 +237,7 @@ class SignUp extends React.Component {
                                 </Button>
                             </Grid>
                         </ValidatorForm>
-                        <Grid container justify="center">
-                            <Grid item>
-                                <Link href="/login" variant="body2">
-                                    Already have an account? Sign in
-                                </Link>
-                            </Grid>
-                        </Grid>
                     </div>
-                    <Box mt={5}>
-                        <Copyright/>
-                    </Box>
             </Fade>
                 </Container>
 

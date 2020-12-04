@@ -77,9 +77,6 @@ class CategoryCard extends React.Component {
                         <Button size="small" color="primary" onClick={this.handleToggleForSets}>
                             Übungssets
                         </Button>
-                        <Button size="small" color="primary">
-                            Learn More
-                        </Button>
                     </CardActions>
                 </Card>
             );

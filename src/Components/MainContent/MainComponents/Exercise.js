@@ -54,9 +54,11 @@ class Exercise extends React.Component {
             })
             const type = this.getTypeOfQuestion(data.correctAnswers)
             let correctAnswers = this.giveIndexesOfCorrectAnswers(data.possibleAnswers, data.correctAnswers)
+            console.log(data.id)
             quizData.questions.push(
                 {
                     "question": data.questionPhrase,
+                    "questionId": data.id,
                     "questionType": "text",
                     "questionPic": questionImageUrl, // checkquestion Objekt
                     "answerSelectionType": type,
@@ -73,13 +75,23 @@ class Exercise extends React.Component {
     }
 
     onCompleteAction(result) {
+        console.log("Received Result")
+        console.log(result)
+        let markedQuestions = result.markedQuestions.filter((markedQuestion) => { return markedQuestion.value});
+        console.log(markedQuestions)
         let statistics = [];
         result.userInput.map((userinput, index) => {
             const involvedQuestion = this.state.fetchedQuestions[index];
-            const correctAnswers = this.giveIndexesOfCorrectAnswers(involvedQuestion.possibleAnswers, involvedQuestion.correctAnswers)
+            const correctAnswers = this.giveIndexesOfCorrectAnswers(involvedQuestion.possibleAnswers, involvedQuestion.correctAnswers);
+            let isMarked = false;
+            markedQuestions.map((markedQuestion) => {
+                if (markedQuestion.questionId === involvedQuestion.id) {
+                    isMarked = true;
+                }
+            });
             let statistic = {
                 pointsAchieved: null,
-                isMarked: false,
+                isMarked: isMarked,
                 questionId: involvedQuestion.id,
             }
             if (Array.isArray(userinput)) {
@@ -103,9 +115,8 @@ class Exercise extends React.Component {
 
         console.log("Sending new Statistics")
         console.log(statistics)
-        console.log(JSON.stringify(statistics))
 
-        ApiRequests.apiPostRequest(urlTypes.STATISTICS, statistics)
+        ApiRequests.apiPostRequest(urlTypes.POSTARRAYSTATISTIC, statistics)
             .then(result => {
                 console.log(result)
                 if (result.status === 200) {
@@ -193,7 +204,7 @@ class Exercise extends React.Component {
             console.log(this.state.quizData)
             return (
                 <React.Fragment>
-                    <Quiz quiz={quizData} continueTillCorrect={false} onComplete={this.onCompleteAction}/>
+                    <Quiz quiz={quizData} continueTillCorrect={false} onComplete={this.onCompleteAction} />
                 </React.Fragment>
             );
         }

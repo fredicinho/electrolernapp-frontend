@@ -3,13 +3,13 @@ import NavigationBar from "./NavigationBar";
 import StartPageContent from "./StartPageContent";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import SignIn from "./SignIn";
-import SignUp from "./SignUp";
 import Demo from "./Demo";
 import {Redirect} from "react-router-dom";
 import background from "../../images/backgroundBlue.jpg";
 import withStyles from "@material-ui/core/styles/withStyles";
 import ResetPassword from "./ResetPassword";
 import CreatePassword from "./CreatePassword";
+import SignUp from "../MainContent/Admin/SignUp";
 
 const styles = theme => ({
     root: {

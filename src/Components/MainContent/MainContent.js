@@ -6,13 +6,13 @@ import Sidebar from "react-sidebar";
 import MaterialTitlePanel from "./Navigation/MaterialTitelPanel";
 import Demo from "../FrontPage/Demo";
 import NoMatch from "./Utils/NoMatch";
-import { connect } from "react-redux";
-import { changeNavigationPage, NavigationStates } from "../../Redux/Actions/navigationActions";
+import {connect} from "react-redux";
+import {changeNavigationPage, NavigationStates} from "../../Redux/Actions/navigationActions";
 import IconButton from "@material-ui/core/IconButton";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import {MuiThemeProvider} from "@material-ui/core";
+import {MuiThemeProvider, withStyles} from "@material-ui/core";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import AuthenticationRequests from "../../Services/AuthService/AuthenticationRequests";
 import Exercise from "./MainComponents/Exercise";
@@ -27,8 +27,9 @@ import SchoolClassForm from "./Admin/SchoolClassForm";
 import InstitutionForm from "./Admin/InstitutionForm";
 import Quiz from "./Exam/Quiz";
 import ReviseExam from "./Admin/ReviseExam";
-import Typography from "@material-ui/core/Typography";
-import Toolbar from "@material-ui/core/Toolbar";
+import ImportUsersForm from "./Admin/ImportUsersForm";
+import SignUp from "./Admin/SignUp";
+import Statistics from "./MainComponents/Statistics";
 
 
 const mql = window.matchMedia(`(min-width: 800px)`);
@@ -39,16 +40,14 @@ const mapStateToProps = state => {
 };
 
 
-const theme = createMuiTheme({
-    overrides: {
-        MuiOutlinedInput: {
-            root: {
-                "&&&& $input": {
-                    padding: "0px"
-                }
-            }
+const myStyles = theme => ({
+
+    accountIcon: {
+        "& .MuiIconButton-root": {
+            padding: 0
         }
     },
+
     title: {
         flexGrow: 1,
     },
@@ -91,7 +90,7 @@ class MainContent extends React.Component {
 
 
     onSetOpen(open) {
-        this.setState({ open });
+        this.setState({open});
     }
 
     mediaQueryChanged() {
@@ -102,7 +101,7 @@ class MainContent extends React.Component {
     }
 
     toggleOpen(ev) {
-        this.setState({ open: !this.state.open });
+        this.setState({open: !this.state.open});
 
         if (ev) {
             ev.preventDefault();
@@ -118,14 +117,14 @@ class MainContent extends React.Component {
         }
     }
 
-    handleMenu(event){
+    handleMenu(event) {
         this.setState({
             anchorEl: event.currentTarget,
             openAnchorEl: true
         })
     };
 
-    handleClose(){
+    handleClose() {
         this.setState({
             anchorEl: null,
             openAnchorEl: false
@@ -133,9 +132,9 @@ class MainContent extends React.Component {
     };
 
 
-
     render() {
         const sidebar = <SidebarContent isAdminOrTeacher={this.props.isAdminOrTeacher}/>;
+        const {classes} = this.props;
         const contentHeader = (
             <span>
         {!this.state.docked && (
@@ -152,20 +151,17 @@ class MainContent extends React.Component {
 
         const navigationHeader = (
             <span>
-
-                                <MuiThemeProvider theme={theme}>
-            <IconButton
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={this.handleMenu}
-                color="inherit"
-            >
-
-                    <AccountCircle />
-
-            </IconButton>
-                                                    </MuiThemeProvider>
+                <div className={classes.accountIcon}>
+                    <IconButton
+                      aria-label="account of current user"
+                      aria-controls="menu-appbar"
+                      aria-haspopup="true"
+                      onClick={this.handleMenu}
+                      color="inherit"
+                    >
+                        <AccountCircle/>
+                    </IconButton>
+                </div>
         <Menu
             id="menu-appbar"
             anchorEl={this.state.anchorEl}
@@ -209,14 +205,17 @@ class MainContent extends React.Component {
                                 <Route path="/exercises" component={Exercise}/>
                                 <Route path="/exams" component={ExamView}/>
                                 <Route path="/exam" component={Quiz}/>
+                                <Route path="/statistics" component={Statistics}/>
                                 {this.props.isAdminOrTeacher &&
-                                    <React.Fragment>
-                                        <Route path="/createquestion" component={QuestionForm}/>
-                                        <Route path="/createexam" component={ExamForm}/>
-                                        <Route path="/createschoolclass" component={SchoolClassForm}/>
-                                        <Route path="/createinstitution" component={InstitutionForm}/>
-                                        <Route path="/reviseexam" component={ReviseExam}/>
-                                    </React.Fragment>
+                                <React.Fragment>
+                                    <Route path="/createquestion" component={QuestionForm}/>
+                                    <Route path="/createexam" component={ExamForm}/>
+                                    <Route path="/createschoolclass" component={SchoolClassForm}/>
+                                    <Route path="/createinstitution" component={InstitutionForm}/>
+                                    <Route path="/reviseexam" component={ReviseExam}/>
+                                    <Route path="/createusers" component={ImportUsersForm}/>
+                                    <Route path="/createuser" component={SignUp}/>
+                                </React.Fragment>
                                 }
                                 <Route component={NoMatch}/>
                             </Switch>
@@ -228,8 +227,10 @@ class MainContent extends React.Component {
     }
 }
 
+const mainComponent = withStyles(myStyles)(MainContent);
+
 export default connect(
     mapStateToProps,
     null
-)(MainContent);
+)(mainComponent);
 

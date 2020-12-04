@@ -26,6 +26,10 @@ export function getNavigationStateByLocation(location) {
             return NavigationStates.CREATE_QUESTION;
         case "/reviseexam":
             return NavigationStates.REVISE_EXAM;
+        case "/createusers":
+            return NavigationStates.IMPORT_USERS;
+        case "/createuser":
+            return NavigationStates.CREATE_USER;
         default:
             return NavigationStates.NOTFOUND;
     }
@@ -68,6 +72,10 @@ export function getNavigationName(navigationItem) {
             break
         case NavigationStates.REVISE_EXAM:
             return "Prüfung auswerten";
+        case NavigationStates.IMPORT_USERS:
+            return "Benutzer importieren";
+        case NavigationStates.CREATE_USER:
+            return "Benutzer erstellen";
         default:
             return "Not Found";
     }

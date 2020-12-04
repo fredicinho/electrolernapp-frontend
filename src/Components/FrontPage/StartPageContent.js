@@ -1,12 +1,8 @@
 import React from "react";
-import Button from "@material-ui/core/Button";
-import Container from "@material-ui/core/Container";
 import background from "../../images/backgroundBlue.jpg"
 import withStyles from "@material-ui/core/styles/withStyles";
 import Box from '@material-ui/core/Box';
 import Zoom from 'react-reveal/Zoom';
-import Roll from 'react-reveal/Roll';
-import Toolbar from "@material-ui/core/Toolbar";
 import '../../CSS/NavigationBar.css';
 import logo from "../../images/logoWhite.png"
 
@@ -34,7 +30,7 @@ class StartPageContent extends React.Component {
                 >
                     <Zoom>
                         <img src={logo} alt="Logo Brain Power"/>
-                        <span className='transparent_btn transparent_btn.blue'>Probier eine Demo aus!</span>
+
                     </Zoom>
 
                 </Box>
@@ -43,3 +39,5 @@ class StartPageContent extends React.Component {
 }
 
 export default withStyles(styles)(StartPageContent);
+
+// <span className='transparent_btn transparent_btn.blue'>Probier eine Demo aus!</span>

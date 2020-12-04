@@ -4,6 +4,7 @@ import QuizResultFilter from "./core-components/QuizResultFilter";
 import {checkAnswer, rawMarkup} from "./core-components/helpers";
 import InstantFeedback from "./core-components/InstantFeedback";
 import Explanation from "./core-components/Explanation";
+import Checkbox from "@material-ui/core/Checkbox";
 
 const Card = ({questions, appLocale, showDefaultResult, onComplete, customResultPage, showInstantFeedback, continueTillCorrect}) => {
   const [incorrectAnswer, setIncorrectAnswer] = useState(false);
@@ -16,6 +17,7 @@ const Card = ({questions, appLocale, showDefaultResult, onComplete, customResult
   const [correct, setCorrect] = useState([]);
   const [incorrect, setIncorrect] = useState([]);
   const [userInput, setUserInput] = useState([]);
+  const [markedQuestions, setMarkedQuestions] = useState([]);
   const [filteredValue, setFilteredValue] = useState('all');
   const [userAttempt, setUserAttempt] = useState(1);
   const [showDefaultResultState, setShowDefaultResult] = useState(true);
@@ -69,7 +71,8 @@ const Card = ({questions, appLocale, showDefaultResult, onComplete, customResult
       questions: questions,
       userInput: userInput,
       totalPoints: totalPoints,
-      correctPoints: correctPoints
+      correctPoints: correctPoints,
+      markedQuestions: markedQuestions,
     })
   }, [totalPoints, correctPoints]);
 
@@ -256,6 +259,23 @@ const Card = ({questions, appLocale, showDefaultResult, onComplete, customResult
       </div>
   );
 
+  const updateQuestionMarked = questionId => e => {
+    let newMarkedQuestion = {
+      questionId: questionId,
+      value: e.target.checked,
+    }
+    let actualMarkedQuestions = [...markedQuestions];
+    let availableQuestions = actualMarkedQuestions.filter((markedQuestion) => {return markedQuestion.questionId === questionId})
+    if (availableQuestions.length == 0) {
+      actualMarkedQuestions.push(newMarkedQuestion);
+      setMarkedQuestions(actualMarkedQuestions)
+    } else {
+      let filteredAvailableQuestions = actualMarkedQuestions.filter((markedQuestion) => {return markedQuestion.questionId !== questionId});
+      filteredAvailableQuestions.push(newMarkedQuestion);
+      setMarkedQuestions(filteredAvailableQuestions)
+    }
+  }
+
   return (
       <div className="questionWrapper">
         {!endQuiz &&
@@ -278,6 +298,12 @@ const Card = ({questions, appLocale, showDefaultResult, onComplete, customResult
             <button onClick={() => nextQuestion(currentQuestionIndex)} className="nextQuestionBtn btn">
               {appLocale.nextQuestionBtn}
             </button>
+            <span className="nextQuestionBtn btn">Übung markieren: <Checkbox
+                defaultChecked={false}
+                color="primary"
+                inputProps={{ 'aria-label': 'secondary checkbox' }}
+                onChange={updateQuestionMarked(question.questionId)}
+            /> </span>
           </div>
           }
         </div>

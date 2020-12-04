@@ -12,12 +12,16 @@ const INSTITUTION_API = API_VERSION + 'institutions/';
 const SCHOOLCLASS_API = API_VERSION + 'schoolClasses/';
 const USERS_API = API_VERSION + 'users/';
 const EXAMCHECK_API = API_VERSION + 'examResults/check';
-const STATISTIC_API = API_VERSION + 'statistics/statistics';
+const STATISTIC_API = API_VERSION + 'statistics/';
+const USERSTATISTIC_API = STATISTIC_API + 'User/';
+const POSTARRAYSTATISTIC_API = API_VERSION + STATISTIC_API +'statistics';
 const EXAMRESULT_API = API_VERSION + 'examResults/';
 const AUTHENTICATION_API = API_VERSION + "auth/";
 const CHECKAUTH_API = AUTHENTICATION_API + 'isTeacherOrAdmin';
 const PASSWORDRESET_API = API_VERSION + 'forgotPassword/';
 const NEWPASSWORD_API = PASSWORDRESET_API + "resetPassword";
+const CSV_API = API_VERSION + "csv/";
+const CSVUSERS_API = CSV_API + "users";
 
 
 export const urlTypes = {
@@ -31,11 +35,14 @@ export const urlTypes = {
   USERS: USERS_API,
   EXAMCHECK: EXAMCHECK_API,
   STATISTICS: STATISTIC_API,
+  POSTARRAYSTATISTIC: POSTARRAYSTATISTIC_API,
+  USERSTATISTIC: USERSTATISTIC_API,
   EXAMRESULT: EXAMRESULT_API,
   CHECKAUTH: CHECKAUTH_API,
   AUTH: AUTHENTICATION_API,
   PASSWORDRESET: PASSWORDRESET_API,
   NEWPASSWORD: NEWPASSWORD_API,
+  CSVUSERS: CSVUSERS_API,
 }
 
 
@@ -47,6 +54,26 @@ class ApiRequests {
 
   apiPostRequest(url, data) {
     return axios.post(url, data, { headers: authenticationHeader()});
+  }
+
+  apiPostFileRequest(url, data) {
+    const bodyFormData = new FormData();
+    bodyFormData.append("file", data[0]);
+    console.log("Sending following FormData")
+    console.log(bodyFormData.get('file'))
+    return axios.post(urlTypes.CSVUSERS, bodyFormData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    return axios(
+        {
+          method: 'post',
+          url: url,
+          data: bodyFormData,
+          headers: {'Content-Type': 'multipart/form-data' }
+        }
+    );
   }
 
   apiPutRequest(url, data) {

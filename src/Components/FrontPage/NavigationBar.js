@@ -6,7 +6,6 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import SchoolIcon from '@material-ui/icons/School';
-import Zoom from 'react-reveal/Roll';
 
 
 
@@ -50,7 +49,6 @@ export default function NavigationBar() {
                         </a>
                     </Typography>
                     <Button className={classes.menuButton} href="/login">Einloggen</Button>
-                    <Button className={classes.menuButton} href="/register">Registrieren</Button>
                 </Toolbar>
             </AppBar>
         </div>

@@ -43,6 +43,8 @@ class CategorySetView extends React.Component {
     componentDidMount() {
         ApiRequests.apiGetRequest(this.props.selectedCategorySetUrl)
             .then(result => {
+                console.log("Fetched categorySets")
+                console.log(result.data)
                 this.setState({
                     isLoaded: true,
                     categorySets: result.data,

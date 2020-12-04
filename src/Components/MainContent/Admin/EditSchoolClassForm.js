@@ -35,6 +35,8 @@ const styles = theme => ({
 });
 
 const initialState = {
+    allSchoolClasses: [],
+    allInstitutions: [],
     name: "",
     description: "",
     examSetsForSchoolClass: [],
@@ -42,7 +44,6 @@ const initialState = {
     institution: "",
     schoolClassCreated: false,
     schoolClassCreatedMessage: "",
-    error: false,
 }
 
 
@@ -59,6 +60,7 @@ class SchoolClassForm extends React.Component {
         this.handleInstitution = this.handleInstitution.bind(this);
         this.handleSchoolClassDescription = this.handleSchoolClassDescription.bind(this);
         this.handleUsers = this.handleUsers.bind(this);
+        this.handleSelectInstitution = this.handleSelectInstitution.bind(this);
 
     }
 
@@ -92,8 +94,10 @@ class SchoolClassForm extends React.Component {
                 if (response.data !== undefined && response.data != 0) {
                     let allInstitutions = [];
                     response.data.map((institution) => {
+                        console.log(institution)
                         allInstitutions.push({
-                            value: institution.id,
+                            // TODO: Check if link is correct
+                            value: institution.link[0].href,
                             label: institution.name,
                         })
                     })
@@ -134,38 +138,26 @@ class SchoolClassForm extends React.Component {
         console.log("New Class :: ")
         console.log(JSON.stringify(newSchoolClass));
 
-        console.log(urlTypes.SCHOOLCLASS)
-        ApiRequests.apiPostRequest(urlTypes.SCHOOLCLASS, newSchoolClass)
+        ApiRequests.apiPutRequest(urlTypes.SCHOOLCLASS, newSchoolClass)
             .then(result => {
                 console.log(result)
                 if (result.status === 201) {
                     this.setState({
                         ...initialState,
                         schooClassCreated: true,
-                        schooClassCreatedMessage: "Die Klasse :: " + result.data.name + " :: wurde erfolgreich erstellt!",
+                        schooClassCreatedMessage: "Die Klasse :: " + result.data.name + " :: wurde erfolgreich bearbeitet!",
                     });
                 } else {
                     this.setState({
-                        error: true,
-                        schooClassCreatedMessage: "Es gab ein Problem beim Erstellen der Klasse.",
+                        //error: "No data found for this CategorySet..."
                     })
                 }
             })
             .catch( error => {
-                console.log(error.message)
-                if (error.response.status === 409) {
                     this.setState({
                         schooClassCreated: true,
-                        schooClassCreatedMessage: "Die Klasse :: " + error.response.data.name + " :: existiert bereits!"
+                        schooClassCreatedMessage: "Es gab ein Problem beim Bearbeiten der Klasse!"
                     });
-                } else {
-                    this.setState({
-                        schooClassCreated: false,
-                        error: true,
-                        schooClassCreatedMessage: "Es gab ein Problem beim Erstellen der Klasse."
-                    });
-                }
-
             })
             .finally(function () {
             });
@@ -182,6 +174,68 @@ class SchoolClassForm extends React.Component {
     handleInstitution(e) {
         this.setState({
             institution: e.value,
+        })
+    }
+
+    handleSelectInstitution(e) {
+        ApiRequests.apiGetRequest(e.value).then(
+            response => {
+                if (response.data !== undefined && response.data != 0) {
+                    let allSchoolClasses = [];
+                    console.log("Fetched Schoolclasses")
+                    console.log(response.data)
+                    response.data.map((schoolClass) => {
+                        allSchoolClasses.push({
+                            value: schoolClass.id,
+                            label: schoolClass.name,
+                        })
+                    })
+                    this.setState({
+                        allSchoolClasses: allSchoolClasses
+                    })
+                    console.log(allSchoolClasses)
+                } else {
+                    this.setState({
+                        error: "No Categories found..."
+                    })
+                }
+            }
+        ).catch(function (error) {
+            console.log(error);
+        })
+    }
+
+    handleSelectClass(e) {
+        ApiRequests.apiGetRequest(urlTypes.SCHOOLCLASS + e.value).then(
+            response => {
+                if (response.data !== undefined && response.data != 0) {
+                    console.log("Fetched Schoolclasses")
+                    console.log(response.data)
+                    let schoolClass = response.data;
+                    let usersInClass = [];
+                    schoolClass.usersInClass.map((userId) => {
+                        let users = this.state.allUsers.filter((user) => {return user.value === userId});
+                        usersInClass.push(users[0]);
+                    })
+                    this.setState({
+                        name: schoolClass.name,
+                        description: schoolClass.description,
+                        // TODO: Need to get Exams of SchoolClasses for Select-Component of Exams
+                        examSetsForSchoolClass: [...schoolClass.examSetsForSchoolClass],
+                        // TODO: Need to get Users Of SchoolClasses for Select-Component of Exams
+                        usersInClass: [...usersInClass],
+                        institution: schoolClass.institution,
+
+                    })
+                    console.log(allSchoolClasses)
+                } else {
+                    this.setState({
+                        error: "No Categories found..."
+                    })
+                }
+            }
+        ).catch(function (error) {
+            console.log(error);
         })
     }
 
@@ -203,19 +257,15 @@ class SchoolClassForm extends React.Component {
 
     render() {
         const {classes} = this.props;
-        const {name, schoolClassCreated, schoolClassCreatedMessage, institution, allInstitutions, description, allUsers, error} = this.state;
+        const {name, schoolClassCreated, schoolClassCreatedMessage, institution, allInstitutions, description, allUsers, allSchoolClasses, usersInClass} = this.state;
 
         return(
             <Container component="main" maxWidth="xl">
                 <CssBaseline/>
                 <div className={classes.paper}>
+
                     {schoolClassCreated &&
                     <Alert variant="info">
-                        {schoolClassCreatedMessage}
-                    </Alert>
-                    }
-                    {error &&
-                    <Alert variant="danger">
                         {schoolClassCreatedMessage}
                     </Alert>
                     }
@@ -223,11 +273,32 @@ class SchoolClassForm extends React.Component {
                         Erstelle hier eine neue Klasse
                     </Typography>
                     <Form onSubmit={this.handleSubmit}>
+                        <Form.Group controlId="institutionSelect">
+                            <Form.Label>Institution auswählen:</Form.Label>
+                            <Select
+                                defaultValue={"Auswählen..."}
+                                value={institution.label}
+                                components={animatedComponents}
+                                onChange={this.handleSelectInstitution}
+                                options={allInstitutions}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="schooclasses">
+                            <Form.Label>Schulklassen auswählen:</Form.Label>
+                            <Select
+                                defaultValue={"Auswählen..."}
+                                closeMenuOnSelect={false}
+                                components={animatedComponents}
+                                onChange={this.handleSelectClass}
+                                options={allSchoolClasses}
+                                isMulti
+                            />
+                        </Form.Group>
                         <Form.Group controlId="institution">
                             <Form.Label>Institution</Form.Label>
                             <Select
                                 defaultValue={"Auswählen..."}
-                                value={institution.label}
+                                value={all}
                                 components={animatedComponents}
                                 onChange={this.handleInstitution}
                                 options={allInstitutions}
@@ -247,6 +318,7 @@ class SchoolClassForm extends React.Component {
                             <Form.Label>Schüler der Klasse</Form.Label>
                             <Select
                                 defaultValue={"Auswählen..."}
+                                value={usersInClass}
                                 closeMenuOnSelect={false}
                                 components={animatedComponents}
                                 onChange={this.handleUsers}

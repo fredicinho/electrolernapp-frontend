@@ -80,9 +80,17 @@ class SidebarContent extends React.Component {
             style: props.style ? {...styles.sidebar, ...props.style} : styles.sidebar,
             exercisesOpen: false,
             adminPanelOpen: false,
+            userManagementPanelOpen: false,
+            examsOpen: false,
+            institutionPanelOpen: false,
         }
         this.toggleExercise = this.toggleExercise.bind(this);
         this.toggleAdmin = this.toggleAdmin.bind(this);
+        this.toggleUserManagement = this.toggleUserManagement.bind(this);
+        this.toggleExams = this.toggleExams.bind(this);
+        this.toggleInstitutions = this.toggleInstitutions.bind(this);
+
+
     }
 
     getNavigationItems(navigationPage) {
@@ -107,6 +115,24 @@ class SidebarContent extends React.Component {
     toggleAdmin() {
         this.setState( prevState => ({
             adminPanelOpen: !prevState.adminPanelOpen
+        }));
+    }
+
+    toggleUserManagement() {
+        this.setState( prevState => ({
+            userManagementPanelOpen: !prevState.userManagementPanelOpen
+        }));
+    }
+
+    toggleExams() {
+        this.setState( prevState => ({
+            examsOpen: !prevState.examsOpen
+        }));
+    }
+
+    toggleInstitutions() {
+        this.setState( prevState => ({
+            institutionPanelOpen: !prevState.institutionPanelOpen
         }));
     }
 
@@ -160,23 +186,45 @@ class SidebarContent extends React.Component {
                     </ListItem>
                     { this.props.isAdminOrTeacher &&
                         <React.Fragment>
-                            <ListItem button onClick={this.toggleAdmin}>
-                                <ListItemText primary="Lehrer"/>
-                                {this.state.adminPanelOpen ? <ExpandLess/> : <ExpandMore/>}
+                            <ListItem button onClick={this.toggleUserManagement}>
+                                <ListItemText primary="Benutzerverwaltung"/>
+                                {this.state.userManagementPanelOpen ? <ExpandLess/> : <ExpandMore/>}
                             </ListItem>
-                            <Collapse isOpen={this.state.adminPanelOpen} unmountOnExit={true}>
+                            <Collapse isOpen={this.state.userManagementPanelOpen} unmountOnExit={true}>
+                                <List component="div" disablePadding>
+                                    <ListItem button className={classes.nested} component={Link} to="/createusers">
+                                        <ListItemText primary="Benutzer importieren"/>
+                                    </ListItem>
+                                    <ListItem button className={classes.nested} component={Link} to="/createuser">
+                                        <ListItemText primary="Benutzer erstellen"/>
+                                    </ListItem>
+                                </List>
+                            </Collapse>
+                            <ListItem button onClick={this.toggleExams}>
+                                <ListItemText primary="Prüfungen und Fragen"/>
+                                {this.state.examsOpen ? <ExpandLess/> : <ExpandMore/>}
+                            </ListItem>
+                            <Collapse isOpen={this.state.examsOpen} unmountOnExit={true}>
                                 <List component="div" disablePadding>
                                     <ListItem button className={classes.nested} component={Link} to="/createexam">
-                                        <ListItemText primary="Neue Prüfung"/>
+                                        <ListItemText primary="Prüfung erstellen"/>
                                     </ListItem>
                                     <ListItem button className={classes.nested} component={Link} to="/createquestion">
-                                        <ListItemText primary="Neue Frage"/>
+                                        <ListItemText primary="Fragen erstellen"/>
                                     </ListItem>
+                                </List>
+                            </Collapse>
+                            <ListItem button onClick={this.toggleInstitutions}>
+                                <ListItemText primary="Institutionen und Klassen"/>
+                                {this.state.institutionPanelOpen ? <ExpandLess/> : <ExpandMore/>}
+                            </ListItem>
+                            <Collapse isOpen={this.state.institutionPanelOpen} unmountOnExit={true}>
+                                <List component="div" disablePadding>
                                     <ListItem button className={classes.nested} component={Link} to="/createschoolclass">
-                                        <ListItemText primary="Neue Klasse"/>
+                                        <ListItemText primary="Klasse erstellen"/>
                                     </ListItem>
                                     <ListItem button className={classes.nested} component={Link} to="/createinstitution">
-                                        <ListItemText primary="Neue Bildungsinstitution"/>
+                                        <ListItemText primary="Bildungsinstitution erstellen"/>
                                     </ListItem>
                                 </List>
                             </Collapse>
