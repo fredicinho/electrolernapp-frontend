@@ -30,6 +30,8 @@ export function getNavigationStateByLocation(location) {
             return NavigationStates.IMPORT_USERS;
         case "/createuser":
             return NavigationStates.CREATE_USER;
+        case "/editschoolclass":
+            return NavigationStates.EDIT_SCHOOLCLASS
         default:
             return NavigationStates.NOTFOUND;
     }
@@ -61,6 +63,9 @@ export function getNavigationName(navigationItem) {
         case NavigationStates.CREATE_SCHOOLCLASS:
             return "Schulklasse erstellen";
             break
+        case NavigationStates.EDIT_SCHOOLCLASS:
+            return "Schulklasse bearbeiten";
+            break;
         case NavigationStates.CREATE_INSTITUTION:
             return "Bildungsinstitution erstellen";
             break

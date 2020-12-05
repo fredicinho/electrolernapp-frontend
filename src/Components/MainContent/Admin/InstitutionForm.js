@@ -4,15 +4,10 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import {Alert} from "react-bootstrap";
 import Typography from "@material-ui/core/Typography";
 import Form from "react-bootstrap/Form";
-import Select from "react-select";
-import makeAnimated from 'react-select/animated';
 import Button from "@material-ui/core/Button";
-import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
-import {Copyright} from "./QuestionForm";
 import withStyles from "@material-ui/core/styles/withStyles";
 
-const animatedComponents = makeAnimated();
 
 const styles = theme => ({
     paper: {
@@ -99,9 +94,11 @@ class SchoolClassForm extends React.Component {
                     this.setState({
                         ...initialState,
                         institutionCreated: true,
+                        institutionExists: false,
                         institutionCreatedMessage: "Die Bildungsinstitution :: " + result.data.name + " :: wurde erfolgreich erstellt!",
                     });
                 } else {
+
                     this.setState({
                         //error: "No data found for this CategorySet..."
                     })
@@ -110,8 +107,8 @@ class SchoolClassForm extends React.Component {
             .catch( error => {
                 if (error.response.status === 409) {
                     this.setState({
-                        schooClassCreated: true,
-                        schooClassCreatedMessage: "Die Bildungsinstitution :: " + error.response.data.name + " :: existiert bereits!"
+                        institutionExists: true,
+                        institutionExistsMessage: "Die Bildungsinstitution :: " + error.response.data.name + " :: existiert bereits!"
                     });
                 }
 
@@ -147,7 +144,7 @@ class SchoolClassForm extends React.Component {
 
     render() {
         const {classes} = this.props;
-        const {name, institutionCreated, institutionCreatedMessage, description, city, plz} = this.state;
+        const {name, institutionCreated, institutionCreatedMessage, description, city, plz,institutionExistsMessage, institutionExists } = this.state;
 
         return(
             <Container component="main" maxWidth="xl">
@@ -156,6 +153,11 @@ class SchoolClassForm extends React.Component {
                     {institutionCreated &&
                     <Alert variant="info">
                         {institutionCreatedMessage}
+                    </Alert>
+                    }
+                    {institutionExists &&
+                    <Alert variant="danger">
+                        {institutionExistsMessage}
                     </Alert>
                     }
                     <Typography component="h1" variant="h5">
@@ -187,9 +189,6 @@ class SchoolClassForm extends React.Component {
                         </Button>
                     </Form>
                 </div>
-                <Box mt={8}>
-                    <Copyright/>
-                </Box>
             </Container>
         );
     }

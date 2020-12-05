@@ -30,6 +30,7 @@ import ReviseExam from "./Admin/ReviseExam";
 import ImportUsersForm from "./Admin/ImportUsersForm";
 import SignUp from "./Admin/SignUp";
 import Statistics from "./MainComponents/Statistics";
+import EditSchoolClassForm from "./Admin/EditSchoolClassForm";
 
 
 const mql = window.matchMedia(`(min-width: 800px)`);
@@ -211,6 +212,7 @@ class MainContent extends React.Component {
                                     <Route path="/createquestion" component={QuestionForm}/>
                                     <Route path="/createexam" component={ExamForm}/>
                                     <Route path="/createschoolclass" component={SchoolClassForm}/>
+                                    <Route path="/editschoolclass" component={EditSchoolClassForm}/>
                                     <Route path="/createinstitution" component={InstitutionForm}/>
                                     <Route path="/reviseexam" component={ReviseExam}/>
                                     <Route path="/createusers" component={ImportUsersForm}/>

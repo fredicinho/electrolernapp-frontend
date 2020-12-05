@@ -9,7 +9,6 @@ import makeAnimated from 'react-select/animated';
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
-import {Copyright} from "./QuestionForm";
 import withStyles from "@material-ui/core/styles/withStyles";
 
 const animatedComponents = makeAnimated();
@@ -190,6 +189,8 @@ class SchoolClassForm extends React.Component {
             this.setState({
                 usersInClass: e
             })
+            console.log("Actual Users in Class")
+            console.log(this.state.usersInClass)
         }
     }
 
@@ -259,9 +260,6 @@ class SchoolClassForm extends React.Component {
                         </Button>
                     </Form>
                 </div>
-                <Box mt={8}>
-                    <Copyright/>
-                </Box>
             </Container>
         );
     }
