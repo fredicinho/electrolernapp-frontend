@@ -26,6 +26,7 @@
     "react-datetime": "^3.0.4",
     "react-dom": "^16.13.1",
     "react-dropzone": "^11.2.4",
+    "react-flexy-table": "^1.5.8",
     "react-material-ui-form-validator": "^2.1.1",
     "react-quiz-component": "^0.3.7",
     "react-redux": "^7.2.1",

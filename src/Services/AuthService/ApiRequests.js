@@ -23,6 +23,7 @@ const NEWPASSWORD_API = PASSWORDRESET_API + "resetPassword";
 const CSV_API = API_VERSION + "csv/";
 const CSVUSERS_API = CSV_API + "users";
 const EXPORT_QUESTIONS_API = CSV_API + "questions/export";
+const EXAMOVERVIEW_API = EXAMRESULT_API + "examResultOverview";
 
 
 export const urlTypes = {
@@ -45,6 +46,7 @@ export const urlTypes = {
   NEWPASSWORD: NEWPASSWORD_API,
   CSVUSERS: CSVUSERS_API,
   EXPORT_QUESTIONS: EXPORT_QUESTIONS_API,
+  EXAMOVERVIEW: EXAMOVERVIEW_API,
 }
 
 

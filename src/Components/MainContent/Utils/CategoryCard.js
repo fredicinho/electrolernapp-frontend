@@ -61,7 +61,6 @@ class CategoryCard extends React.Component {
         this.setState({redirect: true});
     }
 
-
     render() {
         const { classes, title } = this.props;
         let image;

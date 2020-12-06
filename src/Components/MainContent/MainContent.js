@@ -34,6 +34,7 @@ import EditSchoolClassForm from "./Admin/EditSchoolClassForm";
 import DataExport from "./Admin/DataExport";
 import MyProfile from "./MainComponents/MyPofile";
 import ListItem from "@material-ui/core/ListItem";
+import ExamResultView from "./Admin/ExamResultView";
 
 
 const mql = window.matchMedia(`(min-width: 800px)`);
@@ -222,6 +223,7 @@ class MainContent extends React.Component {
                                     <Route path="/createusers" component={ImportUsersForm}/>
                                     <Route path="/createuser" component={SignUp}/>
                                     <Route path="/export" component={DataExport}/>
+                                    <Route path="/examresults" component={ExamResultView}/>
                                 </React.Fragment>
                                 }
                                 <Route component={NoMatch}/>

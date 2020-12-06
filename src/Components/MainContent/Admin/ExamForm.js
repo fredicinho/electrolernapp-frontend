@@ -190,7 +190,9 @@ class ExamForm extends React.Component {
             userId: AuthenticationService.getCurrentUser().id,
         }
 
+        console.log("New Exam looks like that ::");
         console.log(newExam);
+        console.log(JSON.stringify(newExam))
         ApiRequests.apiPostRequest(urlTypes.EXAMSET, newExam)
             .then(result => {
                 console.log(result)

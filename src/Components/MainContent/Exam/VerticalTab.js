@@ -101,11 +101,8 @@ class VerticalTabs extends React.Component {
         }
         ApiRequests.apiPutRequest(urlTypes.EXAMCHECK, affectedResultObject)
             .then(result => {
-                if (result.status === 201) {
-                    console.log("Sending result was successful")
-                } else {
-                    console.log("Sending result was not sucesfull")
-                }
+                // TODO: Log that sending examResult was successful!
+                console.log("Sending examResult")
             })
             .catch( error => {
                 console.log(error)

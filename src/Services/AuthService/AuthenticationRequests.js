@@ -13,7 +13,6 @@ class AuthenticationRequests {
         if (response.data.accessToken) {
           localStorage.setItem("user", JSON.stringify(response.data));
         }
-
         return response.data;
       });
   }
@@ -64,9 +63,6 @@ class AuthenticationRequests {
       password
     })
         .then(response => {
-            console.log("Response of starting Exam sign in ::")
-            console.log(response.data)
-            alert(response.data)
           if (response.data.accessToken) {
               localStorage.removeItem("user");
               localStorage.setItem("user", JSON.stringify(response.data));
@@ -79,8 +75,6 @@ class AuthenticationRequests {
     return axios.post(urlTypes.AUTH + "endExam?examSetId=" + examSetId, {}, { headers: authenticationHeader()})
         .then(response => {
           if (response.data.accessToken) {
-              console.log("Signing out and setting new token ::")
-              console.log(response.data)
               localStorage.removeItem("user");
               localStorage.setItem("user", JSON.stringify(response.data));
           }

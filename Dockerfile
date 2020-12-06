@@ -16,6 +16,7 @@ RUN npm run build
 
 # Prepare nginx
 FROM nginx:1.16.0-alpine
+ENV TZ=Europe/Paris
 COPY --from=build /app/build /usr/share/nginx/html
 RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx/nginx.conf /etc/nginx/conf.d
