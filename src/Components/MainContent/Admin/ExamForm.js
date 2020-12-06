@@ -70,6 +70,7 @@ class ExamForm extends React.Component {
         this.getCategories = this.getCategories.bind(this);
         this.getSchoolClasses = this.getSchoolClasses.bind(this);
         this.handleSchoolClass = this.handleSchoolClass.bind(this);
+        this.clearExam = this.clearExam.bind(this);
     }
 
     componentDidMount() {
@@ -276,12 +277,17 @@ class ExamForm extends React.Component {
         })
     }
 
+    clearExam() {
+        this.setState({
+            questionsInExamSet: [],
+        })
+    }
+
     render() {
         const {classes} = this.props;
         const { questionsInExamSet, questionsOfSelectedCategorySet, examCreatedPopup, examCreatedMessage } = this.state;
-        let chosedExersices = [];
-        questionsInExamSet.map(question => {
-            chosedExersices.push(
+        const chosenExercises = questionsInExamSet.map(question => {
+            return (
                 <ListGroup.Item>
                     {question.questionPhrase}
                     <Button className="pull-right" onClick={() => this.handleDeleteQuestion(question.id)}>Entfernen</Button>
@@ -368,10 +374,13 @@ class ExamForm extends React.Component {
                     Deine ausgewählten Fragen für die Prüfung:
                 </Typography>
                 <ListGroup defaultActiveKey="#link1">
-                    {chosedExersices}
+                    {chosenExercises}
                 </ListGroup>
                 <Button onClick={() => this.handleSubmit()}>
                     Prüfung erstellen!
+                </Button>
+                <Button onClick={() => this.clearExam()}>
+                    Prüfungsfragen entfernen!
                 </Button>
             </Container>
         );

@@ -1,7 +1,7 @@
 import React, {Fragment} from "react";
 import SidebarContent from "./Navigation/SidebarContent";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import {BrowserRouter as Router, Link, Route, Switch} from "react-router-dom";
 import Sidebar from "react-sidebar";
 import MaterialTitlePanel from "./Navigation/MaterialTitelPanel";
 import Demo from "../FrontPage/Demo";
@@ -31,6 +31,9 @@ import ImportUsersForm from "./Admin/ImportUsersForm";
 import SignUp from "./Admin/SignUp";
 import Statistics from "./MainComponents/Statistics";
 import EditSchoolClassForm from "./Admin/EditSchoolClassForm";
+import DataExport from "./Admin/DataExport";
+import MyProfile from "./MainComponents/MyPofile";
+import ListItem from "@material-ui/core/ListItem";
 
 
 const mql = window.matchMedia(`(min-width: 800px)`);
@@ -178,7 +181,7 @@ class MainContent extends React.Component {
             open={this.state.openAnchorEl}
             onClose={this.handleClose}
         >
-            <MenuItem onClick={this.handleClose}>Mein Profil</MenuItem>
+            <MenuItem component={Link} to="/myprofile" onClick={this.handleClose}>Mein Profil</MenuItem>
             <MenuItem onClick={this.toggleLogout}>Ausloggen</MenuItem>
         </Menu>
                 </span>
@@ -207,6 +210,7 @@ class MainContent extends React.Component {
                                 <Route path="/exams" component={ExamView}/>
                                 <Route path="/exam" component={Quiz}/>
                                 <Route path="/statistics" component={Statistics}/>
+                                <Route path="/myprofile" component={MyProfile}/>
                                 {this.props.isAdminOrTeacher &&
                                 <React.Fragment>
                                     <Route path="/createquestion" component={QuestionForm}/>
@@ -217,6 +221,7 @@ class MainContent extends React.Component {
                                     <Route path="/reviseexam" component={ReviseExam}/>
                                     <Route path="/createusers" component={ImportUsersForm}/>
                                     <Route path="/createuser" component={SignUp}/>
+                                    <Route path="/export" component={DataExport}/>
                                 </React.Fragment>
                                 }
                                 <Route component={NoMatch}/>

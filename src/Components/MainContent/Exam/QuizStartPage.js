@@ -82,7 +82,6 @@ class QuizStartPage extends React.Component {
             <div>
                 { this.state.showAuthenticateScreen &&
                 <Popup
-                    text='Click "Close Button" to hide popup'
                     closePopup={this.handleClosePopup}
                     authenticate={this.handleAuthenticate}
                     examSetId={this.props.examData.examSetId}
@@ -99,9 +98,6 @@ class QuizStartPage extends React.Component {
                         title="Paella dish"
                     />
                     <CardContent>
-                        <Typography variant="body2" color="textSecondary" component="p">
-                            Here comes the description of the exam
-                        </Typography>
                     </CardContent>
                     <CardActions disableSpacing>
                         <Button variant="contained" color="primary" disabled={!examIsActive} onClick={this.handleClosePopup}>

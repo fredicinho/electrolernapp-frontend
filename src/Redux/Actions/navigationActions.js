@@ -11,6 +11,7 @@ export const NavigationStates = {
     HOME: "HOME",
     EXERCISES: "EXERCISES",
     EXAMS: "EXAMS",
+    EXAM: "EXAM",
     STATISTICS: "STATISTICS",
     DEMO: "DEMO",
     CATEGORIES: "KATEGORIES",
@@ -24,4 +25,6 @@ export const NavigationStates = {
     IMPORT_USERS: "IMPORT_USERS",
     CREATE_USER: "CREATE_USERS",
     EDIT_SCHOOLCLASS: "EDIT_SCHOOLCLASS",
+    EXPORT: "EXPORT",
+    MY_PROFILE: "MY_PROFILE",
 }

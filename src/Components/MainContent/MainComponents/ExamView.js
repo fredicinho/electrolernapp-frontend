@@ -12,6 +12,9 @@ import Zoom from 'react-reveal/Zoom';
 const myStyles = theme => ({
     root: {
         flexGrow: 1,
+        marginLeft: theme.spacing(3),
+        marginRight: theme.spacing(3),
+        marginTop: theme.spacing(3),
     },
     paper: {
         padding: theme.spacing(2),

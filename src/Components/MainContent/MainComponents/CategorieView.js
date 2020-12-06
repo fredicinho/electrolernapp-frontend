@@ -7,11 +7,14 @@ import Loader from "../Utils/Loader";
 import {changeNavigationPage} from "../../../Redux/Actions/navigationActions";
 import {connect} from "react-redux";
 import Zoom from 'react-reveal/Zoom';
-import TransitionGroup from 'react-transition-group/TransitionGroup';
 
 const myStyles = theme => ({
     root: {
         flexGrow: 1,
+        marginLeft: theme.spacing(3),
+        marginRight: theme.spacing(3),
+        marginTop: theme.spacing(3),
+
     },
     paper: {
         padding: theme.spacing(2),

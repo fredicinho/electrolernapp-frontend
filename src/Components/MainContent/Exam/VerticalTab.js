@@ -9,6 +9,8 @@ import QuizCore from "./QuizCore";
 import ApiRequests, {urlTypes} from "../../../Services/AuthService/ApiRequests";
 import moment from "moment";
 import AuthenticationRequests from "../../../Services/AuthService/AuthenticationRequests";
+import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
 
 
 function TabPanel(props) {
@@ -54,6 +56,10 @@ const myStyles = theme => ({
     tabs: {
         borderRight: `1px solid ${theme.palette.divider}`,
     },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
+        backgroundColor: "#2979ff",
+    },
 });
 
 class VerticalTabs extends React.Component {
@@ -64,10 +70,12 @@ class VerticalTabs extends React.Component {
             questions: this.props.questions,
             timeLeft: true,
             difference: null,
+            endExamSelected: false,
         }
         this.handleChange = this.handleChange.bind(this);
         this.changeSelectedAnswers = this.changeSelectedAnswers.bind(this);
         this.sendActualAnswers = this.sendActualAnswers.bind(this);
+        this.endExam = this.endExam.bind(this);
     }
 
     handleChange(event, newValue){
@@ -119,6 +127,11 @@ class VerticalTabs extends React.Component {
         })
     }
 
+    endExam(e) {
+        e.preventDefault();
+        this.props.signOutOfExam()
+    }
+
     componentDidMount() {
         this.interval = setInterval(() => {
             const { examData } = this.props;
@@ -136,8 +149,8 @@ class VerticalTabs extends React.Component {
 
 
     render() {
-        const { questions, timeLeft } = this.state;
-        if (timeLeft.difference <= 0 ) {
+        const { questions, timeLeft, endExamSelected } = this.state;
+        if (timeLeft.difference <= 0) {
             this.props.signOutOfExam();
         }
         let tabLabels = [];
@@ -157,19 +170,33 @@ class VerticalTabs extends React.Component {
         console.log("Timer")
         console.log(moment(this.props.examData.endDate) - moment())
         return (
-            <div className={classes.root}>
-                {timeLeft.hours + ":" + timeLeft.minutes + ":" + timeLeft.seconds}
-                <Tabs
-                    orientation="vertical"
-                    variant="scrollable"
-                    value={this.state.value}
-                    onChange={this.handleChange}
-                    aria-label="Vertical tabs example"
-                    className={classes.tabs}
-                >
-                    {tabLabels}
-                </Tabs>
-                {tabPanels}
+            <div>
+            <Typography component="h1" variant="h5" align={"center"}>Verbleibende Zeit: {timeLeft.hours + " h: " + timeLeft.minutes + " min: " + timeLeft.seconds + " s"} </Typography>
+                <div className={classes.root}>
+                        <Tabs
+                            orientation="vertical"
+                            variant="scrollable"
+                            value={this.state.value}
+                            onChange={this.handleChange}
+                            aria-label="Vertical tabs example"
+                            className={classes.tabs}
+                        >
+                            {tabLabels}
+                        </Tabs>
+                        {tabPanels}
+                    </div>
+                <div>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                        fullWidth={true}
+                        onClick={(e) => {this.endExam(e)}}
+                    >
+                        Prüfung beenden
+                    </Button>
+
+                </div>
             </div>
         );
     }

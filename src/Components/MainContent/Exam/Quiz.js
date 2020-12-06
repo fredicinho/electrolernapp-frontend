@@ -7,6 +7,8 @@ import QuizStartPage from "./QuizStartPage";
 import AuthenticationRequests from "../../../Services/AuthService/AuthenticationRequests";
 import VerticalTab from "./VerticalTab";
 import {connect} from "react-redux";
+import * as windows from "react-router-redux";
+import {Typography} from "@material-ui/core";
 
 const initialState = {
     exam: null,
@@ -24,7 +26,6 @@ const myStyles = theme => ({
     rootContainer: {
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
     },
 
 });
@@ -57,8 +58,6 @@ class Quiz extends React.Component {
         ApiRequests.apiGetRequest(this.props.urlOfExam)
             .then(result => {
                 if (result.data !== undefined && result.data != 0) {
-                    console.log("Exam received of Reducer url :: ")
-                    console.log(result.data)
                     this.setState({
                         isLoaded: true,
                         examData: result.data,
@@ -78,6 +77,7 @@ class Quiz extends React.Component {
     }
 
     signOutOfExam() {
+        console.log("Sign out of Exam now")
         AuthenticationRequests.endExam(this.props.examSetId).then((response) => {
             if (response.status === 200) {
                 this.setState({
@@ -85,7 +85,8 @@ class Quiz extends React.Component {
                 })
             }
         });
-        // TODO: Make Exam Finished Page Component
+        window.location.replace("/exams");
+        window.location.reload();
     }
 
     changeSelectedAnswers(selectedAnswers) {
@@ -153,6 +154,7 @@ class Quiz extends React.Component {
         this.setState({
             quizStarted: !this.state.quizStarted,
         })
+        alert("Whatever")
     }
 
     getActualQuestion() {
@@ -172,7 +174,7 @@ class Quiz extends React.Component {
     }
 
     render() {
-        const { quizStarted, isLoaded, quizDataLoaded, questions } = this.state;
+        const { quizStarted, isLoaded, quizDataLoaded, questions, examFinished } = this.state;
         const { classes } = this.props;
 
         if (isLoaded) {
@@ -186,11 +188,20 @@ class Quiz extends React.Component {
                         examData={this.state.examData}
                         signOutOfExam={this.signOutOfExam}/>
                     }
+                    { examFinished &&
+                    <Container className={classes.rootContainer}>
+                        <Typography>
+                            Du hast die Prüfung erfolgreich beendet!
+                        </Typography>
+                    </Container>
+
+                    }
                     {quizStarted && !quizDataLoaded &&
                         <Container className={classes.rootContainer}>
                             <Loader/>
                         </Container>
                     }
+
                     {!quizStarted &&
                         <QuizStartPage examData={this.state.examData} startQuiz={this.handleQuizStart}/>
                     }

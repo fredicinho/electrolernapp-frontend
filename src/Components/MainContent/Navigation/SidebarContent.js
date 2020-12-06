@@ -20,6 +20,7 @@ import AuthenticationRequests from "../../../Services/AuthService/Authentication
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import hsluLogo from "../../../images/hsluLogo.png";
+import DataExport from "../Admin/DataExport";
 
 
 const styles = {
@@ -70,6 +71,7 @@ const myStyles = theme => ({
         width: '100%',
         height: 'auto',
         padding: '10px',
+        bottom: 0,
     },
 });
 
@@ -231,12 +233,18 @@ class SidebarContent extends React.Component {
                                     </ListItem>
                                 </List>
                             </Collapse>
+                            <ListItem button component={Link} to="/export">
+                                <ListItemText primary="Daten exportieren"/>
+                            </ListItem>
                         </React.Fragment>
                     }
                 </List>
+                <div className={classes.hsluLogo}>
                 <a href="https://www.hslu.ch/de-ch/technik-architektur/studium/bachelor/gebaeudetechnik-energie/">
                 <img src={hsluLogo} className={classes.hsluLogo}/>
                 </a>
+                </div>
+
             </MaterialTitlePanel>
         );
     }

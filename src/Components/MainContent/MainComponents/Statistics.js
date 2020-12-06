@@ -1,13 +1,44 @@
-import React from "react";
+import React, {PureComponent} from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 import ApiRequests, {urlTypes} from "../../../Services/AuthService/ApiRequests";
 import AuthenticationRequests from "../../../Services/AuthService/AuthenticationRequests";
 import Loader from "../Utils/Loader";
-
+import {
+    Radar,
+    RadarChart,
+    PolarGrid,
+    PolarAngleAxis,
+    PolarRadiusAxis,
+    ComposedChart,
+    BarChart
+} from 'recharts';
+import {XAxis} from "recharts";
+import {YAxis} from "recharts";
+import Tooltip from "@material-ui/core/Tooltip";
+import {Legend} from "recharts";
+import {CartesianGrid} from "recharts";
+import {Bar} from "recharts";
+import Typography from "@material-ui/core/Typography";
+import CategorySetStatistic from "../Utils/CategorySetStatistic";
 
 const myStyles = theme => ({
     root: {
-        flexGrow: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+    },
+    title: {
+        textAlign: 'center',
+    },
+    child: {
+        width: '100%',
+        justifyContent: 'center' ,
+        boxSizing: 'border-box',
+    },
+    categoryBar: {
+        display: 'flex',
+        justifyContent: 'center',
     },
     paper: {
         padding: theme.spacing(2),
@@ -18,7 +49,8 @@ const myStyles = theme => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-    }
+    },
+
 
 });
 
@@ -33,12 +65,14 @@ class Statistics extends React.Component {
             allQuestions: [],
             allUserStatistics: [],
             allDataLoaded: false,
+            statistics: null,
+            statisticsCalculated: false,
         }
 
         this.getUserStatistics = this.getUserStatistics.bind(this);
         this.getCategories = this.getCategories.bind(this);
         this.getCategorySets = this.getCategorySets.bind(this);
-        this.getQuestions = this.getQuestions.bind(this);
+        // this.getQuestions = this.getQuestions.bind(this);
         this.sortQuestions = this.sortQuestions.bind(this);
     }
 
@@ -49,7 +83,6 @@ class Statistics extends React.Component {
     getCategories() {
         ApiRequests.apiGetRequest(urlTypes.CATEGORIES)
             .then(result => {
-                console.log(result.data)
                 this.setState({
                     categoriesLoaded: true,
                     allCategories: result.data,
@@ -65,15 +98,15 @@ class Statistics extends React.Component {
     }
 
     getCategorySets(categories) {
-        ApiRequests.apiGetRequest(urlTypes.CATEGORYSET)
+        ApiRequests.apiGetRequest(urlTypes.CATEGORYSET + "categorySetOverview/")
             .then(result => {
-                console.log("Fetched categorySets")
+                console.log("Fetched categorySetOverviews")
                 console.log(result.data)
                 this.setState({
                     categorySetsLoaded: true,
                     allCategorySets: result.data,
                 });
-                this.getQuestions(categories, result.data);
+                this.getUserStatistics(categories, result.data);
             })
             .catch(function (error) {
                 console.log(error);
@@ -83,7 +116,8 @@ class Statistics extends React.Component {
             });
     }
 
-    getQuestions(categories, categorySets) {
+    /**
+     getQuestions(categories, categorySets) {
         ApiRequests.apiGetRequest(urlTypes.QUESTIONS)
             .then(result => {
                 if (result.data !== undefined && result.data != 0) {
@@ -106,17 +140,17 @@ class Statistics extends React.Component {
             .finally(function () {
             });
     }
+     */
 
-    getUserStatistics(categories, categorySets, questions) {
+    getUserStatistics(categories, categorySets) {
         ApiRequests.apiGetRequest(urlTypes.USERSTATISTIC + AuthenticationRequests.getCurrentUser().id)
             .then(result => {
                 if (result.data !== undefined && result.data != 0) {
-                    console.log(result.data);
                     this.setState({
                         allUserStatistics: result.data,
                         allDataIsLoaded: true,
                     })
-                    this.sortQuestions(categories, categorySets, questions);
+                    this.sortQuestions(categories, categorySets, result.data);
                 } else {
                     console.log("No Statisticobjects found...");
                     this.setState({
@@ -132,46 +166,151 @@ class Statistics extends React.Component {
             });
     }
 
-    sortQuestions(categories, categorySets, questions, userStatistics) {
+    sortQuestions(categories, categorySets, userStatistics) {
         let statistics = {
             pointsPossible: 0,
             numberOfQuestions: 0,
             numberOfQuestionsSolved: 0,
             pointsAchieved: 0,
             numberOfQuestionsMarked: 0,
+            categoryStatistics: {},
             categorySetStatistics: {},
         }
-        // TODO: What does a categorySet contains exactly?
+
+        categories.map((category) => {
+            statistics.categoryStatistics[category.categoryId] = category;
+            statistics.categoryStatistics[category.categoryId].pointsAchieved = 0;
+            statistics.categoryStatistics[category.categoryId].pointsPossible = 0;
+            statistics.categoryStatistics[category.categoryId].numberOfQuestions = 0;
+            statistics.categoryStatistics[category.categoryId].numberOfQuestionsSolved = 0;
+            statistics.categoryStatistics[category.categoryId].numberOfQuestionsMarked = 0;
+        })
+
         categorySets.map((categorySet) => {
-            statistics.categorySetStatistics[categorySet.categorySetId] = {
-                title: categorySet.title,
-                //possiblePoints: categorySet.possiblePoints,
-                //numberOfQuestions: categorySet.numberOfQuestions,
+            statistics.categorySetStatistics[categorySet.categorySetId] = categorySet;
+            statistics.categorySetStatistics[categorySet.categorySetId].pointsAchieved = 0;
+            statistics.categorySetStatistics[categorySet.categorySetId].numberOfQuestionsMarked = 0;
+            statistics.categorySetStatistics[categorySet.categorySetId].numberOfQuestionsSolved = 0;
+            statistics.pointsPossible += parseFloat(categorySet.maximalNumberOfPoints);
+            statistics.numberOfQuestions += categorySet.numberOfQuestions;
+            statistics.categoryStatistics[categorySet.categoryId].pointsPossible += categorySet.maximalNumberOfPoints;
+            statistics.categoryStatistics[categorySet.categoryId].numberOfQuestions += categorySet.numberOfQuestions;
+            statistics.categoryStatistics[categorySet.categoryId].numberOfQuestions += 1;
+
+        })
+
+        userStatistics.map((userStatistic) => {
+            statistics.categorySetStatistics[userStatistic.categorySetId].pointsAchieved += userStatistic.pointsAchieved;
+            statistics.categorySetStatistics[userStatistic.categorySetId].numberOfQuestionsSolved += 1;
+            statistics.categoryStatistics[userStatistic.categoryId].pointsAchieved += userStatistic.pointsAchieved;
+            statistics.categoryStatistics[userStatistic.categoryId].numberOfQuestionsSolved += 1;
+            statistics.pointsAchieved += userStatistic.pointsAchieved;
+            statistics.numberOfQuestionsSolved += 1;
+            if (userStatistic.marked) {
+                statistics.numberOfQuestionsMarked += 1;
+                statistics.categoryStatistics[userStatistic.categoryId].numberOfQuestionsMarked += 1;
+                statistics.categorySetStatistics[userStatistic.categorySetId].numberOfQuestionsMarked += 1;
             }
         })
+
         console.log("New Statistics")
         console.log(statistics)
 
+        this.setState({
+            statistics: statistics,
+            statisticsCalculated: true,
+        })
     }
 
 
     render() {
         const {classes} = this.props;
-        const {allDataIsLoaded} = this.state;
+        const {allDataIsLoaded, statisticsCalculated, statistics} = this.state;
 
-        if (!allDataIsLoaded) {
+        if (!statisticsCalculated && !allDataIsLoaded) {
             return (
                 <div className={classes.loader}>
                     <Loader/>
                 </div>
             );
         } else {
-            return (
-                <div>
-                    Hello World!
-                </div>
 
-            );
+            if (statistics === null) {
+                return (
+                    <div className={classes.loader}>
+                        <Loader/>
+                    </div>
+                );
+            } else {
+
+                const categoryStatistics = Object.values(statistics.categoryStatistics).map((categoryStatistic) => {
+                    return ({
+                        name: categoryStatistic.name,
+                        'Übungen absolviert (in %)': (categoryStatistic.numberOfQuestionsSolved / categoryStatistic.numberOfQuestions) * 100,
+                        'Punkte erreicht (in %)': (categoryStatistic.pointsAchieved / categoryStatistic.pointsPossible) * 100,
+                        fullMark: 100,
+                    });
+                });
+
+
+
+                console.log("Actual Statistics")
+                console.log(this.state.statistics)
+                return (
+                    <div>
+                        <div className={classes.root}>
+                            <div className={classes.child}>
+                            <Typography className={classes.title} variant="h3" gutterBottom>
+                                Kategorien
+                            </Typography>
+                            </div>
+
+                            <div className={classes.child}>
+
+                            <BarChart className={classes.categoryBar}
+                                      width={1500}
+                                      height={500}
+                                      data={categoryStatistics}
+                                      margin={{
+                                          top: 5, right: 30, left: 20, bottom: 5,
+                                      }}
+                            >
+                                <CartesianGrid strokeDasharray="3 3"/>
+                                <XAxis dataKey="name"/>
+                                <YAxis/>
+                                <Tooltip/>
+                                <Legend/>
+                                <Bar dataKey="Übungen absolviert (in %)"
+                                     fill="#03a9f4"
+                                     isAnimationActive={true}
+                                     animationBegin={0}
+                                     animationDuration={3000}
+                                />
+                                <Bar dataKey="Punkte erreicht (in %)"
+                                     fill="#08135f"
+                                     isAnimationActive={true}
+                                     animationBegin={0}
+                                     animationDuration={3000}
+                                />
+                            </BarChart>
+                            </div>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <div className={classes.child}>
+                                <Typography className={classes.title} variant="h3" gutterBottom>
+                                    Übungssets
+                                </Typography>
+                            </div>
+                            <div className={classes.child}>
+                                <CategorySetStatistic categorySets={statistics.categorySetStatistics} categories={statistics.categoryStatistics}/>
+                            </div>
+                        </div>
+                    </div>
+
+                );
+            }
         }
     }
 }

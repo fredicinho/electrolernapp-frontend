@@ -4,6 +4,7 @@ import {changeNavigationPage} from "../../../Redux/Actions/navigationActions";
 import {connect} from "react-redux";
 import { withRouter } from 'react-router-dom';
 import {getNavigationStateByLocation} from "./NavigationUtils";
+import hsluLogo from "../../../images/hsluLogo.png";
 
 
 const styles = {

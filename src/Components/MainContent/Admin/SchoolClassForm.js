@@ -140,13 +140,13 @@ class SchoolClassForm extends React.Component {
                 if (result.status === 201) {
                     this.setState({
                         ...initialState,
-                        schooClassCreated: true,
-                        schooClassCreatedMessage: "Die Klasse :: " + result.data.name + " :: wurde erfolgreich erstellt!",
+                        schoolClassCreated: true,
+                        schoolClassCreatedMessage: "Die Klasse :: " + result.data.name + " :: wurde erfolgreich erstellt!",
                     });
                 } else {
                     this.setState({
                         error: true,
-                        schooClassCreatedMessage: "Es gab ein Problem beim Erstellen der Klasse.",
+                        schoolClassCreatedMessage: "Es gab ein Problem beim Erstellen der Klasse.",
                     })
                 }
             })
@@ -154,14 +154,14 @@ class SchoolClassForm extends React.Component {
                 console.log(error.message)
                 if (error.response.status === 409) {
                     this.setState({
-                        schooClassCreated: true,
-                        schooClassCreatedMessage: "Die Klasse :: " + error.response.data.name + " :: existiert bereits!"
+                        schoolClassCreated: true,
+                        schoolClassCreatedMessage: "Die Klasse :: " + error.response.data.name + " :: existiert bereits!"
                     });
                 } else {
                     this.setState({
-                        schooClassCreated: false,
+                        schoolClassCreated: false,
                         error: true,
-                        schooClassCreatedMessage: "Es gab ein Problem beim Erstellen der Klasse."
+                        schoolClassCreatedMessage: "Es gab ein Problem beim Erstellen der Klasse."
                     });
                 }
 

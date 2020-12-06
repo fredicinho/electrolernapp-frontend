@@ -10,6 +10,8 @@ export function getNavigationStateByLocation(location) {
             return NavigationStates.DEMO;
         case "/exams":
             return NavigationStates.EXAMS;
+        case "/exam":
+            return NavigationStates.EXAM;
         case "/exercices":
             return NavigationStates.EXERCISES;
         case "/categories":
@@ -31,7 +33,11 @@ export function getNavigationStateByLocation(location) {
         case "/createuser":
             return NavigationStates.CREATE_USER;
         case "/editschoolclass":
-            return NavigationStates.EDIT_SCHOOLCLASS
+            return NavigationStates.EDIT_SCHOOLCLASS;
+        case "/export":
+            return NavigationStates.EXPORT;
+        case "/myprofile":
+            return NavigationStates.MY_PROFILE;
         default:
             return NavigationStates.NOTFOUND;
     }
@@ -41,46 +47,40 @@ export function getNavigationName(navigationItem) {
     switch (navigationItem) {
         case NavigationStates.STATISTICS:
             return "Statistiken";
-            break
         case NavigationStates.HOME:
             return "Home";
-            break
         case NavigationStates.DEMO:
             return "Demo";
-            break
+        case NavigationStates.EXAM:
+            return "Prüfung";
         case NavigationStates.EXAMS:
             return "Prüfungen";
-            break
         case NavigationStates.EXERCISES:
             return "Übungen";
-            break
         case NavigationStates.CATEGORIES:
             return "Kategorien";
-            break
         case NavigationStates.CATEGORYSETS:
             return "Übungssets";
-            break
         case NavigationStates.CREATE_SCHOOLCLASS:
             return "Schulklasse erstellen";
-            break
         case NavigationStates.EDIT_SCHOOLCLASS:
             return "Schulklasse bearbeiten";
-            break;
         case NavigationStates.CREATE_INSTITUTION:
             return "Bildungsinstitution erstellen";
-            break
         case NavigationStates.CREATE_QUESTION:
             return "Frage erstellen";
-            break
         case NavigationStates.CREATE_EXAM:
             return "Prüfung erstellen";
-            break
         case NavigationStates.REVISE_EXAM:
             return "Prüfung auswerten";
         case NavigationStates.IMPORT_USERS:
             return "Benutzer importieren";
         case NavigationStates.CREATE_USER:
             return "Benutzer erstellen";
+        case NavigationStates.EXPORT:
+            return "Daten exportieren";
+        case NavigationStates.MY_PROFILE:
+            return "Mein Profil";
         default:
             return "Not Found";
     }

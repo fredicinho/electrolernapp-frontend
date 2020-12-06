@@ -85,7 +85,7 @@ class SignIn extends React.Component {
             this.props.onExamSignIn();
           }
       )
-          .catch(function (error) {
+          .catch((error) => {
             console.log(error);
             if (error.response.status === 500) {
               this.setState({
@@ -102,7 +102,7 @@ class SignIn extends React.Component {
             this.props.history.push("/");
             window.location.reload();
           },
-          error => {
+          (error) => {
             console.log(error)
             const resMessage =
                 (error.response &&

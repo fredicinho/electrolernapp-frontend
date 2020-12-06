@@ -30,7 +30,6 @@ class StartPageContent extends React.Component {
                 >
                     <Zoom>
                         <img src={logo} alt="Logo Brain Power"/>
-
                     </Zoom>
 
                 </Box>

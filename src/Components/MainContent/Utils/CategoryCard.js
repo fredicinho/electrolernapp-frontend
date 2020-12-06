@@ -10,6 +10,19 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import {selectCategorySet} from "../../../Redux/Actions/categorySetActions";
 import {connect} from "react-redux";
 import { Redirect } from 'react-router';
+import electricity from "../../../images/electricity.webp";
+import physic from "../../../images/physics.webp";
+import logo from "../../../images/hsluLogo.png";
+import math from "../../../images/mathematics.png";
+import chemistry from "../../../images/chemistry.png";
+import telephone from "../../../images/telephone.webp";
+import metal from "../../../images/metal.jpg";
+import conduct from "../../../images/conduct.jpg";
+import fachzeichnen from "../../../images/fachzeichen.jpg";
+import security from "../../../images/security.jpg";
+import preperation from "../../../images/preperation.jpg";
+
+
 
 
 const myStyles = theme => ({
@@ -51,15 +64,51 @@ class CategoryCard extends React.Component {
 
     render() {
         const { classes, title } = this.props;
+        let image;
+        switch (this.props.category.name) {
+            case "Elektrotechnik":
+                image = electricity
+                break;
+            case "Physik":
+                image = physic;
+                break;
+            case "Mathematik":
+                image = math;
+                break;
+            case "Chemie":
+                image = chemistry;
+                break;
+            case "Telekommunikation":
+                image = telephone;
+                break;
+            case "Werkstoffkunde":
+                image = metal;
+                break;
+            case "NIN 2015":
+                image = conduct;
+                break;
+            case "Fachzeichnen":
+                image = fachzeichnen;
+                break;
+            case "Arbeitssicherheit":
+                image = security;
+                break;
+            case "Vorbereitung QV":
+                image = preperation;
+                break;
+            default:
+                image = logo;
+        }
+
         if (this.state.redirect) {
             return <Redirect push to="/categorySets" />;
         } else {
             return (
                 <Card className={classes.root}>
-                    <CardActionArea>
+                    <CardActionArea onClick={this.handleToggleForSets}>
                         <CardMedia
                             className={classes.media}
-                            //image="/static/images/cards/contemplative-reptile.jpg"
+                            image={image}
                             title={title}
                         />
                         <CardContent>
@@ -67,9 +116,7 @@ class CategoryCard extends React.Component {
                                 {this.props.category.name}
                             </Typography>
                             <Typography variant="body2" color="textSecondary" component="p">
-                                TODO: this.props.description showing here
-                                Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                                across all continents except Antarctica
+
                             </Typography>
                         </CardContent>
                     </CardActionArea>
