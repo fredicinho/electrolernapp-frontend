@@ -45,23 +45,6 @@ class MyProfile extends React.Component {
         const { classes } = this.props;
         const { userData } = this.state;
 
-        let roles = "Rolle";
-        if (userData.roles.length !== 1) {
-            roles += "n:";
-        }
-        userData.roles.map((role) => {
-            switch (role) {
-                case "ROLE_USER":
-                    roles = roles + " Schüler"
-                case "ROLE_TEACHER":
-                    roles = roles + " Lehrer"
-                case "ROLE_ADMIN":
-                    roles = roles + " Administrator"
-                case "ROLE_EXAM":
-                    roles = roles + " Prüfungsmodus";
-            }
-        })
-
         return (
 
             <Container component="main" maxWidth="xs">
@@ -74,9 +57,6 @@ class MyProfile extends React.Component {
                         </Typography>
                         <Typography component="h3" variant="h5">
                             E-Mail: {userData.email}
-                        </Typography>
-                        <Typography component="h1" variant="h5">
-                            {roles}
                         </Typography>
                     </div>
                 </Fade>

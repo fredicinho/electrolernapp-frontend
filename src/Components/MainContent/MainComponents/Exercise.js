@@ -33,8 +33,8 @@ class Exercise extends React.Component {
 
     createQuizData(exerciseData) {
         let quizData = {
-            "quizTitle": "React Quiz Component Demo",
-            "quizSynopsis": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim",
+            "quizTitle": this.props.selectedCategorySet,
+            "quizSynopsis": "Bei diesem Quiz kannst du dein Wissen durch Multiple-Choice Fragen erweitern. Unterhalb der jeweiligen Fragen ist jeweils gelb markiert ob es sich um eine oder mehrere mögliche Antworten handelt, und violet markiert die Anzahl korrekter Antworten. Du erhälst immer sofort eine Rückmeldung und kannst in der Checkbox, welche sich danach jeweils unter den Antwortmöglichkeiten befindet, markieren damit du diese ein anderes Mal wiederholen kannst. Viel Spass!",
             "questions": [],
         }
         exerciseData.forEach(data => {
@@ -64,10 +64,10 @@ class Exercise extends React.Component {
                     "answerSelectionType": type,
                     "answers": answers,
                     "correctAnswer": (this.checkTypeOfAnswers(correctAnswers, type)),
-                    "messageForCorrectAnswer": "Correct answer. Good job.",
-                    "messageForIncorrectAnswer": "Incorrect answer. Please try again.",
-                    "explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-                    "point": "20"
+                    "messageForCorrectAnswer": "Richtige Antwort! Gut gemacht!",
+                    "messageForIncorrectAnswer": "Falsche Antwort... Versuche es nochmal!",
+                    "explanation": "",
+                    "point": data.pointsToAchieve.toString(),
                 },
             );
         });
@@ -75,10 +75,7 @@ class Exercise extends React.Component {
     }
 
     onCompleteAction(result) {
-        console.log("Received Result")
-        console.log(result)
         let markedQuestions = result.markedQuestions.filter((markedQuestion) => { return markedQuestion.value});
-        console.log(markedQuestions)
         let statistics = [];
         result.userInput.map((userinput, index) => {
             const involvedQuestion = this.state.fetchedQuestions[index];
@@ -112,9 +109,6 @@ class Exercise extends React.Component {
                 }
             }
         });
-
-        console.log("Sending new Statistics")
-        console.log(statistics)
 
         ApiRequests.apiPostRequest(urlTypes.POSTARRAYSTATISTIC, statistics)
             .then(result => {
@@ -200,8 +194,6 @@ class Exercise extends React.Component {
         } else if (!isLoaded) {
             return <Loader/>
         } else {
-            console.log("Loading quiz now")
-            console.log(this.state.quizData)
             return (
                 <React.Fragment>
                     <Quiz quiz={quizData} continueTillCorrect={false} onComplete={this.onCompleteAction} />
@@ -209,105 +201,6 @@ class Exercise extends React.Component {
             );
         }
     }
-}
-
-export const quiz1 = {
-    "quizTitle": "React Quiz Component Demo",
-    "quizSynopsis": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim",
-    "questions": [
-        {
-            "question": "How can you access the state of a component from inside of a member function?",
-            "questionType": "text",
-            "questionPic": "https://dummyimage.com/600x400/000/fff&text=X", // if you need to display Picture in Question
-            "answerSelectionType": "single",
-            "answers": [
-                "this.getState()",
-                "this.prototype.stateValue",
-                "this.state",
-                "this.values"
-            ],
-            "correctAnswer": "3",
-            "messageForCorrectAnswer": "Correct answer. Good job.",
-            "messageForIncorrectAnswer": "Incorrect answer. Please try again.",
-            "explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-            "point": "20"
-        },
-        {
-            "question": "ReactJS is developed by _____?",
-            "questionType": "text",
-            "answerSelectionType": "single",
-            "answers": [
-                "Google Engineers",
-                "Facebook Engineers"
-            ],
-            "correctAnswer": "2",
-            "messageForCorrectAnswer": "Correct answer. Good job.",
-            "messageForIncorrectAnswer": "Incorrect answer. Please try again.",
-            "explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-            "point": "20"
-        },
-        {
-            "question": "ReactJS is an MVC based framework?",
-            "questionType": "text",
-            "answerSelectionType": "single",
-            "answers": [
-                "True",
-                "False"
-            ],
-            "correctAnswer": "2",
-            "messageForCorrectAnswer": "Correct answer. Good job.",
-            "messageForIncorrectAnswer": "Incorrect answer. Please try again.",
-            "explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-            "point": "10"
-        },
-        {
-            "question": "Which of the following concepts is/are key to ReactJS?",
-            "questionType": "text",
-            "answerSelectionType": "single",
-            "answers": [
-                "Component-oriented design",
-                "Event delegation model",
-                "Both of the above",
-            ],
-            "correctAnswer": "3",
-            "messageForCorrectAnswer": "Correct answer. Good job.",
-            "messageForIncorrectAnswer": "Incorrect answer. Please try again.",
-            "explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-            "point": "30"
-        },
-        {
-            "question": "Lorem ipsum dolor sit amet, consectetur adipiscing elit,",
-            "questionType": "photo",
-            "answerSelectionType": "single",
-            "answers": [
-                "https://dummyimage.com/600x400/000/fff&text=A",
-                "https://dummyimage.com/600x400/000/fff&text=B",
-                "https://dummyimage.com/600x400/000/fff&text=C",
-                "https://dummyimage.com/600x400/000/fff&text=D"
-            ],
-            "correctAnswer": "1",
-            "messageForCorrectAnswer": "Correct answer. Good job.",
-            "messageForIncorrectAnswer": "Incorrect answer. Please try again.",
-            "explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-            "point": "20"
-        },
-        {
-            "question": "What are the advantages of React JS?",
-            "questionType": "text",
-            "answerSelectionType": "multiple",
-            "answers": [
-                "React can be used on client and as well as server side too",
-                "Using React increases readability and makes maintainability easier. Component, Data patterns improves readability and thus makes it easier for manitaining larger apps",
-                "React components have lifecycle events that fall into State/Property Updates",
-                "React can be used with any other framework (Backbone.js, Angular.js) as it is only a view layer"
-            ],
-            "correctAnswer": [1, 2, 4],
-            "messageForCorrectAnswer": "Correct answer. Good job.",
-            "messageForIncorrectAnswer": "Incorrect answer. Please try again.",
-            "explanation": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-            "point": "20"
-        },
-    ]
 }
 
 const Exercises = connect(mapStateToProps, null)(Exercise)

@@ -154,7 +154,6 @@ class Quiz extends React.Component {
         this.setState({
             quizStarted: !this.state.quizStarted,
         })
-        alert("Whatever")
     }
 
     getActualQuestion() {

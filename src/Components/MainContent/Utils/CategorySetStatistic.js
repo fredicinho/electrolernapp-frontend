@@ -25,7 +25,7 @@ export default function CategorySetStatistic(props) {
     const [chardOfCategorySet, setChard] = React.useState([]);
 
     const handleChange = (event) => {
-        let categorySet = Object.values(props.categorySets).filter((categorySet) => {return categorySet.categorySetId === event.target.value})
+        let categorySet = props.categorySets.filter((categorySet) => {return categorySet.categorySetId === event.target.value})
         let selectedCategorySet = categorySet[0];
         console.log("Selected categorySet")
         console.log(selectedCategorySet)

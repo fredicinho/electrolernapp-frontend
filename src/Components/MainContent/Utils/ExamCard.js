@@ -10,7 +10,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import {connect} from "react-redux";
 import {Redirect} from 'react-router';
 import {urlTypes} from "../../../Services/AuthService/ApiRequests";
-import {selectExam, selectExamReview} from "../../../Redux/Actions/examActions";
+import {selectExam, selectExamReview, selectExamView} from "../../../Redux/Actions/examActions";
 import AuthenticationRequests from "../../../Services/AuthService/AuthenticationRequests";
 
 
@@ -28,7 +28,7 @@ function mapDispatchToProps(dispatch) {
     return {
         selectExam: exam => dispatch(selectExam(exam)),
         selectExamReview: exam => dispatch(selectExamReview(exam)),
-        // selectExamView: exam => dispatch(selectExamView(exam)),
+        selectExamView: exam => dispatch(selectExamView(exam)),
     };
 }
 
@@ -39,6 +39,7 @@ class ExamCard extends React.Component {
         this.state = {
             redirectToExam: false,
             redirectToExamReview: false,
+            redirectToExamOverview: false,
         }
         this.handleToggleForExam = this.handleToggleForExam.bind(this);
         this.handleToggleForExamReview = this.handleToggleForExamReview.bind(this);
@@ -74,17 +75,22 @@ class ExamCard extends React.Component {
             selectedExamTitle: this.props.exam.title,
             selectedExamId: this.props.exam.examSetId,
             urlOfExamOverview: urlTypes.EXAMOVERVIEW + this.props.exam.examSetId,
-            urlOfQuestionsInExam: this.props.exam.links[0].href,
         }
+        this.props.selectExamView(selectedExam);
+        this.setState({
+            redirectToExamOverview: true,
+        })
     }
-
 
     render() {
         const {classes, exam} = this.props;
-        if (this.state.redirectToExam) {
+        const { redirectToExam, redirectToExamOverview, redirectToExamReview } = this.state;
+        if (redirectToExam) {
             return <Redirect push to="/exam"/>;
-        } else if (this.state.redirectToExamReview) {
+        } else if (redirectToExamReview) {
             return <Redirect push to="/reviseexam"/>
+        } else if (redirectToExamOverview) {
+            return <Redirect push to="/examresults"/>
         } else {
             return (
                 <Card className={classes.root}>
@@ -104,18 +110,20 @@ class ExamCard extends React.Component {
                         </CardContent>
                     </CardActionArea>
                     <CardActions>
-                        <Button size="small" color="primary" onClick={this.handleToggleForExam}>
-                            Zur Prüfung
-                        </Button>
                         {(AuthenticationRequests.isAdmin() || AuthenticationRequests.isTeacher()) &&
                         <div>
                             <Button size="small" color="primary" onClick={this.handleToggleForExamReview}>
-                                Prüfung betrachten
+                                Prüfungspunkte neu verteilen
                             </Button>
                             <Button size="small" color="primary" onClick={this.handleToggleForExamView}>
-                                Prüfung auswerten
+                                Prüfungsergebnisse
                             </Button>
                         </div>
+                        }
+                        { AuthenticationRequests.isUser() &&
+                            <Button size="small" color="primary" onClick={this.handleToggleForExam}>
+                                Zur Prüfung
+                            </Button>
                         }
                     </CardActions>
                 </Card>

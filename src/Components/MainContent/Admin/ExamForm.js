@@ -10,6 +10,8 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import ApiRequests, {urlTypes} from "../../../Services/AuthService/ApiRequests";
 import Datetime from "react-datetime";
 import "react-datetime/css/react-datetime.css";
+// import moment from 'moment';
+import moment from 'moment-timezone';
 import "moment/locale/de";
 import AuthenticationService from "../../../Services/AuthService/AuthenticationRequests";
 import makeAnimated from "react-select/animated/dist/react-select.esm";
@@ -93,7 +95,6 @@ class ExamForm extends React.Component {
                         allSchoolClasses: allSchoolClasses,
                     })
                 } else {
-                    console.log("No Schoolclasses found...")
                     this.setState({
                         error: "No Schoolclasses found..."
                     })
@@ -118,7 +119,6 @@ class ExamForm extends React.Component {
                     this.setState({
                         categories: allCategories
                     })
-                    console.log(allCategories)
                 } else {
                     this.setState({
                         error: "No Categories found..."
@@ -174,8 +174,6 @@ class ExamForm extends React.Component {
         questionsInExamSet.map(question => {
             idsOfChosenQuestions.push(question.id);
         })
-        console.log("All Schooclasses ")
-        console.log(schoolClassesInExamSet)
         let schoolClassesInNewExamSet = [];
         schoolClassesInExamSet.map(schoolClass => {
             schoolClassesInNewExamSet.push(schoolClass.value);
@@ -183,19 +181,15 @@ class ExamForm extends React.Component {
 
         let newExam = {
             title: title,
-            startDate: startDate,
-            endDate: endDate,
+            startDate: moment(startDate).format(),
+            endDate: moment(endDate).format(),
             questionsInExamSet: idsOfChosenQuestions,
             schoolClassesInExamSet: schoolClassesInNewExamSet,
             userId: AuthenticationService.getCurrentUser().id,
         }
 
-        console.log("New Exam looks like that ::");
-        console.log(newExam);
-        console.log(JSON.stringify(newExam))
         ApiRequests.apiPostRequest(urlTypes.EXAMSET, newExam)
             .then(result => {
-                console.log(result)
                 if (result.status === 201) {
                     this.setState({
                         ...initialState,
@@ -209,7 +203,6 @@ class ExamForm extends React.Component {
                         examCreatedPopup: true,
                         examCreatedMessage: "Es gab ein Problem beim erstellen der Prüfung..."
                     })
-                    console.log(result)
                 }
             })
             .catch( error => {
@@ -229,8 +222,6 @@ class ExamForm extends React.Component {
             response => {
                 if (response.data !== undefined && response.data != 0) {
                     let allCategorySets = [];
-                    console.log("Fetched CategoySets")
-                    console.log(response.data)
                     response.data.map((categorySet) => {
                         allCategorySets.push({
                             value: categorySet.links[1].href,
@@ -240,7 +231,6 @@ class ExamForm extends React.Component {
                     this.setState({
                         categorySets: allCategorySets
                     })
-                    console.log(allCategorySets)
                 } else {
                     this.setState({
                         error: "No Categories found..."
@@ -253,13 +243,9 @@ class ExamForm extends React.Component {
     }
 
     handleCategorySet(e) {
-        console.log(e.value)
         ApiRequests.apiGetRequest(e.value)
             .then(result => {
-                console.log("Fetched Questions")
-                console.log(result.data)
                 if (result.data !== undefined) {
-                    console.log(result.data)
                     this.setState({
                         questionsOfSelectedCategorySet: result.data,
                     });
@@ -329,11 +315,11 @@ class ExamForm extends React.Component {
                         </Form.Group>
                         <Form.Group controlId="validFrom">
                             <Form.Label>Prüfungsstart</Form.Label>
-                            <Datetime locale="de" value={this.state.startDate} onChange={this.handleValidFrom}/>
+                            <Datetime value={this.state.startDate} onChange={this.handleValidFrom}/>
                         </Form.Group>
                         <Form.Group controlId="valitUntil">
                             <Form.Label>Prüfungsende</Form.Label>
-                            <Datetime locale="de" value={this.state.endDate} onChange={this.handleValidUntil}/>
+                            <Datetime value={this.state.endDate} onChange={this.handleValidUntil}/>
                         </Form.Group>
                         <Form.Group controlId="schooclasses">
                             <Form.Label>Schulklassen für die Prüfung</Form.Label>
@@ -388,5 +374,7 @@ class ExamForm extends React.Component {
         );
     }
 }
+
+
 
 export default withStyles(styles)(ExamForm);

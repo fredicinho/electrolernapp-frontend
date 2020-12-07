@@ -12,7 +12,7 @@ export function getNavigationStateByLocation(location) {
             return NavigationStates.EXAMS;
         case "/exam":
             return NavigationStates.EXAM;
-        case "/exercices":
+        case "/exercises":
             return NavigationStates.EXERCISES;
         case "/categories":
             return NavigationStates.CATEGORIES;
@@ -38,6 +38,8 @@ export function getNavigationStateByLocation(location) {
             return NavigationStates.EXPORT;
         case "/myprofile":
             return NavigationStates.MY_PROFILE;
+        case "/examresults":
+            return NavigationStates.EXAM_OVERVIEW;
         default:
             return NavigationStates.NOTFOUND;
     }
@@ -81,6 +83,8 @@ export function getNavigationName(navigationItem) {
             return "Daten exportieren";
         case NavigationStates.MY_PROFILE:
             return "Mein Profil";
+        case NavigationStates.EXAM_OVERVIEW:
+            return "Prüfungsergebnisse";
         default:
             return "Not Found";
     }

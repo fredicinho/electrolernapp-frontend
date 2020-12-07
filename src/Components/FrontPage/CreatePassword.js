@@ -106,8 +106,6 @@ class CreatePassword extends React.Component {
                         repeatPassword: "",
                     });
                 } else {
-                    console.log("Response with different status")
-                    console.log(response.status)
                     this.setState({
                         message: "Irgendetwas ist schiefgelaufen...",
                         error: true,

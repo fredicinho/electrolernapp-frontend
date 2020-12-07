@@ -1,0 +1,19 @@
+:root {
+    --rft-main-color: #2979ff;
+    --rft-button-color: #2979ff;
+    --rft-even-row-color: #f3f3f3;
+}
+
+/** These Styles doesnt work... */
+.rft-table thead th:hover {
+    background-color: #2979ff;
+    color: white;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.rft-table tbody tr:hover {
+    transition: 0.3s;
+    cursor: pointer;
+    color: #2979ff;
+}

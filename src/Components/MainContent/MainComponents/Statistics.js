@@ -20,6 +20,12 @@ import {CartesianGrid} from "recharts";
 import {Bar} from "recharts";
 import Typography from "@material-ui/core/Typography";
 import CategorySetStatistic from "../Utils/CategorySetStatistic";
+import Select from "react-select";
+import Form from "react-bootstrap/Form";
+import makeAnimated from "react-select/animated/dist/react-select.esm";
+
+const animatedComponents = makeAnimated();
+
 
 const myStyles = theme => ({
     root: {
@@ -32,8 +38,8 @@ const myStyles = theme => ({
         textAlign: 'center',
     },
     child: {
-        width: '100%',
-        justifyContent: 'center' ,
+        minWidth: '100%',
+        justifyContent: 'center',
         boxSizing: 'border-box',
     },
     categoryBar: {
@@ -67,25 +73,42 @@ class Statistics extends React.Component {
             allDataLoaded: false,
             statistics: null,
             statisticsCalculated: false,
+            allCategoriesForSelect: [],
+            selectedCategory: "",
         }
 
         this.getUserStatistics = this.getUserStatistics.bind(this);
         this.getCategories = this.getCategories.bind(this);
         this.getCategorySets = this.getCategorySets.bind(this);
-        // this.getQuestions = this.getQuestions.bind(this);
         this.sortQuestions = this.sortQuestions.bind(this);
+        this.handleSelectedCategory = this.handleSelectedCategory.bind(this);
     }
 
     componentDidMount() {
         this.getCategories();
     }
 
+    handleSelectedCategory(e) {
+        this.setState({
+            selectedCategory: e.value,
+        })
+    }
+
     getCategories() {
         ApiRequests.apiGetRequest(urlTypes.CATEGORIES)
             .then(result => {
+                let allCategoriesForSelect = [];
+                console.log(result.data)
+                result.data.map((category) => {
+                    allCategoriesForSelect.push({
+                        value: category.categoryId,
+                        label: category.name,
+                    })
+                });
                 this.setState({
                     categoriesLoaded: true,
                     allCategories: result.data,
+                    allCategoriesForSelect: allCategoriesForSelect,
                 });
                 this.getCategorySets(result.data);
             })
@@ -225,7 +248,7 @@ class Statistics extends React.Component {
 
     render() {
         const {classes} = this.props;
-        const {allDataIsLoaded, statisticsCalculated, statistics} = this.state;
+        const {allDataIsLoaded, statisticsCalculated, statistics, allCategoriesForSelect, selectedCategory} = this.state;
 
         if (!statisticsCalculated && !allDataIsLoaded) {
             return (
@@ -252,7 +275,9 @@ class Statistics extends React.Component {
                     });
                 });
 
-
+                let selectedCategorySetStatistics = Object.values(statistics.categorySetStatistics).filter((categorySetStatistic) => {
+                    return categorySetStatistic.categoryId === selectedCategory
+                });
 
                 console.log("Actual Statistics")
                 console.log(this.state.statistics)
@@ -260,39 +285,39 @@ class Statistics extends React.Component {
                     <div>
                         <div className={classes.root}>
                             <div className={classes.child}>
-                            <Typography className={classes.title} variant="h3" gutterBottom>
-                                Kategorien
-                            </Typography>
+                                <Typography className={classes.title} variant="h3" gutterBottom>
+                                    Kategorien
+                                </Typography>
                             </div>
 
                             <div className={classes.child}>
 
-                            <BarChart className={classes.categoryBar}
-                                      width={1500}
-                                      height={500}
-                                      data={categoryStatistics}
-                                      margin={{
-                                          top: 5, right: 30, left: 20, bottom: 5,
-                                      }}
-                            >
-                                <CartesianGrid strokeDasharray="3 3"/>
-                                <XAxis dataKey="name"/>
-                                <YAxis/>
-                                <Tooltip/>
-                                <Legend/>
-                                <Bar dataKey="Übungen absolviert (in %)"
-                                     fill="#03a9f4"
-                                     isAnimationActive={true}
-                                     animationBegin={0}
-                                     animationDuration={3000}
-                                />
-                                <Bar dataKey="Punkte erreicht (in %)"
-                                     fill="#08135f"
-                                     isAnimationActive={true}
-                                     animationBegin={0}
-                                     animationDuration={3000}
-                                />
-                            </BarChart>
+                                <BarChart className={classes.categoryBar}
+                                          width={1500}
+                                          height={500}
+                                          data={categoryStatistics}
+                                          margin={{
+                                              top: 5, right: 30, left: 20, bottom: 5,
+                                          }}
+                                >
+                                    <CartesianGrid strokeDasharray="3 3"/>
+                                    <XAxis dataKey="name"/>
+                                    <YAxis/>
+                                    <Tooltip/>
+                                    <Legend/>
+                                    <Bar dataKey="Übungen absolviert (in %)"
+                                         fill="#03a9f4"
+                                         isAnimationActive={true}
+                                         animationBegin={0}
+                                         animationDuration={3000}
+                                    />
+                                    <Bar dataKey="Punkte erreicht (in %)"
+                                         fill="#08135f"
+                                         isAnimationActive={true}
+                                         animationBegin={0}
+                                         animationDuration={3000}
+                                    />
+                                </BarChart>
                             </div>
                             <br/>
                             <br/>
@@ -304,7 +329,16 @@ class Statistics extends React.Component {
                                 </Typography>
                             </div>
                             <div className={classes.child}>
-                                <CategorySetStatistic categorySets={statistics.categorySetStatistics} categories={statistics.categoryStatistics}/>
+                                <Select
+                                    defaultValue={"Auswählen..."}
+                                    components={animatedComponents}
+                                    onChange={this.handleSelectedCategory}
+                                    options={allCategoriesForSelect}
+                                />
+                            </div>
+                            <div className={classes.child}>
+                                <CategorySetStatistic categorySets={selectedCategorySetStatistics}
+                                                      categories={statistics.categoryStatistics}/>
                             </div>
                         </div>
                     </div>

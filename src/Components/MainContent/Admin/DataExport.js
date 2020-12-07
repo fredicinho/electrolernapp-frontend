@@ -43,26 +43,24 @@ class DataExport extends React.Component {
     }
 
     downloadQuestions() {
-        window.open('http://localhost:8080/api/v1/csv/questions/export', '_blank');
+        window.open(urlTypes.API_URL + '/api/v1/csv/questions/export', '_blank');
     }
 
     downloadExams() {
-        window.open('http://localhost:8080/api/v1/csv/examSets/export', '_blank');
+        window.open(urlTypes.API_URL + '/api/v1/csv/examSets/export', '_blank');
     }
 
     downloadUsers() {
-        window.open('http://localhost:8080/api/v1/csv/users/export', '_blank');
+        window.open(urlTypes.API_URL + '/api/v1/csv/users/export', '_blank');
     }
 
     downloadExamResults() {
-        window.open('http://localhost:8080/api/v1/csv/examResults/export', '_blank');
+        window.open(urlTypes.API_URL + '/api/v1/csv/examResults/export', '_blank');
     }
 
     render() {
         const { classes } = this.props;
-
         return (
-
             <Container component="main" maxWidth="xs">
                 <Fade right>
                     <CssBaseline />

@@ -48,6 +48,11 @@ const styles = theme => ({
         margin: theme.spacing(3, 0, 2),
         backgroundColor: "#2979ff",
     },
+    userInput: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    }
 });
 
 export const questionType = [
@@ -70,6 +75,7 @@ const initialState = {
     usersUploaded: false,
     error: "",
     usersUploadedMessage: "",
+    userInputText: "",
 }
 
 class ImportUsersForm extends React.Component {
@@ -86,20 +92,16 @@ class ImportUsersForm extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        console.log("State on submit::")
-        console.log(this.state.addedCsv)
         if (this.state.addedCsv === null) {
             this.setState({
                 usersUploaded: false,
                 error: true,
                 usersUploadedMessage: "Du musst zuerst eine CSV-Datei hinzufügen!",
+                fileAdded: false,
             })
         } else {
             ApiRequests.apiPostFileRequest(urlTypes.CSVUSERS, this.state.addedCsv)
                 .then(result => {
-                    console.log("Result looks like that")
-                    console.log(result.status)
-                    console.log(result)
                     if (result.status === 200) {
                         this.setState({
                             ...initialState,
@@ -130,14 +132,14 @@ class ImportUsersForm extends React.Component {
     }
 
     addedFile(acceptedFile) {
+        console.log(acceptedFile);
         if (acceptedFile != null) {
             this.setState({
                 addedCsv: acceptedFile,
+                userInputText: "Du hast folgende Datei eingefügt: " + acceptedFile[0].name,
+                fileAdded: true,
             })
         }
-
-        console.log("Added csv")
-        console.log(acceptedFile)
 
     }
 
@@ -167,9 +169,15 @@ class ImportUsersForm extends React.Component {
                     </Typography>
                     <Form onSubmit={this.handleSubmit}>
                         <DragAndDropCsv addedFile={this.addedFile}/>
+                        {this.state.fileAdded &&
+                            <div className={classes.userInput}>
+                                <Typography component="h1" variant="subtitle1" >{this.state.userInputText}</Typography>
                         <Button variant="primary" type="submit">
                             Submit
                         </Button>
+                            </div>
+                        }
+
                     </Form>
                 </div>
                 <Box mt={8}>

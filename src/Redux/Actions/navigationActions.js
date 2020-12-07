@@ -12,6 +12,7 @@ export const NavigationStates = {
     EXERCISES: "EXERCISES",
     EXAMS: "EXAMS",
     EXAM: "EXAM",
+    EXAM_OVERVIEW: "EXAM_OVERVIEW",
     STATISTICS: "STATISTICS",
     DEMO: "DEMO",
     CATEGORIES: "KATEGORIES",
@@ -27,4 +28,5 @@ export const NavigationStates = {
     EDIT_SCHOOLCLASS: "EDIT_SCHOOLCLASS",
     EXPORT: "EXPORT",
     MY_PROFILE: "MY_PROFILE",
+
 }

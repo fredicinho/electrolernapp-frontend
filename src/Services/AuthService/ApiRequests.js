@@ -23,7 +23,8 @@ const NEWPASSWORD_API = PASSWORDRESET_API + "resetPassword";
 const CSV_API = API_VERSION + "csv/";
 const CSVUSERS_API = CSV_API + "users";
 const EXPORT_QUESTIONS_API = CSV_API + "questions/export";
-const EXAMOVERVIEW_API = EXAMRESULT_API + "examResultOverview";
+const EXAMOVERVIEW_API = EXAMRESULT_API + "examResultOverview/";
+const API_URL = 'http://http://wiproh20-owerlen.enterpriselab.ch:8080';
 
 
 export const urlTypes = {
@@ -47,6 +48,7 @@ export const urlTypes = {
   CSVUSERS: CSVUSERS_API,
   EXPORT_QUESTIONS: EXPORT_QUESTIONS_API,
   EXAMOVERVIEW: EXAMOVERVIEW_API,
+  API_URL: API_URL,
 }
 
 

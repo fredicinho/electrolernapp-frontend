@@ -83,7 +83,6 @@ class SchoolClassForm extends React.Component {
                         allUsers: allUsers,
                     })
                 } else {
-                    console.log("No Users found...")
                     this.setState({
                         error: "No Users found..."
                     })
@@ -99,7 +98,6 @@ class SchoolClassForm extends React.Component {
                     let allInstitutions = [];
                     let institutionForForm = [];
                     response.data.map((institution) => {
-                        console.log(institution)
                         allInstitutions.push({
                             // TODO: Check if link is correct
                             value: institution.links[0].href,
@@ -116,7 +114,6 @@ class SchoolClassForm extends React.Component {
                         institutionForForm: institutionForForm,
                     })
                 } else {
-                    console.log("No Institutions found...")
                     this.setState({
                         error: "No Institutions found..."
                     })
@@ -146,13 +143,9 @@ class SchoolClassForm extends React.Component {
             id: schoolClassId,
         }
 
-        console.log("New Class :: ")
-        console.log(JSON.stringify(newSchoolClass));
-
         ApiRequests.apiPutRequest(urlTypes.SCHOOLCLASS, newSchoolClass)
             .then(result => {
-                console.log("Received Result of PUT")
-                console.log(result)
+
                 if (result.status === 201) {
                     this.setState({
                         ...initialState,
@@ -193,7 +186,6 @@ class SchoolClassForm extends React.Component {
         this.setState({
             institution: e,
         })
-        console.log(this.state.institution);
     }
 
     handleSelectInstitution(e) {
@@ -201,8 +193,6 @@ class SchoolClassForm extends React.Component {
             response => {
                 if (response.data !== undefined && response.data != 0) {
                     let allSchoolClasses = [];
-                    console.log("Fetched Schoolclasses")
-                    console.log(response.data)
                     response.data.map((schoolClass) => {
                         allSchoolClasses.push({
                             value: schoolClass.id,
@@ -219,7 +209,6 @@ class SchoolClassForm extends React.Component {
                         schoolClassUpdated: false,
 
                     })
-                    console.log(allSchoolClasses)
                 } else {
                     this.setState({
                         error: "No Categories found..."
@@ -232,13 +221,9 @@ class SchoolClassForm extends React.Component {
     }
 
     handleSelectClass(e) {
-        console.log("Fetching selected Class")
-        console.log(urlTypes.SCHOOLCLASS + e.value)
         ApiRequests.apiGetRequest(urlTypes.SCHOOLCLASS + e.value).then(
             response => {
                 if (response.data !== undefined && response.data != 0) {
-                    console.log("Fetched SchoolClass")
-                    console.log(response.data)
                     let schoolClass = response.data;
                     this.getUsersOfClass(schoolClass._links.usersInSchoolClass.href);
                     this.getInstitutionOfClass(schoolClass._links.institution.href);
