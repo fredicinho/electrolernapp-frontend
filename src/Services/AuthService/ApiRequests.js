@@ -24,7 +24,7 @@ const CSV_API = API_VERSION + "csv/";
 const CSVUSERS_API = CSV_API + "users";
 const EXPORT_QUESTIONS_API = CSV_API + "questions/export";
 const EXAMOVERVIEW_API = EXAMRESULT_API + "examResultOverview/";
-const API_URL = 'http://http://wiproh20-owerlen.enterpriselab.ch:8080';
+const API_URL = 'http://wiproh20-owerlen.enterpriselab.ch:8080';
 
 
 export const urlTypes = {
