@@ -26,7 +26,7 @@ class AuthenticationRequests {
       username,
       email,
       password,
-      role: ['admin'],
+      role: ['user'],
     });
   }
 
