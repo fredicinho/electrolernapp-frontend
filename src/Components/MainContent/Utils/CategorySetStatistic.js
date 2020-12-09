@@ -25,7 +25,7 @@ export default function CategorySetStatistic(props) {
     const [chardOfCategorySet, setChard] = React.useState([]);
 
     const handleChange = (event) => {
-        let categorySet = props.categorySets.filter((categorySet) => {return categorySet.categorySetId === event.target.value})
+        let categorySet = props.categorySets.filter((categorySet) => {return (categorySet.categorySetId === event.target.value)})
         let selectedCategorySet = categorySet[0];
         console.log("Selected categorySet")
         console.log(selectedCategorySet)
@@ -62,7 +62,9 @@ export default function CategorySetStatistic(props) {
                     onChange={handleChange}
                 >
                     {Object.values(props.categorySets).map((categorySet) => {
-                        return(<MenuItem value={categorySet.categorySetId}>{categorySet.title}</MenuItem>);
+                        if (categorySet.numberOfQuestionsSolved !== 0) {
+                            return(<MenuItem value={categorySet.categorySetId}>{categorySet.title}</MenuItem>);
+                        }
                     })}
                 </Select>
                 {chardOfCategorySet &&

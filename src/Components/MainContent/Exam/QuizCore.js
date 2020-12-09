@@ -16,6 +16,9 @@ const myStyles = theme => ({
         flexDirection: 'column',
         alignItems: 'center',
     },
+    image: {
+        width: '50%'
+    }
 
 });
 
@@ -48,13 +51,18 @@ class QuizCore extends React.Component {
         let imageAvailable = false;
         console.log("Question is ::")
         console.log(question)
-        if (question.links.length > 1) {
-            imageAvailable = true;
-        }
+        let questionAvailable = false;
+        let questionImageUrl = "";
+        question.links.forEach((link) => {
+            if (link.rel === "questionImage") {
+                questionImageUrl = link.href;
+                questionAvailable = true;
+            }
+        });
         return(
             <Container maxWidth={"lg"}>
-                { imageAvailable &&
-                    <Image src={question.links[1].href}/>
+                { questionAvailable &&
+                    <Image className={classes.image} src={questionImageUrl}/>
                 }
                 <List className={classes.root}>
                     {question.possibleAnswers.map((answer) => {

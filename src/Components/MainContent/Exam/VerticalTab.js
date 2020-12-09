@@ -72,6 +72,8 @@ class VerticalTabs extends React.Component {
             difference: null,
             endExamSelected: false,
         }
+        console.log("All Questions")
+        console.log(this.props.questions)
         this.handleChange = this.handleChange.bind(this);
         this.changeSelectedAnswers = this.changeSelectedAnswers.bind(this);
         this.sendActualAnswers = this.sendActualAnswers.bind(this);
@@ -164,8 +166,6 @@ class VerticalTabs extends React.Component {
         });
 
         const { classes } = this.props;
-        console.log("Timer")
-        console.log(moment(this.props.examData.endDate) - moment())
         return (
             <div>
             <Typography component="h1" variant="h5" align={"center"}>Verbleibende Zeit: {timeLeft.hours + " h: " + timeLeft.minutes + " min: " + timeLeft.seconds + " s"} </Typography>

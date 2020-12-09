@@ -139,32 +139,6 @@ class Statistics extends React.Component {
             });
     }
 
-    /**
-     getQuestions(categories, categorySets) {
-        ApiRequests.apiGetRequest(urlTypes.QUESTIONS)
-            .then(result => {
-                if (result.data !== undefined && result.data != 0) {
-                    console.log("All Questions")
-                    console.log(result.data);
-                    this.setState({
-                        allQuestions: result.data,
-                    })
-                    this.getUserStatistics(categories, categorySets, result.data);
-                } else {
-                    console.log("No Questions found...");
-                    this.setState({
-                        infoMessasge: "No Questions found...",
-                    })
-                }
-            })
-            .catch(function (error) {
-                console.log(error);
-            })
-            .finally(function () {
-            });
-    }
-     */
-
     getUserStatistics(categories, categorySets) {
         ApiRequests.apiGetRequest(urlTypes.USERSTATISTIC + AuthenticationRequests.getCurrentUser().id)
             .then(result => {
@@ -224,7 +198,9 @@ class Statistics extends React.Component {
 
         userStatistics.map((userStatistic) => {
             statistics.categorySetStatistics[userStatistic.categorySetId].pointsAchieved += userStatistic.pointsAchieved;
-            statistics.categorySetStatistics[userStatistic.categorySetId].numberOfQuestionsSolved += 1;
+            if ( statistics.categorySetStatistics[userStatistic.categorySetId].numberOfQuestions > statistics.categorySetStatistics[userStatistic.categorySetId].numberOfQuestionsSolved ) {
+                statistics.categorySetStatistics[userStatistic.categorySetId].numberOfQuestionsSolved += 1;
+            }
             statistics.categoryStatistics[userStatistic.categoryId].pointsAchieved += userStatistic.pointsAchieved;
             statistics.categoryStatistics[userStatistic.categoryId].numberOfQuestionsSolved += 1;
             statistics.pointsAchieved += userStatistic.pointsAchieved;

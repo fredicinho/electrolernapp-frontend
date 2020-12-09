@@ -46,7 +46,12 @@ class Exercise extends React.Component {
                     answers.push(answer.answerPhrase)
                 });
             }
-            let questionImageUrl = data.links[2].href;
+            let questionImageUrl = "";
+            data.links.forEach((link) => {
+                if (link.rel === "questionImage") {
+                    questionImageUrl = link.href;
+                }
+            })
             const type = this.getTypeOfQuestion(data.correctAnswers)
             let correctAnswers = this.giveIndexesOfCorrectAnswers(data.possibleAnswers, data.correctAnswers)
             console.log(data.id)
