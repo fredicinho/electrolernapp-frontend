@@ -110,7 +110,7 @@ class DataExport extends React.Component {
                             variant="contained"
                             color="secondary"
                             className={classes.submit}
-                            onClick={this.downloadExams}
+                            onClick={this.downloadExamResults}
                         >
                             Herunterladen
                         </Button>

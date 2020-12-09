@@ -1,8 +1,6 @@
 import React from "react";
 import Grid from "@material-ui/core/Grid";
-import CategoryCard from "../Utils/CategoryCard";
 import ApiRequests from "../../../Services/AuthService/ApiRequests";
-import { urlTypes } from "../../../Services/AuthService/ApiRequests";
 import Loader from "../Utils/Loader";
 import {connect} from "react-redux";
 import CategorySetCard from "../Utils/CategorySetCard";
@@ -55,7 +53,6 @@ class CategorySetView extends React.Component {
             })
             .catch(function (error) {
                 console.log(error);
-                // TODO: Make "Show Error" Component
             })
             .finally(function () {
             });

@@ -66,6 +66,11 @@ const myStyles = theme => ({
     },
     nested: {
         paddingLeft: theme.spacing(4),
+        '&:hover': {
+            color: 'black',
+            fontWeight: '1000',
+            backgroundColor: '#d3d3d3',
+        }
     },
     hsluLogo: {
         width: '100%',
@@ -73,6 +78,13 @@ const myStyles = theme => ({
         padding: '10px',
         bottom: 0,
     },
+    link : {
+        '&:hover': {
+            color: 'black',
+            fontWeight: '1000',
+            backgroundColor: '#d3d3d3',
+        }
+    }
 });
 
 class SidebarContent extends React.Component {
@@ -141,32 +153,17 @@ class SidebarContent extends React.Component {
 
     render() {
         const {classes} = this.props;
-        let items = []
-        this.getNavigationItems(this.props.actualPage).map(navigationItem => {
-            items.push(
-                <ListItem button>
-                    <ListItemText primary={navigationItem}/>
-                </ListItem>
-            );
-        });
+
         return (
             <MaterialTitlePanel title="Menu" style={this.state.style}>
-                {!items && <List
-                    component="nav"
-                    className={classes.root}
-                >
-                    {items}
-                </List>
-                }
-                { !items && <div style={styles.divider}/> }
                 <List
                     component="nav"
                     className={classes.root}
                 >
-                    <ListItem button component={Link} to="/">
+                    <ListItem button className={classes.link} component={Link} to="/">
                         <ListItemText primary="Home"/>
                     </ListItem>
-                    <ListItem button onClick={this.toggleExercise}>
+                    <ListItem button className={classes.link} onClick={this.toggleExercise}>
                         <ListItemText primary="Übungen"/>
                         {this.state.exercisesOpen ? <ExpandLess/> : <ExpandMore/>}
                     </ListItem>
@@ -180,15 +177,15 @@ class SidebarContent extends React.Component {
                             </ListItem>
                         </List>
                     </Collapse>
-                    <ListItem button component={Link} to="/exams">
+                    <ListItem button className={classes.link} component={Link} to="/exams">
                         <ListItemText primary="Prüfungen"/>
                     </ListItem>
-                    <ListItem button component={Link} to="/statistics">
+                    <ListItem button className={classes.link} component={Link} to="/statistics">
                         <ListItemText primary="Statistiken"/>
                     </ListItem>
                     { this.props.isAdminOrTeacher &&
                         <React.Fragment>
-                            <ListItem button onClick={this.toggleUserManagement}>
+                            <ListItem button className={classes.link} onClick={this.toggleUserManagement}>
                                 <ListItemText primary="Benutzerverwaltung"/>
                                 {this.state.userManagementPanelOpen ? <ExpandLess/> : <ExpandMore/>}
                             </ListItem>
@@ -202,7 +199,7 @@ class SidebarContent extends React.Component {
                                     </ListItem>
                                 </List>
                             </Collapse>
-                            <ListItem button onClick={this.toggleExams}>
+                            <ListItem button className={classes.link} onClick={this.toggleExams}>
                                 <ListItemText primary="Prüfungen und Fragen"/>
                                 {this.state.examsOpen ? <ExpandLess/> : <ExpandMore/>}
                             </ListItem>
@@ -216,7 +213,7 @@ class SidebarContent extends React.Component {
                                     </ListItem>
                                 </List>
                             </Collapse>
-                            <ListItem button onClick={this.toggleInstitutions}>
+                            <ListItem button className={classes.link} onClick={this.toggleInstitutions}>
                                 <ListItemText primary="Institutionen und Klassen"/>
                                 {this.state.institutionPanelOpen ? <ExpandLess/> : <ExpandMore/>}
                             </ListItem>
@@ -233,7 +230,7 @@ class SidebarContent extends React.Component {
                                     </ListItem>
                                 </List>
                             </Collapse>
-                            <ListItem button component={Link} to="/export">
+                            <ListItem button className={classes.link} component={Link} to="/export">
                                 <ListItemText primary="Daten exportieren"/>
                             </ListItem>
                         </React.Fragment>

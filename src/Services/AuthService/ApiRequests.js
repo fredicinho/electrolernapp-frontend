@@ -51,7 +51,6 @@ export const urlTypes = {
   API_URL: API_URL,
 }
 
-
 class ApiRequests {
 
   apiGetRequest(url) {
