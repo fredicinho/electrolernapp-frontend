@@ -35,7 +35,7 @@ export const questionType = [
     {
         key: 'mc',
         text: 'Multiple Choice',
-        value: 'MC',
+        value: 'MultipleChoice',
         // image: {avatar: true, src: '/images/avatar/small/jenny.jpg'},
     },
     {
@@ -52,7 +52,7 @@ const initialState = {
     correctAnswers: [],
     loading: false,
     categorySetId: "",
-    questionType: "MC",
+    questionType: "MultipleChoice",
     userId: "",
     questionImageId: "",
     answerImageId: "",
@@ -100,7 +100,6 @@ class QuestionForm extends React.Component {
                     this.setState({
                         allCategorySets: allCategorySets
                     })
-                    console.log(response.data)
                 } else {
                     this.setState({
                         error: "No CategorySets found..."
@@ -142,16 +141,21 @@ class QuestionForm extends React.Component {
             pointsToAchieve: parseInt(this.state.possiblePoints)
         }
 
+        console.log("New Question ::")
+        console.log(newQuestion)
+        console.log(JSON.stringify(newQuestion))
+
         ApiRequests.apiPostRequest(urlTypes.QUESTIONS, newQuestion)
             .then(result => {
                 console.log(result)
-                if (result.status === 200) {
+                if (result.status === 201) {
                     this.setState({
                         ...initialState,
                         questionCreated: true,
                         questionCreatedMessage: "Die Frage :: " + result.data.questionPhrase + " :: wurde erfolgreich erstellt!",
                     });
                 } else {
+                    console.log()
                     this.setState({
                         //error: "No data found for this CategorySet..."
                     })
@@ -160,8 +164,13 @@ class QuestionForm extends React.Component {
             .catch( error => {
                 if (error.response.status === 409) {
                     this.setState({
-                        questionCreated: true,
+                        error: true,
                         questionCreatedMessage: "Die Frage :: " + error.response.data.questionPhrase + " :: existiert bereits!"
+                    });
+                } else {
+                    this.setState({
+                        error: true,
+                        questionCreatedMessage: "Es gab ein Problem beim Erstellen der Frage... Versuche es später nochmal oder wende dich an den Administrator."
                     });
                 }
                 console.log(error.response)
@@ -199,12 +208,13 @@ class QuestionForm extends React.Component {
         let newQuestionType = null;
         switch (e.target.value) {
             case "Multiple Choice":
-                newQuestionType = "MC";
+                newQuestionType = "MultipleChoice";
                 break;
         }
         this.setState({
             questionType: newQuestionType,
         })
+        console.log("NEw Type :: "+ this.state.questionType)
     }
 
     handleQuestionPhrase(e) {
@@ -252,7 +262,7 @@ class QuestionForm extends React.Component {
 
     render() {
         const {classes} = this.props;
-        const {answerError, answerErrorMessage, questionCreated, questionCreatedMessage} = this.state;
+        const {answerError, answerErrorMessage, questionCreated, questionCreatedMessage, error} = this.state;
         let correctAnswerCheckbox = [];
         for (let i = 1; i <= this.state.availableAnswerTextFields; i++) {
             let answerLabel = "Antwort Nr. " + i;
@@ -267,6 +277,11 @@ class QuestionForm extends React.Component {
                         <Alert variant="info">
                             {questionCreatedMessage}
                         </Alert>
+                    }
+                    {error &&
+                    <Alert variant="danger">
+                        {questionCreatedMessage}
+                    </Alert>
                     }
                     <Typography component="h1" variant="h5">
                         Erstelle hier eine neue Frage
