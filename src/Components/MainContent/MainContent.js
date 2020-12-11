@@ -63,6 +63,13 @@ const myStyles = theme => ({
             textDecoration: 'none',
         }
     },
+    linkProfile : {
+        '&:hover': {
+            color: 'black',
+            fontWeight: '1000',
+            backgroundColor: '#d3d3d3',
+        }
+    }
 
 });
 
@@ -182,8 +189,8 @@ class MainContent extends React.Component {
             open={this.state.openAnchorEl}
             onClose={this.handleClose}
         >
-            <MenuItem component={Link} to="/myprofile" onClick={this.handleClose}>Mein Profil</MenuItem>
-            <MenuItem onClick={this.toggleLogout}>Ausloggen</MenuItem>
+            <MenuItem className={classes.linkProfile} component={Link} to="/myprofile" onClick={this.handleClose}>Mein Profil</MenuItem>
+            <MenuItem className={classes.linkProfile} onClick={this.toggleLogout}>Ausloggen</MenuItem>
         </Menu>
                 </span>
         );
