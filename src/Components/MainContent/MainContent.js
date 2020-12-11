@@ -156,6 +156,7 @@ class MainContent extends React.Component {
             >
                 =
             </a>
+
         )}
                 <span> {getNavigationName(this.props.actualPage)} </span>
             </span>
