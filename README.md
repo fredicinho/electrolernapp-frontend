@@ -1,7 +1,12 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Single-Page-Application made with React
 
-### Informations
-In the CI/CD Lifecycle this application will be available on  http://wiproh20-owerlen.enterpriselab.ch/
+![Layeroverview](layers.png)
+
+## Components of the frontend
+![Componentdiagram](componentdiagram.png)
+
+
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 Install all packages:
